@@ -1,0 +1,27 @@
+			<div class="row">
+				<div class="col-lg-9" style="margin-bottom: 50px;">
+                    <div class="alert alert-dismissable alert-info">
+                        <!-- <button data-dismiss="alert" class="close" type="button">&times;</button> -->
+                        Welcome to the CRM for ThinkBox Cloud.
+                        <br />
+                        You can see a information of Telephony in this box.
+                    </div>
+					<div ng-controller=CtrlCustomer>
+						<div ui-grid="gridOptions" ui-grid-selection ui-grid-pagination class="grid"></div>
+					</div>
+					<div class="form-group form-inline" style='margin-top: 10px;'>
+						<input type='text' id='txtsearch' class='form-control' placeholder="전화번호 휴대전화" />
+						<button type='button' for='txtsearch' class="btn btn-info btn-sm">검색</button>
+						<button type="button" class="btn btn-warning btn-sm" style="float: right;">삭제</button>
+					</div>
+	        	</div>
+		        <div class="col-lg-3">
+		        	<div class="form-inline form-group" style="margin-bottom: 10px; text-align: right;">
+						<input type="text" id="innertelnum" class="form-control" placeholder="전화번호" style="width: 170px;" />
+	        			<button type="button" for="innertelnum" class="btn btn-primary btn-sm">연결</button>
+		        	</div>
+					<div ng-controller="CtrlTelStatus">
+						<div ui-grid="gridOptions" class="grid_tels"></div>
+					</div>
+		        </div>
+			</div>
