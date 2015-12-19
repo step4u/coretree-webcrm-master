@@ -1,0 +1,50 @@
+					<div ng-controller="CtrlCounsellor">
+						<div ui-grid="gridOptions" ui-grid-selection ui-grid-pagination class="grid" id="ctrlcounsellor"></div>
+						<div class="form-group form-inline" style='margin-top: 10px;'>
+							<input type='text' id='txtsearch' class='form-control' placeholder="상담원명 내선번호" />
+							<button type='button' id='btnsearch' for='txtsearch' class="btn btn-info btn-sm" ng-click="getPage('app_data_counsellor2.json')")>검색</button>
+							<button type="button" class="btn btn-warning btn-sm">삭제</button>
+						</div>
+					</div>
+			
+			<script>
+				$(function(){
+					$('#scopetest').click(function(){
+						var scope = angular.element($("#ctrlcallstat")).scope();
+						var i = 0;
+						console.log(scope.gridOptions.data);
+	
+						//$.each(scope.gridOptions.data, function(index, obj){
+						//	console.log(index + "//" + obj.title + "//" + obj.count);
+						//	obj.count = "3";
+						//});
+						
+						scope.$apply(function(){
+							scope.gridOptions.data = [
+							                          {
+							                              "title": "통화중2",
+							                      		"count": "11"
+							                          },
+							                          {
+							                              "title": "대기중2",
+							                      		"count": "10"
+							                          },
+							                          {
+							                              "title": "연결중2",
+							                      		"count": "100"
+							                          }
+							                      ];
+						});
+					});
+				});
+
+				/*
+				$(document).ready(function(){
+					$('#btnsearch').click(function(){
+						var scope = angular.element($("#ctrlcounsellor")).scope();
+						scope.setPage('app_data_counsellor2.json');
+						scope.$apply();
+					});
+				});
+				*/
+			</script>

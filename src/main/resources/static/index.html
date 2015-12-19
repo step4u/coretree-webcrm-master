@@ -1,0 +1,77 @@
+<html ng-app="BasicHttpAuth">
+<head>
+	<title>CRM with IPCC - Coretree</title>
+  	<meta charset="utf-8">
+  	<meta name="viewport" content="width=device-width, initial-scale=1">
+  	
+ 	<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <link rel="stylesheet" href="/resources/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/resources/bootstrap/css/bootstrap-theme.min.css" />
+	<script src="/resources/bootstrap/js/bootstrap.min.js"></script>
+
+	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular-touch.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular-animate.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular-route.min.js"></script>
+
+    <script src="/resources/angularjs/grid-ui/grunt-scripts/csv.js"></script>
+    <script src="/resources/angularjs/grid-ui/grunt-scripts/pdfmake.js"></script>
+    <script src="/resources/angularjs/grid-ui/grunt-scripts/vfs_fonts.js"></script>
+
+	<script src="/resources/angularjs/grid-ui/3.0.7/ui-grid.min.js"></script>
+    <link rel="stylesheet" href="/resources/angularjs/grid-ui/3.0.7/ui-grid.min.css" />
+
+    <link rel="stylesheet" href="/resources/css/simple-sidebar.css" />
+	<!-- <link rel="stylesheet" ng-href="/resources/css/{{css}}" /> -->
+    <link rel="stylesheet" href="/resources/css/main.css" />
+
+	<script>
+		$(document).ready(function(){
+			$('[data-toggle="tooltip"]').tooltip();
+			
+			$('a').click(function(event){
+				var str = this.toString();
+				str = str.split('/#/');
+				// alert(str.length);
+				if (str.length < 2)
+					event.preventDefault();
+			});
+			
+		    $("#menu-toggle").click(function(e) {
+		        e.preventDefault();
+		        $("#wrapper").toggleClass("toggled");
+		    });
+		    
+		    $("#publicaddr").click(function(e){
+		    	e.preventDefault();
+		    	console.log('publicaddr clicked');
+		    	location.href="#/mgmt/addr";
+		    });
+		    $("#personaladdr").click(function(e){
+		    	e.preventDefault();
+		    	console.log('personaladdr clicked');
+		    	location.href="#/mgmt/addr";
+		    });
+		});
+	</script>
+</head>
+<body>
+    <div id="wrapper" ui-view="module/authentication/view/logon.html">
+		
+    </div>
+
+<!-- 
+    <footer class="footer">
+      <div class="container">
+        <p class="text-muted">© Copyright 2015 Coretree Corp. All Rights Reserved.</p>
+      </div>
+    </footer>
+ -->
+
+    <script src="scripts/app.js"></script>
+    <script src="modules/authentication/services.js"></script>
+    <script src="modules/authentication/controllers.js"></script>
+    <script src="modules/home/controllers.js"></script>
+ 
+</body>
+</html>
