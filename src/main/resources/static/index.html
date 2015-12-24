@@ -1,31 +1,61 @@
-<html ng-app="BasicHttpAuth">
+<!DOCTYPE html>
+<html ng-app="app" id="ng-app">
 <head>
 	<title>CRM with IPCC - Coretree</title>
   	<meta charset="utf-8">
   	<meta name="viewport" content="width=device-width, initial-scale=1">
   	
- 	<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+	
     <link rel="stylesheet" href="/resources/bootstrap/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="/resources/bootstrap/css/bootstrap-theme.min.css" />
-	<script src="/resources/bootstrap/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="resources/bootstrap/css/bootstrap-theme.min.css" />
+	<script src="resources/bootstrap/js/bootstrap.min.js"></script>
+	
+	<script src="https://code.angularjs.org/1.4.8/angular.min.js"></script>
+    <script src="https://code.angularjs.org/1.4.8/angular-touch.min.js"></script>
+    <script src="https://code.angularjs.org/1.4.8/angular-animate.min.js"></script>
+    <script src="https://code.angularjs.org/1.4.8/angular-route.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.8/angular-cookies.min.js"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.14.3/ui-bootstrap-tpls.min.js"></script>
+    <script data-require="ui-router@*" data-semver="0.2.8" src="http://angular-ui.github.io/ui-router/release/angular-ui-router.js"></script>
 
-	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular.min.js"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular-touch.min.js"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular-animate.min.js"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular-route.min.js"></script>
+    <script src="resources/angularjs/grid-ui/grunt-scripts/csv.js"></script>
+    <script src="resources/angularjs/grid-ui/grunt-scripts/pdfmake.js"></script>
+    <script src="resources/angularjs/grid-ui/grunt-scripts/vfs_fonts.js"></script>
 
-    <script src="/resources/angularjs/grid-ui/grunt-scripts/csv.js"></script>
-    <script src="/resources/angularjs/grid-ui/grunt-scripts/pdfmake.js"></script>
-    <script src="/resources/angularjs/grid-ui/grunt-scripts/vfs_fonts.js"></script>
+	<script src="resources/angularjs/grid-ui/3.0.7/ui-grid.min.js"></script>
+    <link rel="stylesheet" href="resources/angularjs/grid-ui/3.0.7/ui-grid.min.css" />
+    
+    <link rel="stylesheet" href="resources/css/simple-sidebar.css" />
+    
+    <link rel="stylesheet" href="style.css" />
+    <script src="script.js"></script>
+    
+    <link rel="stylesheet" href="resources/css/main.css" />
+</head>
+<body>
+    <div id="wrapper">
+		<!-- <div ng-class="{ 'alert': flash, 'alert-success': flash.type === 'success', 'alert-danger': flash.type === 'error' }" ng-if="flash" ng-bind="flash.message"></div> -->
+		<div ui-view="content">
+			Please wait while we retrieve your user info
+		</div>
+    </div>
 
-	<script src="/resources/angularjs/grid-ui/3.0.7/ui-grid.min.js"></script>
-    <link rel="stylesheet" href="/resources/angularjs/grid-ui/3.0.7/ui-grid.min.css" />
-
-    <link rel="stylesheet" href="/resources/css/simple-sidebar.css" />
-	<!-- <link rel="stylesheet" ng-href="/resources/css/{{css}}" /> -->
-    <link rel="stylesheet" href="/resources/css/main.css" />
+<!-- 
+    <footer class="footer">
+      <div class="container">
+        <p class="text-muted">© Copyright 2015 Coretree Corp. All Rights Reserved.</p>
+      </div>
+    </footer>
+ -->
 
 	<script>
+		var ident = function(){
+			var id, name, extension;
+			var roles = [];
+		}
+	
 		$(document).ready(function(){
 			$('[data-toggle="tooltip"]').tooltip();
 			
@@ -54,24 +84,5 @@
 		    });
 		});
 	</script>
-</head>
-<body>
-    <div id="wrapper" ui-view="module/authentication/view/logon.html">
-		
-    </div>
-
-<!-- 
-    <footer class="footer">
-      <div class="container">
-        <p class="text-muted">© Copyright 2015 Coretree Corp. All Rights Reserved.</p>
-      </div>
-    </footer>
- -->
-
-    <script src="scripts/app.js"></script>
-    <script src="modules/authentication/services.js"></script>
-    <script src="modules/authentication/controllers.js"></script>
-    <script src="modules/home/controllers.js"></script>
- 
 </body>
 </html>
