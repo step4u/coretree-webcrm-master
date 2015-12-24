@@ -1,65 +1,69 @@
-.grid {
-	width: 100%;
-	height: 670;
-}
-.grid_teller_status {
-	width: 100%;
-	height: 90;
-}
-.grid_tels {
-	width: 100%;
-	height: 700;
-}
-.grid_teller_status .ui-grid-contents-wrapper,
-.grid_tels .ui-grid-contents-wrapper,
-.grid .ui-grid-contents-wrapper {
-		height: 35px !important;
-}
-
-// .white { color: white; background-color:black !important; text-align: center; }
-.white { text-align: center; }
-.grid-cell { text-align: center; }
-.grid-cell-align { text-align: center; padding-top: 3px; }
-
-.subgroup {
-	padding-left: 20px;
-}
-.alert {
-	text-align: center;
-	font-size: 17px;
-}
-.header-filtered {
-	color: blue;
-}
-
-#page-wrapper {
-	width: 100%;
-	padding: 75px 30px 50px 30px;
-}
-
-@media (min-width:768px) {
-	#page-wrapper {
-		padding: 75px 30px 50px 30px;
-	}
-	
-	.navbar-nav {
-		float: left;
-		margin: 0;
-	}
-	.navbar-nav > li {
-		float: left;
-	}
-	.navbar-nav > li > a {
-		padding-top: 15px;
-		padding-bottom: 15px;
-	}
-	.navbar-nav .navbar-right:last-child {
-		margin-right: -15px;
-	}
-	.navbar-left {
-		float: left !important;
-	}
-	.navbar-right {
-		float: right !important;
-	}
-}
+		.grid {
+			width: 100%;
+			height: 670px;
+		}
+		.grid_teller_status {
+			width: 100%;
+			height: 90px;
+		}
+		.grid_tels {
+			width: 100%;
+			height: 700px;
+		}
+		.grid_teller_status .ui-grid-contents-wrapper,
+		.grid_tels .ui-grid-contents-wrapper,
+		.grid .ui-grid-contents-wrapper {
+ 			height: 35px !important;
+		}
+		
+		.ui-grid-row:hover .ui-grid-cell{background: #ff8080;};
+		
+		// .white { color: white; background-color:black !important; text-align: center; }
+		.white {
+		 	text-align: center;
+		 }
+		.grid-cell { text-align: center; }
+		.grid-cell-align { text-align: center; padding-top: 3px; }
+		
+		.subgroup {
+			padding-left: 20px;
+		}
+		.alert {
+			text-align: center;
+			font-size: 17px;
+		}
+		.header-filtered {
+			color: blue;
+		}
+		
+		#page-wrapper {
+			width: 100%;
+			padding: 75px 30px 50px 30px;
+		}
+		
+		@media (min-width:768px) {
+			#page-wrapper {
+				padding: 75px 30px 50px 30px;
+			}
+			
+			.navbar-nav {
+				float: left;
+				margin: 0;
+			}
+			.navbar-nav > li {
+				float: left;
+			}
+			.navbar-nav > li > a {
+				padding-top: 15px;
+				padding-bottom: 15px;
+			}
+			.navbar-nav .navbar-right:last-child {
+				margin-right: -15px;
+			}
+			.navbar-left {
+				float: left !important;
+			}
+			.navbar-right {
+				float: right !important;
+			}
+		}

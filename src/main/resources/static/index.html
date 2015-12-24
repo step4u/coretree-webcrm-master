@@ -1,31 +1,83 @@
-<html ng-app="BasicHttpAuth">
+<!DOCTYPE html>
+<html ng-app="app" id="ng-app">
 <head>
 	<title>CRM with IPCC - Coretree</title>
   	<meta charset="utf-8">
   	<meta name="viewport" content="width=device-width, initial-scale=1">
   	
- 	<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+	
     <link rel="stylesheet" href="/resources/bootstrap/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="/resources/bootstrap/css/bootstrap-theme.min.css" />
-	<script src="/resources/bootstrap/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="resources/bootstrap/css/bootstrap-theme.min.css" />
+	<script src="resources/bootstrap/js/bootstrap.min.js"></script>
+	
+	<script src="https://code.angularjs.org/1.4.8/angular.min.js"></script>
+    <script src="https://code.angularjs.org/1.4.8/angular-touch.min.js"></script>
+    <script src="https://code.angularjs.org/1.4.8/angular-animate.min.js"></script>
+    <script src="https://code.angularjs.org/1.4.8/angular-route.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.8/angular-cookies.min.js"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.14.3/ui-bootstrap-tpls.min.js"></script>
+    <script data-require="ui-router@*" data-semver="0.2.8" src="http://angular-ui.github.io/ui-router/release/angular-ui-router.js"></script>
 
-	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular.min.js"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular-touch.min.js"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular-animate.min.js"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular-route.min.js"></script>
+    <script src="resources/angularjs/grid-ui/grunt-scripts/csv.js"></script>
+    <script src="resources/angularjs/grid-ui/grunt-scripts/pdfmake.js"></script>
+    <script src="resources/angularjs/grid-ui/grunt-scripts/vfs_fonts.js"></script>
 
-    <script src="/resources/angularjs/grid-ui/grunt-scripts/csv.js"></script>
-    <script src="/resources/angularjs/grid-ui/grunt-scripts/pdfmake.js"></script>
-    <script src="/resources/angularjs/grid-ui/grunt-scripts/vfs_fonts.js"></script>
+	<script src="resources/angularjs/grid-ui/3.0.7/ui-grid.min.js"></script>
+    <link rel="stylesheet" href="resources/angularjs/grid-ui/3.0.7/ui-grid.min.css" />
+   	<script src="resources/js/BootStrapContextMenu.js"></script>
+    
+    <link rel="stylesheet" href="resources/css/simple-sidebar.css" />
 
-	<script src="/resources/angularjs/grid-ui/3.0.7/ui-grid.min.js"></script>
-    <link rel="stylesheet" href="/resources/angularjs/grid-ui/3.0.7/ui-grid.min.css" />
+    <link rel="stylesheet" href="resources/css/main.css" />    
+    <link rel="stylesheet" href="style.css" />
+    <script src="script.js"></script>
+    <script src="contextmenu.js"></script>
+    
+    <script src="resources/js/sockjs-0.3.4.js"></script>
+    <script src="resources/js/stomp.js"></script>
+    
+	<style>
 
-    <link rel="stylesheet" href="/resources/css/simple-sidebar.css" />
-	<!-- <link rel="stylesheet" ng-href="/resources/css/{{css}}" /> -->
-    <link rel="stylesheet" href="/resources/css/main.css" />
-
+    </style>
 	<script>
+	    function connect() {
+	        var socket = new SockJS('/webcrm');
+	        stompClient = Stomp.over(socket);
+	        
+	        /*
+	        stompClient.connect({}, function(frame) {
+	            setConnected(true);
+	            console.log('Connected: ' + frame);
+	            stompClient.subscribe('/user/queue/greetings', function(greeting){
+	                showGreeting(JSON.parse(greeting.body).content);
+	            });
+	        });
+	        */
+	        
+	        stompClient.connect({}, function(frame) {
+	            // setConnected(true);
+	            console.log('Connected: ' + frame);
+	            stompClient.subscribe('/topic/tel.status.*', function(message){
+	                // showGreeting(JSON.parse(greeting.body).content);
+	            });
+	        });
+	    }
+	    
+	    function disconnect() {
+	        if (stompClient != null) {
+	            stompClient.disconnect();
+	        }
+	        // setConnected(false);
+	        console.log("Disconnected");
+	    }
+	    
+	    function sendName() {
+	        var name = document.getElementById('name').value;
+	        stompClient.send("/user/hello", {}, JSON.stringify({ 'name': name }));
+	    }
+	
 		$(document).ready(function(){
 			$('[data-toggle="tooltip"]').tooltip();
 			
@@ -45,19 +97,19 @@
 		    $("#publicaddr").click(function(e){
 		    	e.preventDefault();
 		    	console.log('publicaddr clicked');
-		    	location.href="#/mgmt/addr";
+		    	location.href="addr0";
 		    });
 		    $("#personaladdr").click(function(e){
 		    	e.preventDefault();
 		    	console.log('personaladdr clicked');
-		    	location.href="#/mgmt/addr";
+		    	location.href="addr1";
 		    });
 		});
 	</script>
 </head>
 <body>
-    <div id="wrapper" ui-view="module/authentication/view/logon.html">
-		
+    <div id="wrapper">
+		<div ui-view="content"></div>
     </div>
 
 <!-- 
@@ -68,10 +120,9 @@
     </footer>
  -->
 
-    <script src="scripts/app.js"></script>
-    <script src="modules/authentication/services.js"></script>
-    <script src="modules/authentication/controllers.js"></script>
-    <script src="modules/home/controllers.js"></script>
- 
+	<script src="resources/apps/controller_callstatus.js"></script>
+	<script src="resources/apps/controller_telstatus.js"></script>
+	<script src="resources/apps/controller_customers.js"></script>
+	<script src="resources/apps/controller_calls.js"></script>
 </body>
 </html>
