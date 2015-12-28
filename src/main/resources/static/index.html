@@ -26,35 +26,62 @@
 
 	<script src="resources/angularjs/grid-ui/3.0.7/ui-grid.min.js"></script>
     <link rel="stylesheet" href="resources/angularjs/grid-ui/3.0.7/ui-grid.min.css" />
+   	<script src="resources/js/BootStrapContextMenu.js"></script>
     
     <link rel="stylesheet" href="resources/css/simple-sidebar.css" />
-    
+
+    <link rel="stylesheet" href="resources/css/main.css" />    
     <link rel="stylesheet" href="style.css" />
     <script src="script.js"></script>
+    <script src="contextmenu.js"></script>
     
-    <link rel="stylesheet" href="resources/css/main.css" />
-</head>
-<body>
-    <div id="wrapper">
-		<!-- <div ng-class="{ 'alert': flash, 'alert-success': flash.type === 'success', 'alert-danger': flash.type === 'error' }" ng-if="flash" ng-bind="flash.message"></div> -->
-		<div ui-view="content">
-			Please wait while we retrieve your user info
-		</div>
-    </div>
+    <script src="resources/js/sockjs-0.3.4.js"></script>
+    <script src="resources/js/stomp.js"></script>
+    
+	<style>
 
-<!-- 
-    <footer class="footer">
-      <div class="container">
-        <p class="text-muted">© Copyright 2015 Coretree Corp. All Rights Reserved.</p>
-      </div>
-    </footer>
- -->
-
+    </style>
 	<script>
-		var ident = function(){
-			var id, name, extension;
-			var roles = [];
-		}
+		var stompClient;
+		
+	    function connect() {
+	        var socket = new SockJS('/webcrm');
+	        stompClient = Stomp.over(socket);
+	        
+	        /*
+	        stompClient.connect({}, function(frame) {
+	            setConnected(true);
+	            console.log('Connected: ' + frame);
+	            stompClient.subscribe('/user/queue/greetings', function(greeting){
+	                showGreeting(JSON.parse(greeting.body).content);
+	            });
+	        });
+	        */
+	        
+	        stompClient.connect('test', function(frame) {
+	            console.log('index.html Connected: ' + frame);
+	            //stompClient.subscribe('/topic/tel.status.*', function(message) {
+	            //    // showGreeting(JSON.parse(greeting.body).content);
+	            //});
+	            
+	            stompClient.subscribe("/app/positions", function(message) {
+	            	console.log('index.html /positions: ' + JSON.parse(message.body));
+				});
+	        });
+	    }
+	    
+	    function disconnect() {
+	        if (stompClient != null) {
+	            stompClient.disconnect();
+	        }
+	        // setConnected(false);
+	        console.log("Disconnected");
+	    }
+	    
+	    function sendName() {
+	        var name = document.getElementById('name').value;
+	        stompClient.send("/user/hello", {}, JSON.stringify({ 'name': name }));
+	    }
 	
 		$(document).ready(function(){
 			$('[data-toggle="tooltip"]').tooltip();
@@ -75,14 +102,47 @@
 		    $("#publicaddr").click(function(e){
 		    	e.preventDefault();
 		    	console.log('publicaddr clicked');
-		    	location.href="#/mgmt/addr";
+		    	location.href="addr0";
 		    });
 		    $("#personaladdr").click(function(e){
 		    	e.preventDefault();
 		    	console.log('personaladdr clicked');
-		    	location.href="#/mgmt/addr";
+		    	location.href="addr1";
+		    });
+
+		    connect();
+
+		    $("#socktest").click(function(){
+		        var trade = {
+		                "action" : "act1",
+		                "ticker" : "ticker1",
+		                "shares" : "shares1"
+		              };
+		        stompClient.send("/topic/traders", {}, 'tttttttttttt');
+		        // stompClient.send("/app/traders");
+		        console.log("socktest sock sent");
 		    });
 		});
 	</script>
+</head>
+<body>
+    <div id="wrapper">
+		<div ui-view="content"></div>
+    </div>
+    
+	<button type="button" class="btn btn-primary btn-sm" id='socktest' style="margin-top: 70px;">테스트send</button>
+
+<!-- 
+    <footer class="footer">
+      <div class="container">
+        <p class="text-muted">© Copyright 2015 Coretree Corp. All Rights Reserved.</p>
+      </div>
+    </footer>
+ -->
+
+	<script src="resources/apps/controller_callstatus.js"></script>
+	<script src="resources/apps/controller_telstatus.js"></script>
+	<script src="resources/apps/controller_customers.js"></script>
+	<script src="resources/apps/controller_calls.js"></script>
 </body>
 </html>
