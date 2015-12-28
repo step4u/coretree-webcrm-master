@@ -1,5 +1,6 @@
 'use strict';
 
+// angular.module('app', ['ui.router', 'ui.bootstrap', 'ui.grid', 'ui.grid.selection', 'ui.grid.pagination', 'ui.bootstrap.contextMenu'])
 angular.module('app', ['ui.router', 'ui.bootstrap', 'ui.grid', 'ui.grid.selection', 'ui.grid.pagination'])
 // principal is a service that tracks the user's identity. 
 // calling identity() returns a promise while it does what you need it to do
@@ -25,13 +26,8 @@ angular.module('app', ['ui.router', 'ui.bootstrap', 'ui.grid', 'ui.grid.selectio
         return _identity.roles.indexOf(role) != -1;
       },
       isInAnyRole: function(roles) {
-    	  console.log("isInAnyRole roles1 : " + roles + "//" + roles.length);
-    	  // console.log("isInAnyRole _identity.roles : " + _identity.roles);
-    	  
         if (!_authenticated || !_identity.roles) return false;
 
-        console.log("isInAnyRole roles2 : " + roles + "//" + roles.length);
-        
         for (var i = 0; i < roles.length; i++) {
           if (this.isInRole(roles[i])) return true;
         }
@@ -39,14 +35,12 @@ angular.module('app', ['ui.router', 'ui.bootstrap', 'ui.grid', 'ui.grid.selectio
         return false;
       },
       authenticate: function(identity) {
-    	  console.log("authenticate typeof(identity): " + typeof(identity));
-    	  console.log("authenticate identity : " + identity);
           _identity = identity;
           _authenticated = identity != null;
           
           // for this demo, we'll store the identity in localStorage. For you, it could be a cookie, sessionStorage, whatever
-          if (identity) localStorage.setItem("demo.identity", angular.toJson(identity));
-          else localStorage.removeItem("demo.identity");
+          if (identity) localStorage.setItem("app.identity", angular.toJson(identity));
+          else localStorage.removeItem("app.identity");
       },
       identity: function(force) {
         var deferred = $q.defer();
@@ -102,10 +96,10 @@ angular.module('app', ['ui.router', 'ui.bootstrap', 'ui.grid', 'ui.grid.selectio
           .then(function() {
             var isAuthenticated = principal.isAuthenticated();
             
-            console.log("factory authorization -> isAuthenticated :" + isAuthenticated);
-            console.log("factory authorization -> $rootScope.toState.data.roles :" + $rootScope.toState.data.roles);
-            console.log("factory authorization -> $rootScope.toState.data.roles.length :" + $rootScope.toState.data.roles.length);
-            console.log("factory authorization -> !principal.isInAnyRole($rootScope.toState.data.roles) :" + !principal.isInAnyRole($rootScope.toState.data.roles));
+//            console.log("factory authorization -> isAuthenticated :" + isAuthenticated);
+//            console.log("factory authorization -> $rootScope.toState.data.roles :" + $rootScope.toState.data.roles);
+//            console.log("factory authorization -> $rootScope.toState.data.roles.length :" + $rootScope.toState.data.roles.length);
+//            console.log("factory authorization -> !principal.isInAnyRole($rootScope.toState.data.roles) :" + !principal.isInAnyRole($rootScope.toState.data.roles));
 
             if ($rootScope.toState.data.roles && $rootScope.toState.data.roles.length > 0 && !principal.isInAnyRole($rootScope.toState.data.roles)) {
               if (isAuthenticated) $state.go('accessdenied'); // user is signed in but not authorized for desired state
@@ -143,6 +137,7 @@ angular.module('app', ['ui.router', 'ui.bootstrap', 'ui.grid', 'ui.grid.selectio
   					
   			        // here, we fake authenticating and give a fake user
   			        principal.authenticate(user);
+  			        connect();
   			        
   			        if ($scope.returnToState) $state.go($scope.returnToState.name, $scope.returnToStateParams);
   			        else $state.go('home');
@@ -151,6 +146,7 @@ angular.module('app', ['ui.router', 'ui.bootstrap', 'ui.grid', 'ui.grid.selectio
   				}
   			}
   			, function errorCallback(response) {
+  				console.log("SigninCtrl login err : " + angular.toJson(response.data));
   				return;
   			});
       };
@@ -158,8 +154,10 @@ angular.module('app', ['ui.router', 'ui.bootstrap', 'ui.grid', 'ui.grid.selectio
   ])
   .controller('HomeCtrl', ['$scope', '$state', 'principal',
     function($scope, $state, principal) {
+	  $scope.css = "resources/css/main.css";
       $scope.signout = function() {
         principal.authenticate(null);
+        disconnect();
         $state.go('signin');
       };
     }
@@ -178,19 +176,51 @@ angular.module('app', ['ui.router', 'ui.bootstrap', 'ui.grid', 'ui.grid.selectio
             }
           ]
         }
-      }).state('home', {
+      })
+      .state('home', {
         parent: 'site',
         url: '/',
         data: {
-          roles: ['User']
+          roles: ['User', 'Admin']
         },
         views: {
           'content@': {
-            templateUrl: 'home.html',
+            templateUrl: 'view/home.html',
             controller: 'HomeCtrl'
+          },
+          'maincontent@home': {
+              templateUrl: 'view/addr.html',
+              controller: 'CtrlCustomer'
           }
         }
-      }).state('signin', {
+      })
+      .state('addr', {
+        parent: 'home',
+        url: 'addr',
+        data: {
+          roles: ['User', 'Admin']
+        },
+        views: {
+          'maincontent@home': {
+              templateUrl: 'view/addr.html',
+              controller: 'CtrlCustomer'
+          }
+        }
+      })
+      .state('calls', {
+        parent: 'home',
+        url: 'calls',
+        data: {
+          roles: ['User', 'Admin']
+        },
+        views: {
+          'maincontent@home': {
+              templateUrl: 'view/calls.html',
+              controller: 'CtrlCall'
+          }
+        }
+      })
+      .state('signin', {
         parent: 'site',
         url: '/signin',
         data: {
@@ -230,7 +260,7 @@ angular.module('app', ['ui.router', 'ui.bootstrap', 'ui.grid', 'ui.grid.selectio
   .run(['$rootScope', '$state', '$stateParams', 'authorization', 'principal',
     function($rootScope, $state, $stateParams, authorization, principal) {
       $rootScope.$on('$stateChangeStart', function(event, toState, toStateParams) {
-    	  console.log("$rootScope.$on.toState : " + angular.toJson(toState));
+    	  //console.log("$rootScope.$on.toState : " + angular.toJson(toState));
         $rootScope.toState = toState;
         $rootScope.toStateParams = toStateParams;
 
