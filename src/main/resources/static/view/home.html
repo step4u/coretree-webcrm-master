@@ -39,7 +39,7 @@
                         </ul>
 		        	</li>
 			    	<li class="dropdown">
-						<a href="#" ng-click="signout()"> 로그아웃</a>
+						<a href="/logout.html"> 로그아웃</a>
 		        	</li>
 			    </ul>
 			</div>
@@ -113,6 +113,26 @@
 					<div ng-controller="CtrlTelStatus" style="margin-top: 15px;">
 						<div ui-grid="gridOptions" class="grid_tels" context-menu="menuOptions"></div>
 					</div>
+					<button type="button" class="btn btn-primary btn-sm" id='socktest'>테스트 send</button>
 		        </div>
 			</div>
 		</div>
+		
+		<script>
+			$(document).ready(function(){
+			    $("#socktest").click(function(){
+			        var trade = {
+			                'action' : 'act1',
+			                'ticker' : 'ticker1',
+			                'shares' : 'shares1'
+			              };
+			        
+			     	stompClient.send("/app/traders", {}, JSON.stringify(trade));
+			        // stompClient.send("/app/traders", {user: 'test'}, JSON.stringify(trade));
+			        // stompClient.send("/app/traders");
+			        console.log("socktest sock sent");
+			    });
+			    
+			    connect();
+			});
+		</script>	

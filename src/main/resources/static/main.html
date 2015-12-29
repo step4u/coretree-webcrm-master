@@ -81,16 +81,12 @@
 	            //    // showGreeting(JSON.parse(greeting.body).content);
 	            //});
 	            
-	            //stompClient.subscribe("/user/positions", function(message) {
-	            //	console.log('index.html /positions: ' + JSON.parse(message.body));
-				//});
+	            stompClient.subscribe("/app/positions", function(message) {
+	            	console.log('index.html /positions: ' + JSON.parse(message.body));
+				});
 	            
 	            stompClient.subscribe("/user/queue/errors", function(message) {
 	            	console.log('index.html /app/queue/errors: ' + JSON.parse(message.body));
-				});
-	            
-	            stompClient.subscribe("/user/topic/callstatus", function(message) {
-	            	console.log('index.html /topic/callstatus: ' + JSON.parse(message.body));
 				});
 	        });
 	    }

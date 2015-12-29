@@ -1,6 +1,11 @@
 	/*  상태 */
 	angular.module('app')
 	.controller('CtrlCallStatus', ['$scope', '$http', 'uiGridConstants', function ($scope, $http, uiGridConstants) {
+		
+		$scope.test = function(){
+			alert('test');
+		};
+		
 		$scope.deleteRow = function(row) {
 			var index = $scope.gridOptions.data.indexOf(row.entity);
 			$scope.gridOptions.data.splice(index, 1);
