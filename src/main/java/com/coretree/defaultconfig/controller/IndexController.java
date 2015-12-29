@@ -3,9 +3,9 @@ package com.coretree.defaultconfig.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-@Controller
+//@Controller
 public class IndexController {
-	@RequestMapping(value = "/ee")
+	@RequestMapping(value = "/")
 	public String Index() {
 		return "index";
 	}

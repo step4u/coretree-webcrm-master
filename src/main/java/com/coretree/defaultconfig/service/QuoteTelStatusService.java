@@ -3,6 +3,7 @@ package com.coretree.defaultconfig.service;
 import java.nio.ByteOrder;
 import java.security.Principal;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -13,6 +14,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
+import org.springframework.messaging.MessageHeaders;
 import org.springframework.messaging.core.MessageSendingOperations;
 import org.springframework.messaging.handler.annotation.MessageExceptionHandler;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -21,6 +23,7 @@ import org.springframework.messaging.simp.annotation.SubscribeMapping;
 import org.springframework.messaging.simp.broker.BrokerAvailabilityEvent;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.util.MimeTypeUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -29,11 +32,14 @@ import com.coretree.defaultconfig.domain.QuoteTelStatus.TelStatus;
 import com.coretree.defaultconfig.helper.FirebirdSqlHelper;
 import com.coretree.event.HaveGotUcMessageEventArgs;
 import com.coretree.event.IEventHandler;
+import com.coretree.interfaces.IQuoteTelStatusService;
+import com.coretree.models.GroupWareData;
+import com.coretree.models.UcMessage;
 import com.coretree.socket.*;
+import com.coretree.util.Const4pbx;
 
-@RestController
 @Service
-public class QuoteTelStatusService implements ApplicationListener<BrokerAvailabilityEvent>, IEventHandler<HaveGotUcMessageEventArgs> {
+public class QuoteTelStatusService implements ApplicationListener<BrokerAvailabilityEvent>, IEventHandler<HaveGotUcMessageEventArgs>, IQuoteTelStatusService {
 	private static Log logger = LogFactory.getLog(QuoteTelStatusService.class);
 	private final MessageSendingOperations<String> messagingTemplate;
 	private AtomicBoolean brokerAvailable = new AtomicBoolean();
@@ -52,8 +58,8 @@ public class QuoteTelStatusService implements ApplicationListener<BrokerAvailabi
 		this.brokerAvailable.set(event.isBrokerAvailable());
 		
 		uc = new UcServer("14.63.166.98", 31001, 1, ByteOrder.LITTLE_ENDIAN);
-		uc.start();
-		uc.Regist();
+		// uc.start();
+		uc.regist();
 
 //		try {
 //			Thread.sleep(1000);
@@ -73,8 +79,48 @@ public class QuoteTelStatusService implements ApplicationListener<BrokerAvailabi
 //		}
 	}
 	
+	// sample
 	@Scheduled(fixedDelay=2000)
 	public void sendQuotes() {
+		for (QuoteTelStatus quote : this.quoteGenerator.generateQuotes()) {
+			if (logger.isTraceEnabled()) {
+				logger.trace("Sending quote " + quote);
+			}
+			if (this.brokerAvailable.get()) {
+				this.messagingTemplate.convertAndSend("/topic/tel.status." + quote.getTicker(), quote);
+			}
+		}
+	}
+	
+	// 내선 상태 구독 2초마다 갱신
+	@Scheduled(fixedDelay=2000)
+	public void sendInnerTelStatus() {
+		for (QuoteTelStatus quote : this.quoteGenerator.generateQuotes()) {
+			if (logger.isTraceEnabled()) {
+				logger.trace("Sending quote " + quote);
+			}
+			if (this.brokerAvailable.get()) {
+				this.messagingTemplate.convertAndSend("/topic/tel.status." + quote.getTicker(), quote);
+			}
+		}
+	}
+	
+	// 통화 통계 및 서버 상태 구독 10초마다 갱신
+	@Scheduled(fixedDelay=10000)
+	public void sendCallStatus() {
+		for (QuoteTelStatus quote : this.quoteGenerator.generateQuotes()) {
+			if (logger.isTraceEnabled()) {
+				logger.trace("Sending quote " + quote);
+			}
+			if (this.brokerAvailable.get()) {
+				this.messagingTemplate.convertAndSend("/topic/call.status." + quote.getTicker(), quote);
+			}
+		}
+	}
+	
+	// 모든 요청 (MakeCall, Transfer, Pick up ...)
+	@MessageMapping("/req")
+	public void sendResultOfRequest() {
 		for (QuoteTelStatus quote : this.quoteGenerator.generateQuotes()) {
 			if (logger.isTraceEnabled()) {
 				logger.trace("Sending quote " + quote);
@@ -144,7 +190,6 @@ public class QuoteTelStatusService implements ApplicationListener<BrokerAvailabi
 
 		public StockQuoteGenerator() {
 			
-			
 			this.innertels.put("8001", TelStatus.Busy);
 			this.innertels.put("8002", TelStatus.Busy);
 			this.innertels.put("8003", TelStatus.Normal);
@@ -179,12 +224,75 @@ public class QuoteTelStatusService implements ApplicationListener<BrokerAvailabi
 		}
 	}
 
+	/*
+	public void sendGroupwareNotifications() {
+
+		Map<String, Object> map = new HashMap<>();
+		map.put(MessageHeaders.CONTENT_TYPE, MimeTypeUtils.APPLICATION_JSON);
+
+		for (TradeResult result : this.tradeResults) {
+			if (System.currentTimeMillis() >= (result.timestamp + 1500)) {
+				logger.debug("Sending position update: " + result.position);
+				this.messagingTemplate.convertAndSendToUser(result.user, "/queue/position-updates", result.position, map);
+				this.tradeResults.remove(result);
+			}
+		}
+	}
+	*/
+ 
 	@Override
-	@SubscribeMapping("/groupware")
 	public void eventReceived(Object sender, HaveGotUcMessageEventArgs e) {
 		// when a message have been arrived from the groupware socket 31001, a event raise.
 		if (this.brokerAvailable.get()) {
-			this.messagingTemplate.convertAndSend("/topic/tel.status." + quote.getTicker(), quote);
+			// this.messagingTemplate.convertAndSend("/topic/tel.status." + quote.getTicker(), quote);
+			// this.messagingTemplate.convertAndSendToUser(result.user, "/queue/position-updates", result.position, map);
 		}		
+	}
+	
+	@Override
+	public void RequestToPbx(UcMessage msg) {
+		uc.Send(msg);
+	}
+	
+	@Override
+	public void MakeCall(UcMessage msg) {
+		// TODO Auto-generated method stub
+		uc.Send(msg);
+	}
+
+	@Override
+	public void Transfer(UcMessage msg) {
+		// TODO Auto-generated method stub
+		uc.Send(msg);
+	}
+
+	@Override
+	public void PickUp(UcMessage msg) {
+		// TODO Auto-generated method stub
+		uc.Send(msg);
+	}
+
+	@Override
+	public void ReqExtStatus(UcMessage msg) {
+		// TODO Auto-generated method stub
+		uc.Send(msg);
+	}
+
+	@Override
+	public void DropCall(UcMessage msg) {
+		// TODO Auto-generated method stub
+		uc.Send(msg);
+	}
+
+	@Override
+	public void HoldCall(UcMessage msg) {
+		// TODO Auto-generated method stub
+		uc.Send(msg);
+	}
+
+	@Override
+	public void ActiveCall(UcMessage msg) {
+		// TODO Auto-generated method stub
+		uc.Send(msg);
 	}
 }

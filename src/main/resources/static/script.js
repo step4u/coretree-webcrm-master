@@ -74,7 +74,7 @@ angular.module('app', ['ui.router', 'ui.bootstrap', 'ui.grid', 'ui.grid.selectio
           _identity = angular.fromJson(localStorage.getItem("app.identity"));
           self.authenticate(_identity);
           deferred.resolve(_identity);
-        }, 1000);
+        }, 500);
 
         return deferred.promise;
       }
@@ -137,7 +137,7 @@ angular.module('app', ['ui.router', 'ui.bootstrap', 'ui.grid', 'ui.grid.selectio
   					
   			        // here, we fake authenticating and give a fake user
   			        principal.authenticate(user);
-  			        connect();
+ 			        connect();
   			        
   			        if ($scope.returnToState) $state.go($scope.returnToState.name, $scope.returnToStateParams);
   			        else $state.go('home');
