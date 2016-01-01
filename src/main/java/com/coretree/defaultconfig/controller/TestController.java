@@ -25,21 +25,24 @@ import com.coretree.defaultconfig.mapper.Member;
 import com.coretree.defaultconfig.mapper.MemberMapper;
 import com.coretree.defaultconfig.model.ChatMessage;
 import com.coretree.defaultconfig.model.LoginResult;
-import com.coretree.defaultconfig.model.Ucmessage;
+import com.coretree.interfaces.IQuoteTelStatusService;
+import com.coretree.models.UcMessage;
 
 @Controller
 public class TestController {
 	
 	private static final Log logger = LogFactory.getLog(TestController.class);
 	private SimpMessagingTemplate template;
+	private IQuoteTelStatusService ucservice;
 	
 	@Autowired
-	public TestController(SimpMessagingTemplate template) {
+	public TestController(SimpMessagingTemplate template, IQuoteTelStatusService ucservice) {
 		this.template = template;
+		this.ucservice = ucservice;
 	}
 
 	@SubscribeMapping("/positions")
-	public String getPositions(Principal principal) throws Exception {
+	public String getPositions() throws Exception {
 //		logger.debug("TestController Positions for " + principal.getName());
 //		System.err.println("TestController Positions for " + principal.getName());
 		logger.debug("TestController Positions for ");
@@ -48,9 +51,12 @@ public class TestController {
 	}
 
 	@MessageMapping("/traders")
-	public void executeTrade(Ucmessage message, Principal principal) {
-		logger.debug("TestController Trade: " + message);
-		System.err.println("TestController Trade: " + message);
+	public void executeTrade(UcMessage message, Principal principal) {
+		// logger.debug(String.format("TestController Trade: cmd:%d, extension:%s, peer:%s, status:%d" + message.cmd, message.extension, message.peer, message.status));
+		// System.err.println(String.format("TestController Trade: cmd:%d, extension:%s, peer:%s, status:%d" + message.cmd, message.extension, message.peer, message.status));
+		
+		ucservice.RequestToPbx(message);
+		
 		
 //		Principal principal = message.getHeaders().get(SimpMessageHeaderAccessor.USER_HEADER, Principal.class);
 //	    String authedSender = principal.getName();

@@ -33,10 +33,14 @@ import com.coretree.defaultconfig.domain.QuoteTelStatus.TelStatus;
 import com.coretree.defaultconfig.helper.FirebirdSqlHelper;
 import com.coretree.event.HaveGotUcMessageEventArgs;
 import com.coretree.event.IEventHandler;
+import com.coretree.interfaces.IQuoteTelStatusService;
+import com.coretree.models.GroupWareData;
+import com.coretree.models.UcMessage;
 import com.coretree.socket.*;
+import com.coretree.util.Const4pbx;
 
 @Service
-public class QuoteTelStatusService implements ApplicationListener<BrokerAvailabilityEvent>, IEventHandler<HaveGotUcMessageEventArgs> {
+public class QuoteTelStatusService implements ApplicationListener<BrokerAvailabilityEvent>, IEventHandler<HaveGotUcMessageEventArgs>, IQuoteTelStatusService {
 	private static Log logger = LogFactory.getLog(QuoteTelStatusService.class);
 	private final MessageSendingOperations<String> messagingTemplate;
 	private final SimpMessagingTemplate msgTemplate;
@@ -57,8 +61,8 @@ public class QuoteTelStatusService implements ApplicationListener<BrokerAvailabi
 		this.brokerAvailable.set(event.isBrokerAvailable());
 		
 		uc = new UcServer("14.63.166.98", 31001, 1, ByteOrder.LITTLE_ENDIAN);
-		uc.start();
-		uc.Regist();
+		// uc.start();
+		uc.regist();
 
 //		try {
 //			Thread.sleep(1000);
@@ -189,7 +193,6 @@ public class QuoteTelStatusService implements ApplicationListener<BrokerAvailabi
 
 		public StockQuoteGenerator() {
 			
-			
 			this.innertels.put("8001", TelStatus.Busy);
 			this.innertels.put("8002", TelStatus.Busy);
 			this.innertels.put("8003", TelStatus.Normal);
@@ -247,5 +250,52 @@ public class QuoteTelStatusService implements ApplicationListener<BrokerAvailabi
 			// this.messagingTemplate.convertAndSend("/topic/tel.status." + quote.getTicker(), quote);
 			// this.messagingTemplate.convertAndSendToUser(result.user, "/queue/position-updates", result.position, map);
 		}		
+	}
+	
+	@Override
+	public void RequestToPbx(UcMessage msg) {
+		uc.Send(msg);
+	}
+	
+	@Override
+	public void MakeCall(UcMessage msg) {
+		// TODO Auto-generated method stub
+		uc.Send(msg);
+	}
+
+	@Override
+	public void Transfer(UcMessage msg) {
+		// TODO Auto-generated method stub
+		uc.Send(msg);
+	}
+
+	@Override
+	public void PickUp(UcMessage msg) {
+		// TODO Auto-generated method stub
+		uc.Send(msg);
+	}
+
+	@Override
+	public void ReqExtStatus(UcMessage msg) {
+		// TODO Auto-generated method stub
+		uc.Send(msg);
+	}
+
+	@Override
+	public void DropCall(UcMessage msg) {
+		// TODO Auto-generated method stub
+		uc.Send(msg);
+	}
+
+	@Override
+	public void HoldCall(UcMessage msg) {
+		// TODO Auto-generated method stub
+		uc.Send(msg);
+	}
+
+	@Override
+	public void ActiveCall(UcMessage msg) {
+		// TODO Auto-generated method stub
+		uc.Send(msg);
 	}
 }

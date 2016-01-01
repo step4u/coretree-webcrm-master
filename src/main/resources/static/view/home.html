@@ -113,13 +113,27 @@
 					<div ng-controller="CtrlTelStatus" style="margin-top: 15px;">
 						<div ui-grid="gridOptions" class="grid_tels" context-menu="menuOptions"></div>
 					</div>
+<<<<<<< HEAD
 					<button type="button" class="btn btn-primary btn-sm" id='socktest'>테스트 send</button>
+=======
+					<button type="button" class="btn btn-primary btn-sm" id='btn_connect'>Connect</button>
+					<button type="button" class="btn btn-primary btn-sm" id='btn_disconnect'>Disconnect</button>
+					<button type="button" class="btn btn-primary btn-sm" id='btn_makecall'>MakeCall</button>
+					<button type="button" class="btn btn-primary btn-sm" id='btn_dropcall'>DropCall</button>
+					<button type="button" class="btn btn-primary btn-sm" id='btn_holdcall'>HoldCall</button>
+					<button type="button" class="btn btn-primary btn-sm" id='btn_activecall'>ActiveCall</button>
+					<button type="button" class="btn btn-primary btn-sm" id='btn_transfer'>Transfer</button>
+					<button type="button" class="btn btn-primary btn-sm" id='btn_pickup'>PickUp</button>
+					<button type="button" class="btn btn-primary btn-sm" id='btn_reqextstatus'>Requset Extension Status</button>
+					<!-- <button type="button" class="btn btn-primary btn-sm" id='btn_live'>TEST</button> -->
+>>>>>>> branch 'angularjs_auth' of https://github.com/step4u/coretree-webcrm-master.git
 		        </div>
 			</div>
 		</div>
 		
 		<script>
 			$(document).ready(function(){
+<<<<<<< HEAD
 			    $("#socktest").click(function(){
 			        var trade = {
 			                'action' : 'act1',
@@ -134,5 +148,121 @@
 			    });
 			    
 			    connect();
+=======
+			    $("#btn_connect").click(function(){
+			    	connect();
+			    });
+				
+			    $("#btn_disconnect").click(function(){
+					disconnect();
+			    });
+			    
+			    $("#btn_makecall").click(function(){
+			    	// makecall
+			        var trade = {
+			                'cmd' : 74,
+			                'extension' : '3001',
+			                'caller' : '',
+			                'peer' : '01045455962',
+			                'unconditional' : '',
+			                'status': -1
+			              };
+			        
+			     	stompClient.send("/app/traders", {}, JSON.stringify(trade));
+			        console.log("socktest sock sent");
+			    });
+			    
+			    $("#btn_dropcall").click(function(){
+			    	// pickup
+			        var trade = {
+			                'cmd' : 76,
+			                'extension' : '',
+			                'caller' : '3001',
+			                'peer' : '3002',
+			                'unconditional' : '',
+			                'status': -1
+			              };
+			        
+			     	stompClient.send("/app/traders", {}, JSON.stringify(trade));
+			        console.log("socktest sock sent");
+			    });
+			    
+			    $("#btn_holdcall").click(function(){
+			    	// pickup
+			        var trade = {
+			                'cmd' : 82,
+			                'extension' : '3001',
+			                'caller' : '3001',
+			                'peer' : '3002',
+			                'unconditional' : '',
+			                'status': -1
+			              };
+			        
+			     	stompClient.send("/app/traders", {}, JSON.stringify(trade));
+			        console.log("socktest sock sent");
+			    });
+			    
+			    $("#btn_activecall").click(function(){
+			    	// pickup
+			        var trade = {
+			                'cmd' : 84,
+			                'extension' : '3001',
+			                'caller' : '3001',
+			                'peer' : '01045455962',
+			                'unconditional' : '',
+			                'status': -1
+			              };
+			        
+			     	stompClient.send("/app/traders", {}, JSON.stringify(trade));
+			        console.log("socktest sock sent");
+			    });
+			    
+			    $("#btn_transfer").click(function(){
+			    	// transfer
+			        var trade = {
+			                'cmd' : 86,
+			                'extension' : '3001',
+			                'caller' : '3001',
+			                'peer' : '01045455962',
+			                'unconditional' : '3002',
+			                'status': -1
+			              };
+			        
+			     	stompClient.send("/app/traders", {}, JSON.stringify(trade));
+			        console.log("socktest sock sent");
+			    });
+			    
+			    $("#btn_pickup").click(function(){
+			    	// pickup
+			        var trade = {
+			                'cmd' : 80,
+			                'extension' : '3001',
+			                'caller' : '',
+			                'peer' : '3002',
+			                'unconditional' : '',
+			                'status': -1
+			              };
+			        
+			     	stompClient.send("/app/traders", {}, JSON.stringify(trade));
+			        console.log("socktest sock sent");
+			    });
+			    
+			    $("#btn_reqextstatus").click(function(){
+			    	// Requset Extension Status
+			        var trade = {
+			                'cmd' : 80,
+			                'extension' : '3001',
+			                'caller' : '',
+			                'peer' : '3002',
+			                'unconditional' : '',
+			                'status': -1
+			              };
+			        
+			     	stompClient.send("/app/traders", {}, JSON.stringify(trade));
+			        console.log("socktest sock sent");
+			    });
+			    
+			    // connect();
+>>>>>>> branch 'angularjs_auth' of https://github.com/step4u/coretree-webcrm-master.git
 			});
 		</script>	

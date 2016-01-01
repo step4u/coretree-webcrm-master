@@ -1,3 +1,4 @@
+
 package com.coretree.defaultconfig.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +47,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
 		auth.inMemoryAuthentication().withUser("test").password("1234").roles("USER", "ADMIN");
-		auth.inMemoryAuthentication().withUser("test2").password("1234").roles("USER");
 	}
 }
