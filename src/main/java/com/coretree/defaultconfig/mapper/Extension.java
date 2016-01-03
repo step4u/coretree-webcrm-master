@@ -21,6 +21,6 @@ public class Extension {
 	
 	@Override
 	public String toString() {
-		return "Member [extension=" + extension + ", status=" + status + "]";
+		return "Extension [extension=" + extension + ", status=" + status + "]";
 	}
 }

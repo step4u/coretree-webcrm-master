@@ -6,6 +6,7 @@
   	<meta name="viewport" content="width=device-width, initial-scale=1">
   	
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
 	
     <link rel="stylesheet" href="/resources/bootstrap/css/bootstrap.min.css" />
     <link rel="stylesheet" href="resources/bootstrap/css/bootstrap-theme.min.css" />
@@ -55,51 +56,39 @@
 		})();
 	*/
 	
+		var ROLE;
 		var whoami;
 		var stompClient;
+		
 	    function connect() {
 	        var socket = new SockJS('/webcrm');
 	        stompClient = Stomp.over(socket);
-	        
-	        //stompClient.connect({}, function(frame) {
-	        //    setConnected(true);
-	        //    console.log('Connected: ' + frame);
-	        //    stompClient.subscribe('/user/queue/greetings', function(greeting){
-	        //        showGreeting(JSON.parse(greeting.body).content);
-	        //    });
-	        //});
-
-	        var headers = {
-	        	      login: 'test',
-	        	      passcode: '1234'
-	        	    };
+	        stompClient.outgoing = 10000;
+	        stompClient.incoming = 10000;
 	        
 	        stompClient.connect({}, function(frame) {
 	        	whoami = frame.headers['user-name'];
-	            console.log('index.html Connected: ' + frame);
-	            //stompClient.subscribe('/topic/tel.status.*', function(message) {
-	            //    // showGreeting(JSON.parse(greeting.body).content);
-	            //});
-	            
-<<<<<<< HEAD
-	            //stompClient.subscribe("/user/positions", function(message) {
-	            //	console.log('index.html /positions: ' + JSON.parse(message.body));
-				//});
-	            
-	            stompClient.subscribe("/user/queue/errors", function(message) {
-	            	console.log('index.html /app/queue/errors: ' + JSON.parse(message.body));
-				});
-	            
+	            //console.log('index.html Connected: ' + frame);
+
+	            /*
 	            stompClient.subscribe("/user/topic/callstatus", function(message) {
 	            	console.log('index.html /topic/callstatus: ' + JSON.parse(message.body));
-=======
-	            stompClient.subscribe("/app/positions", function(message) {
-	            	console.log('index.html /positions: ' + JSON.parse(message.body));
+	            });
+	            */
+
+	            stompClient.subscribe("/topic/ext.status.*", function(message) {
+	            	var data = JSON.parse(message.body);
+	                console.log("/topic/ext.status : " + data.extension + ", " + data.status);
+	                update_ext_status(data);
+	              });
+	            
+	            stompClient.subscribe("/user/queue/groupware", function(message) {
+	            	// console.log('index.html /user/queus/groupware: ' + JSON.parse(message.body));
+	            	// console.log('index.html /user/queus/groupware: ' + message.body);
 				});
 	            
 	            stompClient.subscribe("/user/queue/errors", function(message) {
 	            	console.log('index.html /app/queue/errors: ' + JSON.parse(message.body));
->>>>>>> branch 'angularjs_auth' of https://github.com/step4u/coretree-webcrm-master.git
 				});
 	        });
 	    }
@@ -116,7 +105,7 @@
 	        var name = document.getElementById('name').value;
 	        stompClient.send("/user/hello", {}, JSON.stringify({ 'name': name }));
 	    }
-		
+	    
 		$(document).ready(function(){
 			$('[data-toggle="tooltip"]').tooltip();
 			
@@ -143,34 +132,10 @@
 		    	console.log('personaladdr clicked');
 		    	location.href="addr1";
 		    });
+		    
+		    ROLE = $.cookie("ROLE");
 
 		    // connect();
-/*
-		    $("#socktest").click(function(){
-		        var trade = {
-		                'action' : 'act1',
-		                'ticker' : 'ticker1',
-		                'shares' : 'shares1'
-		              };
-		        
-		     	stompClient.send("/app/traders", {}, JSON.stringify({ 'recipient': 'test', 'message' : 'ttttt' }));
-		        // stompClient.send("/app/traders", {}, JSON.stringify(trade));
-		        // stompClient.send("/app/traders", {user: 'test'}, JSON.stringify(trade));
-		        // stompClient.send("/app/traders");
-		        console.log("socktest sock sent");
-		    });
-<<<<<<< HEAD
-*/		    
-=======
-*/
-			//$("#btn_live").click(function(){
-			//	alert("test");
-			//});
-			
-			$("btn_live").on("click", function(){
-				alert("live test");
-			});
->>>>>>> branch 'angularjs_auth' of https://github.com/step4u/coretree-webcrm-master.git
 		});
 	</script>
 </head>

@@ -2,98 +2,6 @@
 
 // angular.module('app', ['ui.router', 'ui.bootstrap', 'ui.grid', 'ui.grid.selection', 'ui.grid.pagination', 'ui.bootstrap.contextMenu'])
 angular.module('app', ['ui.router', 'ui.bootstrap', 'ui.grid', 'ui.grid.selection', 'ui.grid.pagination'])
-<<<<<<< HEAD
-  .controller('SigninCtrl', ['$scope', '$http', '$state', function($scope, $http, $state) {
-
-    }
-  ])
-  .controller('HomeCtrl', ['$scope', '$state',
-    function($scope, $state) {
-	  $scope.css = "resources/css/main.css";
-      $scope.signout = function() {
-        principal.authenticate(null);
-        disconnect();
-        $state.go('signin');
-      };
-    }
-  ])
-  .config(['$stateProvider', '$urlRouterProvider',
-    function($stateProvider, $urlRouterProvider) {
-
-      $urlRouterProvider.otherwise('/home');
-
-      $stateProvider.state('site', {
-        'abstract': true,
-      })
-      .state('home', {
-        parent: 'site',
-        url: '/home',
-        data: {
-          roles: ['User', 'Admin']
-        },
-        views: {
-          'content@': {
-            templateUrl: 'view/home.html',
-            controller: 'HomeCtrl'
-          },
-          'maincontent@home': {
-              templateUrl: 'view/addr.html',
-              controller: 'CtrlCustomer'
-          }
-        }
-      })
-      .state('addr', {
-        parent: 'home',
-        url: '/addr',
-        data: {
-          roles: ['User', 'Admin']
-        },
-        views: {
-          'maincontent@home': {
-              templateUrl: 'view/addr.html',
-              controller: 'CtrlCustomer'
-          }
-        }
-      })
-      .state('calls', {
-        parent: 'home',
-        url: '/calls',
-        data: {
-          roles: ['User', 'Admin']
-        },
-        views: {
-          'maincontent@home': {
-              templateUrl: 'view/calls.html',
-              controller: 'CtrlCall'
-          }
-        }
-      })
-//      .state('login', {
-//        parent: 'site',
-//        url: '/login',
-//        data: {
-//          roles: []
-//        },
-//        views: {
-//          'content@': {
-//            templateUrl: 'view/login.html',
-//            controller: 'SigninCtrl'
-//          }
-//        }
-//      })
-      .state('restricted', {
-        parent: 'site',
-        url: '/restricted',
-        data: {
-          roles: ['Admin']
-        },
-        views: {
-          'content@': {
-            templateUrl: 'restricted.html'
-          }
-        }
-      }).state('accessdenied', {
-=======
 //  .controller('SigninCtrl', ['$scope', '$http', '$state', function($scope, $http, $state) {
 //
 //    }
@@ -184,7 +92,6 @@ angular.module('app', ['ui.router', 'ui.bootstrap', 'ui.grid', 'ui.grid.selectio
 //        }
 //      })
       .state('accessdenied', {
->>>>>>> branch 'angularjs_auth' of https://github.com/step4u/coretree-webcrm-master.git
         parent: 'site',
         url: '/denied',
         data: {

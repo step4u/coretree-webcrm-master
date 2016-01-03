@@ -23,6 +23,33 @@
 			$scope.gridOptions.data.splice(index, 1);
 		};
 		
+		$scope.updateExtStatus = function(data) {
+//			var item = $.grep($scope.gridOptions.data, function(element, index){
+//				// console.log("element.innertel : " + element.innertel);
+//				return element.innertel == data.extension;
+//			}); 
+//			//console.log("updateExtStatus item : " + item.innertel + ", data.extension : " + data.extension);
+//			var idx = $scope.gridOptions.data.indexOf(item.entity);
+//			item.status = data.status;
+//			//$scope.gridOptions.data.splice(idx, 1);
+//			//$scope.gridOptions.data.splice(idx, 0, item);
+			
+			var item = $scope.gridOptions.data.find(function(element, index){
+				return element.innertel === data.extension;
+			});
+			
+			if (item) {
+				item.status = data.status;
+			}
+			
+			//console.log("item.status : " + item.status);
+			//var idx = $scope.gridOptions.data.indexOf(item);
+			//item.status = data.status;
+			//console.log("item.status : " + item.status);
+			//$scope.gridOptions.data.splice(idx, 1);
+			//$scope.gridOptions.data.splice(idx, 0, item);
+		};
+		
 		$scope.gridOptions = {
 				enableSorting: false,
 				showGridFooter: false,

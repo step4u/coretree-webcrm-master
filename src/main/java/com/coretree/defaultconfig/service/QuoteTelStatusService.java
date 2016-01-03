@@ -1,9 +1,8 @@
 package com.coretree.defaultconfig.service;
 
+import java.net.UnknownHostException;
 import java.nio.ByteOrder;
 import java.security.Principal;
-import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -14,23 +13,19 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
-import org.springframework.messaging.MessageHeaders;
 import org.springframework.messaging.core.MessageSendingOperations;
 import org.springframework.messaging.handler.annotation.MessageExceptionHandler;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.annotation.SendToUser;
-import org.springframework.messaging.simp.annotation.SubscribeMapping;
 import org.springframework.messaging.simp.broker.BrokerAvailabilityEvent;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import org.springframework.util.MimeTypeUtils;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.coretree.defaultconfig.domain.QuoteTelStatus;
 import com.coretree.defaultconfig.domain.QuoteTelStatus.TelStatus;
-import com.coretree.defaultconfig.helper.FirebirdSqlHelper;
+import com.coretree.defaultconfig.mapper.MemberMapper;
 import com.coretree.event.HaveGotUcMessageEventArgs;
 import com.coretree.event.IEventHandler;
 import com.coretree.interfaces.IQuoteTelStatusService;
@@ -40,12 +35,16 @@ import com.coretree.socket.*;
 import com.coretree.util.Const4pbx;
 
 @Service
+@RestController
 public class QuoteTelStatusService implements ApplicationListener<BrokerAvailabilityEvent>, IEventHandler<HaveGotUcMessageEventArgs>, IQuoteTelStatusService {
 	private static Log logger = LogFactory.getLog(QuoteTelStatusService.class);
 	private final MessageSendingOperations<String> messagingTemplate;
 	private final SimpMessagingTemplate msgTemplate;
 	private AtomicBoolean brokerAvailable = new AtomicBoolean();
 	private final StockQuoteGenerator quoteGenerator = new StockQuoteGenerator();
+
+	@Autowired
+	private MemberMapper member;
 
 	@Autowired
 	public QuoteTelStatusService(MessageSendingOperations<String> messagingTemplate, SimpMessagingTemplate msgTemplate) {
@@ -61,43 +60,13 @@ public class QuoteTelStatusService implements ApplicationListener<BrokerAvailabi
 		this.brokerAvailable.set(event.isBrokerAvailable());
 		
 		uc = new UcServer("14.63.166.98", 31001, 1, ByteOrder.LITTLE_ENDIAN);
-		// uc.start();
+		uc.HaveGotUcMessageEventHandler.addEventHandler(this);
 		uc.regist();
-
-//		try {
-//			Thread.sleep(1000);
-//		} catch (InterruptedException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-		
-		//uc.MakeCall("3001", "01045455962");
-
-//		try {
-//			FirebirdSqlHelper fb = new FirebirdSqlHelper();
-//			System.err.println("FirebirdSqlHelper Constructor, dataSource : " + fb.dataSource.getDatabase());
-//			fb.close();
-//		} catch (SQLException e) {
-//			e.printStackTrace();
-//		}
 	}
 	
 	// sample
 	@Scheduled(fixedDelay=2000)
 	public void sendQuotes() {
-		for (QuoteTelStatus quote : this.quoteGenerator.generateQuotes()) {
-			if (logger.isTraceEnabled()) {
-				logger.trace("Sending quote " + quote);
-			}
-			if (this.brokerAvailable.get()) {
-				this.messagingTemplate.convertAndSend("/topic/tel.status." + quote.getTicker(), quote);
-			}
-		}
-	}
-	
-	// 내선 상태 구독 2초마다 갱신
-	@Scheduled(fixedDelay=2000)
-	public void sendInnerTelStatus() {
 		for (QuoteTelStatus quote : this.quoteGenerator.generateQuotes()) {
 			if (logger.isTraceEnabled()) {
 				logger.trace("Sending quote " + quote);
@@ -121,72 +90,30 @@ public class QuoteTelStatusService implements ApplicationListener<BrokerAvailabi
 		}
 	}
 	
-	// 모든 요청 (MakeCall, Transfer, Pick up ...)
-	@MessageMapping("/req")
-	public void sendResultOfRequest() {
-		for (QuoteTelStatus quote : this.quoteGenerator.generateQuotes()) {
-			if (logger.isTraceEnabled()) {
-				logger.trace("Sending quote " + quote);
-			}
-			if (this.brokerAvailable.get()) {
-				this.messagingTemplate.convertAndSend("/topic/tel.status." + quote.getTicker(), quote);
-			}
+	// subscribe extension status, refresh on every 2 seconds.
+	@Scheduled(fixedDelay=5000)
+	public void sendExtensionStatus() {
+		UcMessage msg = new UcMessage();
+		msg.cmd = Const4pbx.UC_BUSY_EXT_REQ;
+		
+		try {
+			this.uc.Send(msg);
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 	
-//	@SubscribeMapping("/topic")
-//	public List<PortfolioPosition> getPositions(Principal principal) throws Exception {
-//		logger.debug("Positions for " + principal.getName());
-//		Portfolio portfolio = this.portfolioService.findPortfolio(principal.getName());
-//		return portfolio.getPositions();
-//	}
-//
-//	@MessageMapping("/queue")
-//	public void executeTrade(Trade trade, Principal principal) {
-//		trade.setUsername(principal.getName());
-//		logger.debug("Trade: " + trade);
-//		this.tradeService.executeTrade(trade);
-//	}
-//
-//	@MessageExceptionHandler
-//	@SendToUser("/queue/errors")
-//	public String handleException(Throwable exception) {
-//		return exception.getMessage();
-//	}
+	// subscribe system informations, refresh on every 2 seconds.
+	@Scheduled(fixedDelay=60000)
+	public void sendSystemInformations() {
 
-	/*
-	// 통화 
-	@RestController
-	public class GoupwareController {
-		private static final Log logger = LogFactory.getLog(GoupwareController.class);
-
-		@Autowired
-		public GoupwareController(PortfolioService portfolioService, TradeService tradeService) {
-			this.portfolioService = portfolioService;
-			this.tradeService = tradeService;
-		}
-
-		@SubscribeMapping("/positions")
-		public List<PortfolioPosition> getPositions(Principal principal) throws Exception {
-			logger.debug("Positions for " + principal.getName());
-			Portfolio portfolio = this.portfolioService.findPortfolio(principal.getName());
-			return portfolio.getPositions();
-		}
-
-		@MessageMapping("/trade")
-		public void executeTrade(Trade trade, Principal principal) {
-			trade.setUsername(principal.getName());
-			logger.debug("Trade: " + trade);
-			this.tradeService.executeTrade(trade);
-		}
-
-		@MessageExceptionHandler
-		@SendToUser("/queue/errors")
-		public String handleException(Throwable exception) {
-			return exception.getMessage();
+		
+		
+		if (this.brokerAvailable.get()) {
+			//this.messagingTemplate.convertAndSend("/topic/ext.status." + quote.getTicker(), quote);
 		}
 	}
-	*/
 	
 	private static class StockQuoteGenerator {
 		private final Map<String, TelStatus> innertels = new ConcurrentHashMap<>();
@@ -227,75 +154,69 @@ public class QuoteTelStatusService implements ApplicationListener<BrokerAvailabi
 		}
 	}
 
-	/*
-	public void sendGroupwareNotifications() {
-
-		Map<String, Object> map = new HashMap<>();
-		map.put(MessageHeaders.CONTENT_TYPE, MimeTypeUtils.APPLICATION_JSON);
-
-		for (TradeResult result : this.tradeResults) {
-			if (System.currentTimeMillis() >= (result.timestamp + 1500)) {
-				logger.debug("Sending position update: " + result.position);
-				this.messagingTemplate.convertAndSendToUser(result.user, "/queue/position-updates", result.position, map);
-				this.tradeResults.remove(result);
-			}
-		}
+	@MessageMapping("/traders")
+	public void executeTrade(UcMessage message, Principal principal) {
+		this.RequestToPbx(message);
 	}
-	*/
+	
+	@MessageExceptionHandler
+	@SendToUser("/queue/errors")
+	public String handleException(Throwable exception) {
+		//System.err.println(String.format("handleException : message : %s", exception.getMessage()));
+		return exception.getMessage();
+	}
  
 	@Override
 	public void eventReceived(Object sender, HaveGotUcMessageEventArgs e) {
 		// when a message have been arrived from the groupware socket 31001, a event raise.
-		if (this.brokerAvailable.get()) {
-			// this.messagingTemplate.convertAndSend("/topic/tel.status." + quote.getTicker(), quote);
-			// this.messagingTemplate.convertAndSendToUser(result.user, "/queue/position-updates", result.position, map);
-		}		
+		// DB
+		GroupWareData data = e.getItem();
+		System.err.println(String.format("Has received %s", data.toString()));
+		System.out.println("");
+		//
+
+		if (!this.brokerAvailable.get()) return;
+		
+		UcMessage payload;
+		
+		switch (data.cmd) {
+			case Const4pbx.UC_BUSY_EXT_RES:
+				break;
+			case Const4pbx.UC_REPORT_EXT_STATE:
+				payload = new UcMessage();
+				payload.cmd = data.cmd;
+				payload.extension = data.extension;
+				payload.status = data.status;
+				this.messagingTemplate.convertAndSend("/topic/ext.status." + data.extension, payload);
+				break;
+			default:
+				System.err.println(String.format("Extension : %s", data.extension));
+				
+				if (data.extension.isEmpty()) return;
+				
+				String id = member.findIdByExt(data.extension);
+				
+				if (id.isEmpty()) return;
+				
+				payload = new UcMessage();
+				payload.cmd = data.cmd;
+				payload.extension = data.extension;
+				payload.caller = data.caller;
+				payload.peer = data.callee;
+				payload.status = data.status;
+				this.msgTemplate.convertAndSendToUser(id, "/queue/groupware", payload);
+				break;
+		}
 	}
 	
 	@Override
 	public void RequestToPbx(UcMessage msg) {
-		uc.Send(msg);
-	}
-	
-	@Override
-	public void MakeCall(UcMessage msg) {
-		// TODO Auto-generated method stub
-		uc.Send(msg);
-	}
-
-	@Override
-	public void Transfer(UcMessage msg) {
-		// TODO Auto-generated method stub
-		uc.Send(msg);
+		try {
+			uc.Send(msg);
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
-	@Override
-	public void PickUp(UcMessage msg) {
-		// TODO Auto-generated method stub
-		uc.Send(msg);
-	}
-
-	@Override
-	public void ReqExtStatus(UcMessage msg) {
-		// TODO Auto-generated method stub
-		uc.Send(msg);
-	}
-
-	@Override
-	public void DropCall(UcMessage msg) {
-		// TODO Auto-generated method stub
-		uc.Send(msg);
-	}
-
-	@Override
-	public void HoldCall(UcMessage msg) {
-		// TODO Auto-generated method stub
-		uc.Send(msg);
-	}
-
-	@Override
-	public void ActiveCall(UcMessage msg) {
-		// TODO Auto-generated method stub
-		uc.Send(msg);
-	}
 }

@@ -15,6 +15,9 @@ import org.springframework.security.web.header.writers.frameoptions.XFrameOption
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+	private LoginHandler loginSuccessHandler = new LoginHandler();
+	private LogoutHandler logoutSuccessHandler = new LogoutHandler();
+
 	@Override
     protected void configure(HttpSecurity http) throws Exception {
         http
@@ -29,17 +32,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.failureUrl("/login.html?error")
 				.usernameParameter("userid")
 				.passwordParameter("userpwd")
+				.successHandler(loginSuccessHandler)
 				.permitAll()
 				.and()
             .logout()
 				.logoutSuccessUrl("/login.html?logout")
 				.logoutUrl("/logout.html")
 				//.clearAuthentication(true)
-				//.deleteCookies("JSESSIONID")
+				.deleteCookies("ROLE")
+				//.logoutSuccessHandler(logoutSuccessHandler)
 				.permitAll()
 				.and()
             .authorizeRequests() //Authorize Request Configuration
 				.antMatchers("/resources/**").permitAll()
+				//.antMatchers("/_admin/**").hasAuthority("ROLE_ADMIN")
 				.anyRequest().authenticated()
 				.and();
     }
@@ -47,5 +53,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
 		auth.inMemoryAuthentication().withUser("test").password("1234").roles("USER", "ADMIN");
+		auth.inMemoryAuthentication().withUser("test1").password("1234").roles("USER");
 	}
 }
