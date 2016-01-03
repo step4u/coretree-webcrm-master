@@ -39,7 +39,7 @@
                         </ul>
 		        	</li>
 			    	<li class="dropdown">
-						<a href="/logout.html"> 로그아웃</a>
+						<a href="#" id="logout"> 로그아웃</a>
 		        	</li>
 			    </ul>
 			</div>
@@ -81,13 +81,13 @@
                 <li>
                     <a href="smses">SMS내역</a>
                 </li>
-                <li>
+                <li style="display: none;" class="ADMIN">
                     <a href="records">녹취내역</a>
                 </li>
-                <li>
+                <li style="display: none;" class="ADMIN">
                     <a href="counsellorcalls">상담원통화내역</a>
                 </li>
-                <li>
+                <li style="display: none;" class="ADMIN">
                     <a href="counsellors">상담원관리</a>
                 </li>
             </ul>
@@ -113,9 +113,6 @@
 					<div ng-controller="CtrlTelStatus" style="margin-top: 15px;">
 						<div ui-grid="gridOptions" class="grid_tels" context-menu="menuOptions"></div>
 					</div>
-<<<<<<< HEAD
-					<button type="button" class="btn btn-primary btn-sm" id='socktest'>테스트 send</button>
-=======
 					<button type="button" class="btn btn-primary btn-sm" id='btn_connect'>Connect</button>
 					<button type="button" class="btn btn-primary btn-sm" id='btn_disconnect'>Disconnect</button>
 					<button type="button" class="btn btn-primary btn-sm" id='btn_makecall'>MakeCall</button>
@@ -125,30 +122,12 @@
 					<button type="button" class="btn btn-primary btn-sm" id='btn_transfer'>Transfer</button>
 					<button type="button" class="btn btn-primary btn-sm" id='btn_pickup'>PickUp</button>
 					<button type="button" class="btn btn-primary btn-sm" id='btn_reqextstatus'>Requset Extension Status</button>
-					<!-- <button type="button" class="btn btn-primary btn-sm" id='btn_live'>TEST</button> -->
->>>>>>> branch 'angularjs_auth' of https://github.com/step4u/coretree-webcrm-master.git
 		        </div>
 			</div>
 		</div>
 		
 		<script>
 			$(document).ready(function(){
-<<<<<<< HEAD
-			    $("#socktest").click(function(){
-			        var trade = {
-			                'action' : 'act1',
-			                'ticker' : 'ticker1',
-			                'shares' : 'shares1'
-			              };
-			        
-			     	stompClient.send("/app/traders", {}, JSON.stringify(trade));
-			        // stompClient.send("/app/traders", {user: 'test'}, JSON.stringify(trade));
-			        // stompClient.send("/app/traders");
-			        console.log("socktest sock sent");
-			    });
-			    
-			    connect();
-=======
 			    $("#btn_connect").click(function(){
 			    	connect();
 			    });
@@ -250,9 +229,9 @@
 			    $("#btn_reqextstatus").click(function(){
 			    	// Requset Extension Status
 			        var trade = {
-			                'cmd' : 80,
+			                'cmd' : 64,
 			                'extension' : '3001',
-			                'caller' : '',
+			                'caller' : '3001',
 			                'peer' : '3002',
 			                'unconditional' : '',
 			                'status': -1
@@ -262,7 +241,15 @@
 			        console.log("socktest sock sent");
 			    });
 			    
+			    if (ROLE === "ADMIN") {
+			    	$(".ADMIN").css("display", "inline");
+			    }
+			    
+			    $("#logout").click(function(){
+			    	disconnect();
+			    	location.href = "/logout.html";
+			    });
+			    
 			    // connect();
->>>>>>> branch 'angularjs_auth' of https://github.com/step4u/coretree-webcrm-master.git
 			});
-		</script>	
+		</script>

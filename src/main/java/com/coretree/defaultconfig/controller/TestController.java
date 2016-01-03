@@ -28,7 +28,7 @@ import com.coretree.defaultconfig.model.LoginResult;
 import com.coretree.interfaces.IQuoteTelStatusService;
 import com.coretree.models.UcMessage;
 
-@Controller
+// @Controller
 public class TestController {
 	
 	private static final Log logger = LogFactory.getLog(TestController.class);
@@ -41,16 +41,16 @@ public class TestController {
 		this.ucservice = ucservice;
 	}
 
-	@SubscribeMapping("/positions")
-	public String getPositions() throws Exception {
-//		logger.debug("TestController Positions for " + principal.getName());
-//		System.err.println("TestController Positions for " + principal.getName());
-		logger.debug("TestController Positions for ");
-		System.err.println("TestController Positions for ");
-		return "success";
-	}
+//	@SubscribeMapping("/groupware")
+//	public String getPositions() throws Exception {
+////		logger.debug("TestController Positions for " + principal.getName());
+////		System.err.println("TestController Positions for " + principal.getName());
+//		logger.debug("TestController Positions for ");
+//		System.err.println("TestController Positions for ");
+//		return "success";
+//	}
 
-	@MessageMapping("/traders")
+	// @MessageMapping("/traders")
 	public void executeTrade(UcMessage message, Principal principal) {
 		// logger.debug(String.format("TestController Trade: cmd:%d, extension:%s, peer:%s, status:%d" + message.cmd, message.extension, message.peer, message.status));
 		// System.err.println(String.format("TestController Trade: cmd:%d, extension:%s, peer:%s, status:%d" + message.cmd, message.extension, message.peer, message.status));
@@ -71,8 +71,8 @@ public class TestController {
 
 	
 	private int count = 0;
-	@MessageExceptionHandler
-	@SendToUser("/queue/errors")
+	//@MessageExceptionHandler
+	//@SendToUser("/queue/errors")
 	public String handleException(Throwable exception) {
 		count++;
 		System.err.println(String.format("handleException : %d, message : %s", count, exception.getMessage()));

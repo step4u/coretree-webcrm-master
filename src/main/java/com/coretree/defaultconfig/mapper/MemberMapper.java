@@ -25,6 +25,9 @@ public interface MemberMapper {
 	@Select("select id, pwd, name, extension, roles from users where id = #{id}")
 	Member findById(String id);
 	
+	@Select("select a.id from users a join extensions b on a.idx=b.user_idx where b.extension = #{ext}")
+	String findIdByExt(String ext);
+	
 	@Select("select count(idx) from users where id = #{id}")
 	int chkById(String id);
 	
