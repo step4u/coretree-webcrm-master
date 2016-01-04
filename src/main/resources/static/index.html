@@ -76,11 +76,13 @@
 	            });
 	            */
 
+	            /*
 	            stompClient.subscribe("/topic/ext.status.*", function(message) {
 	            	var data = JSON.parse(message.body);
 	                console.log("/topic/ext.status : " + data.extension + ", " + data.status);
 	                update_ext_status(data);
-	              });
+	            });
+	            */
 	            
 	            stompClient.subscribe("/user/queue/groupware", function(message) {
 	            	// console.log('index.html /user/queus/groupware: ' + JSON.parse(message.body));

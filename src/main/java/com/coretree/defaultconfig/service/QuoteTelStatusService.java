@@ -93,15 +93,15 @@ public class QuoteTelStatusService implements ApplicationListener<BrokerAvailabi
 	// subscribe extension status, refresh on every 2 seconds.
 	@Scheduled(fixedDelay=5000)
 	public void sendExtensionStatus() {
-		UcMessage msg = new UcMessage();
-		msg.cmd = Const4pbx.UC_BUSY_EXT_REQ;
-		
-		try {
-			this.uc.Send(msg);
-		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		UcMessage msg = new UcMessage();
+//		msg.cmd = Const4pbx.UC_BUSY_EXT_REQ;
+//		
+//		try {
+//			this.uc.Send(msg);
+//		} catch (UnknownHostException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 	}
 	
 	// subscribe system informations, refresh on every 2 seconds.
@@ -179,31 +179,32 @@ public class QuoteTelStatusService implements ApplicationListener<BrokerAvailabi
 		
 		UcMessage payload;
 		
-		switch (data.cmd) {
+		switch (data.getCmd()) {
 			case Const4pbx.UC_BUSY_EXT_RES:
 				break;
 			case Const4pbx.UC_REPORT_EXT_STATE:
 				payload = new UcMessage();
-				payload.cmd = data.cmd;
-				payload.extension = data.extension;
-				payload.status = data.status;
-				this.messagingTemplate.convertAndSend("/topic/ext.status." + data.extension, payload);
+				payload.cmd = data.getCmd();
+				payload.extension = data.getExtension();
+				payload.status = data.getStatus();
+				this.messagingTemplate.convertAndSend("/topic/ext.status." + data.getExtension(), payload);
 				break;
 			default:
-				System.err.println(String.format("Extension : %s", data.extension));
+				System.err.println(String.format("Extension : %s", data.getExtension()));
 				
-				if (data.extension.isEmpty()) return;
+				if (data.getExtension().isEmpty()) return;
 				
-				String id = member.findIdByExt(data.extension);
+				String id = member.findIdByExt(data.getExtension());
 				
+				if (id == null) return;
 				if (id.isEmpty()) return;
 				
 				payload = new UcMessage();
-				payload.cmd = data.cmd;
-				payload.extension = data.extension;
-				payload.caller = data.caller;
-				payload.peer = data.callee;
-				payload.status = data.status;
+				payload.cmd = data.getCmd();
+				payload.extension = data.getExtension();
+				payload.caller = data.getCaller();
+				payload.peer = data.getCallee();
+				payload.status = data.getStatus();
 				this.msgTemplate.convertAndSendToUser(id, "/queue/groupware", payload);
 				break;
 		}
