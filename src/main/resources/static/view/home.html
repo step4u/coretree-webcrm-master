@@ -16,8 +16,8 @@
 			</div>
 			<div class="collapse navbar-collapse navbar-ex1-collapse">
 			    <ul class="nav navbar-nav navbar-right">
-			    	<li class="dropdown" id="currentstatus">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-plus-sign"></span> 대기중</a>
+			    	<li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" id="userstatus"><span class="glyphicon glyphicon-plus-sign"></span> 대기중</a>
                         <ul class="dropdown-menu">
                         	<li class="dropdown-header">현재상태 설정</li>
                             <li class="divider"></li>
@@ -27,8 +27,8 @@
                             <li><a href="#"><span class="glyphicon glyphicon-remove-sign"></span> 수신거부</a></li>
                         </ul>
                     </li>
-			    	<li class="dropdown" id="systeminfo">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown"> 시스템 정상 (8001)</a>
+			    	<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown" id="systeminfo"> 시스템 정상 (8001)</a>
                         <ul class="dropdown-menu">
                         	<li class="dropdown-header">시스템 정보</li>
                             <li class="divider"></li>
@@ -106,11 +106,11 @@
 					<div ui-view="maincontent"></div>
 	        	</div>
 		        <div class="col-lg-3">
-		        	<div ng-controller="CtrlCallStatus" id="ctrlcallstat">
+		        	<div ng-controller="CtrlCallStatus" id="ctrlcallstatus">
 		        		<div ui-grid="gridOptions" class="grid_teller_status"></div>
 		        		<!-- <button type="button" class="btn btn-primary btn-sm" id='scopetest'>테스트</button> -->
 		        	</div>
-					<div ng-controller="CtrlTelStatus" style="margin-top: 15px;">
+					<div ng-controller="CtrlTelStatus" style="margin-top: 15px;" id="ctrlextstatus">
 						<div ui-grid="gridOptions" class="grid_tels" context-menu="menuOptions"></div>
 					</div>
 					<button type="button" class="btn btn-primary btn-sm" id='btn_connect'>Connect</button>
@@ -127,6 +127,13 @@
 		</div>
 		
 		<script>
+		    function update_ext_status(data){
+		    	var scope = angular.element($("#ctrlextstatus")).scope();
+			    scope.$apply(function () {
+			        scope.updateExtStatus(data);
+			    });
+		    }
+		
 			$(document).ready(function(){
 			    $("#btn_connect").click(function(){
 			    	connect();

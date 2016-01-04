@@ -59,6 +59,7 @@
 		var ROLE;
 		var whoami;
 		var stompClient;
+		
 	    function connect() {
 	        var socket = new SockJS('/webcrm');
 	        stompClient = Stomp.over(socket);
@@ -67,7 +68,7 @@
 	        
 	        stompClient.connect({}, function(frame) {
 	        	whoami = frame.headers['user-name'];
-	            console.log('index.html Connected: ' + frame);
+	            //console.log('index.html Connected: ' + frame);
 
 	            /*
 	            stompClient.subscribe("/user/topic/callstatus", function(message) {
@@ -78,7 +79,7 @@
 	            stompClient.subscribe("/topic/ext.status.*", function(message) {
 	            	var data = JSON.parse(message.body);
 	                console.log("/topic/ext.status : " + data.extension + ", " + data.status);
-	            	;
+	                update_ext_status(data);
 	              });
 	            
 	            stompClient.subscribe("/user/queue/groupware", function(message) {
@@ -104,7 +105,7 @@
 	        var name = document.getElementById('name').value;
 	        stompClient.send("/user/hello", {}, JSON.stringify({ 'name': name }));
 	    }
-		
+	    
 		$(document).ready(function(){
 			$('[data-toggle="tooltip"]').tooltip();
 			

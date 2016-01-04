@@ -91,7 +91,7 @@ public class QuoteTelStatusService implements ApplicationListener<BrokerAvailabi
 	}
 	
 	// subscribe extension status, refresh on every 2 seconds.
-	@Scheduled(fixedDelay=2000)
+	@Scheduled(fixedDelay=5000)
 	public void sendExtensionStatus() {
 		UcMessage msg = new UcMessage();
 		msg.cmd = Const4pbx.UC_BUSY_EXT_REQ;
