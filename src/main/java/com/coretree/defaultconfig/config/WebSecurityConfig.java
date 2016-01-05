@@ -13,10 +13,11 @@ import org.springframework.security.web.header.writers.frameoptions.XFrameOption
  */
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-	private LoginHandler loginSuccessHandler = new LoginHandler();
-	private LogoutHandler logoutSuccessHandler = new LogoutHandler();
+	@Autowired
+	LoginHandler loginSuccessHandler;
+	// private LogoutHandler logoutSuccessHandler = new LogoutHandler();
 
 	@Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -39,7 +40,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.logoutSuccessUrl("/login.html?logout")
 				.logoutUrl("/logout.html")
 				//.clearAuthentication(true)
-				.deleteCookies("ROLE")
+				.deleteCookies("crm.identity")
 				//.logoutSuccessHandler(logoutSuccessHandler)
 				.permitAll()
 				.and()

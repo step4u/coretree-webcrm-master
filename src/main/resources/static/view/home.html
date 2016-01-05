@@ -133,6 +133,15 @@
 			        scope.updateExtStatus(data);
 			    });
 		    }
+		    
+		    var trade = {
+	                'cmd' : 0,
+	                'extension' : '3001',
+	                'caller' : '',
+	                'callee' : '',
+	                'unconditional' : '',
+	                'status': -1
+	              };
 		
 			$(document).ready(function(){
 			    $("#btn_connect").click(function(){
@@ -145,11 +154,11 @@
 			    
 			    $("#btn_makecall").click(function(){
 			    	// makecall
-			        var trade = {
+			        trade = {
 			                'cmd' : 74,
 			                'extension' : '3001',
-			                'caller' : '',
-			                'peer' : '01045455962',
+			                'caller' : '3001',
+			                'callee' : '01045455962',
 			                'unconditional' : '',
 			                'status': -1
 			              };
@@ -160,11 +169,11 @@
 			    
 			    $("#btn_dropcall").click(function(){
 			    	// pickup
-			        var trade = {
+			        trade = {
 			                'cmd' : 76,
-			                'extension' : '',
+			                'extension' : '3001',
 			                'caller' : '3001',
-			                'peer' : '3002',
+			                'callee' : '01045455962',
 			                'unconditional' : '',
 			                'status': -1
 			              };
@@ -175,11 +184,11 @@
 			    
 			    $("#btn_holdcall").click(function(){
 			    	// pickup
-			        var trade = {
+			        trade = {
 			                'cmd' : 82,
 			                'extension' : '3001',
-			                'caller' : '3001',
-			                'peer' : '3002',
+			                'caller' : '01045455962',
+			                'callee' : '3001',
 			                'unconditional' : '',
 			                'status': -1
 			              };
@@ -190,11 +199,11 @@
 			    
 			    $("#btn_activecall").click(function(){
 			    	// pickup
-			        var trade = {
+			        trade = {
 			                'cmd' : 84,
 			                'extension' : '3001',
-			                'caller' : '3001',
-			                'peer' : '01045455962',
+			                'caller' : '01045455962',
+			                'callee' : '3001',
 			                'unconditional' : '',
 			                'status': -1
 			              };
@@ -205,11 +214,11 @@
 			    
 			    $("#btn_transfer").click(function(){
 			    	// transfer
-			        var trade = {
+			        trade = {
 			                'cmd' : 86,
 			                'extension' : '3001',
-			                'caller' : '3001',
-			                'peer' : '01045455962',
+			                'caller' : '01045455962',
+			                'callee' : '3001',
 			                'unconditional' : '3002',
 			                'status': -1
 			              };
@@ -220,11 +229,11 @@
 			    
 			    $("#btn_pickup").click(function(){
 			    	// pickup
-			        var trade = {
+			        trade = {
 			                'cmd' : 80,
-			                'extension' : '3001',
+			                'extension' : '3002',
 			                'caller' : '',
-			                'peer' : '3002',
+			                'callee' : '3001',
 			                'unconditional' : '',
 			                'status': -1
 			              };
@@ -235,12 +244,12 @@
 			    
 			    $("#btn_reqextstatus").click(function(){
 			    	// Requset Extension Status
-			        var trade = {
+			        trade = {
 			                'cmd' : 64,
 			                'extension' : '3001',
 			                'caller' : '3001',
-			                'peer' : '3002',
-			                'unconditional' : '',
+			                'callee' : '3001',
+			                'unconditional' : '3001',
 			                'status': -1
 			              };
 			        
@@ -248,7 +257,7 @@
 			        console.log("socktest sock sent");
 			    });
 			    
-			    if (ROLE === "ADMIN") {
+			    if (crmidentity.role == "ADMIN") {
 			    	$(".ADMIN").css("display", "inline");
 			    }
 			    

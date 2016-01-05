@@ -56,7 +56,7 @@
 		})();
 	*/
 	
-		var ROLE;
+		var crmidentity;
 		var whoami;
 		var stompClient;
 		
@@ -135,8 +135,9 @@
 		    	location.href="addr1";
 		    });
 		    
-		    ROLE = $.cookie("ROLE");
-
+		    var tmpidentity = $.cookie("crm.identity");
+		    crmidentity = JSON.parse(tmpidentity);
+		    //console.log(crmidentity.role);
 		    // connect();
 		});
 	</script>

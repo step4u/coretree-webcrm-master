@@ -54,6 +54,7 @@
     <factorypathentry kind="VARJAR" id="M2_REPO/com/h2database/h2/1.4.190/h2-1.4.190.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/org/springframework/boot/spring-boot-configuration-processor/1.3.1.RELEASE/spring-boot-configuration-processor-1.3.1.RELEASE.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/org/json/json/20140107/json-20140107.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/codehaus/jackson/jackson-core-asl/1.9.13/jackson-core-asl-1.9.13.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="EXTJAR" id="D:\dev\workspaces\workspace_spring\CoreLibraries\classes\antlr-runtime-3.4.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="EXTJAR" id="D:\dev\workspaces\workspace_spring\CoreLibraries\classes\connector-api-1.5.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="EXTJAR" id="D:\dev\workspaces\workspace_spring\CoreLibraries\classes\java-getopt-1.0.14.jar" enabled="true" runInBatchMode="false"/>

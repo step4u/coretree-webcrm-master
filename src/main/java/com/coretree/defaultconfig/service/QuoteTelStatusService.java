@@ -59,7 +59,7 @@ public class QuoteTelStatusService implements ApplicationListener<BrokerAvailabi
 		// TODO Auto-generated method stub
 		this.brokerAvailable.set(event.isBrokerAvailable());
 		
-		uc = new UcServer("14.63.166.98", 31001, 1, ByteOrder.LITTLE_ENDIAN);
+		uc = new UcServer("14.63.166.98", 31001, 1, ByteOrder.BIG_ENDIAN);
 		uc.HaveGotUcMessageEventHandler.addEventHandler(this);
 		uc.regist();
 	}
@@ -203,7 +203,7 @@ public class QuoteTelStatusService implements ApplicationListener<BrokerAvailabi
 				payload.cmd = data.getCmd();
 				payload.extension = data.getExtension();
 				payload.caller = data.getCaller();
-				payload.peer = data.getCallee();
+				payload.callee = data.getCallee();
 				payload.status = data.getStatus();
 				this.msgTemplate.convertAndSendToUser(id, "/queue/groupware", payload);
 				break;
