@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.coretree.defaultconfig.domain.QuoteTelStatus;
 import com.coretree.defaultconfig.domain.QuoteTelStatus.TelStatus;
+import com.coretree.defaultconfig.mapper.Member;
 import com.coretree.defaultconfig.mapper.MemberMapper;
 import com.coretree.event.HaveGotUcMessageEventArgs;
 import com.coretree.event.IEventHandler;
@@ -44,7 +45,7 @@ public class QuoteTelStatusService implements ApplicationListener<BrokerAvailabi
 	private final StockQuoteGenerator quoteGenerator = new StockQuoteGenerator();
 
 	@Autowired
-	private MemberMapper member;
+	private MemberMapper memberMapper;
 
 	@Autowired
 	public QuoteTelStatusService(MessageSendingOperations<String> messagingTemplate, SimpMessagingTemplate msgTemplate) {
@@ -180,6 +181,8 @@ public class QuoteTelStatusService implements ApplicationListener<BrokerAvailabi
 		UcMessage payload;
 		
 		switch (data.getCmd()) {
+			case Const4pbx.UC_REGISTER_RES:
+			case Const4pbx.UC_UNREGISTER_RES:	
 			case Const4pbx.UC_BUSY_EXT_RES:
 				break;
 			case Const4pbx.UC_REPORT_EXT_STATE:
@@ -192,12 +195,13 @@ public class QuoteTelStatusService implements ApplicationListener<BrokerAvailabi
 			default:
 				System.err.println(String.format("Extension : %s", data.getExtension()));
 				
+				if (data.getExtension() == null) return;
 				if (data.getExtension().isEmpty()) return;
 				
-				String id = member.findIdByExt(data.getExtension());
+				Member mem = memberMapper.findIdByExt(data.getExtension());
 				
-				if (id == null) return;
-				if (id.isEmpty()) return;
+				if (mem.getId() == null) return;
+				if (mem.getId().isEmpty()) return;
 				
 				payload = new UcMessage();
 				payload.cmd = data.getCmd();
@@ -205,7 +209,7 @@ public class QuoteTelStatusService implements ApplicationListener<BrokerAvailabi
 				payload.caller = data.getCaller();
 				payload.callee = data.getCallee();
 				payload.status = data.getStatus();
-				this.msgTemplate.convertAndSendToUser(id, "/queue/groupware", payload);
+				this.msgTemplate.convertAndSendToUser(mem.getId(), "/queue/groupware", payload);
 				break;
 		}
 	}

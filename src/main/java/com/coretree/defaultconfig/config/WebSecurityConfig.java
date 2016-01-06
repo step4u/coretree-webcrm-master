@@ -1,6 +1,8 @@
 
 package com.coretree.defaultconfig.config;
 
+import javax.sql.DataSource;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -8,15 +10,16 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.*;
 import org.springframework.security.web.header.writers.frameoptions.XFrameOptionsHeaderWriter;
 
-/**
- * An extremely basic auth setup for the sake of a demo project
- */
+import com.coretree.defaultconfig.mapper.MemberMapper;
+
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
-	LoginHandler loginSuccessHandler;
+	private LoginHandler loginSuccessHandler;
+	@Autowired
+	private DataSource datasrc;
 	// private LogoutHandler logoutSuccessHandler = new LogoutHandler();
 
 	@Override
@@ -53,7 +56,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-		auth.inMemoryAuthentication().withUser("test").password("1234").roles("USER", "ADMIN");
-		auth.inMemoryAuthentication().withUser("test1").password("1234").roles("USER");
+		// auth.inMemoryAuthentication().withUser("test").password("1234").roles("USER", "ADMIN");
+		// auth.inMemoryAuthentication().withUser("test1").password("1234").roles("USER");
+		
+		String getUser = "select id as userid, pwd as userpwd from users where id='test'";
+		String getAuth = "select id as userid, pwd as userpwd, roles as authority from users where id='test'";
+
+		auth
+        .jdbcAuthentication()
+        	.dataSource(datasrc)
+            .usersByUsernameQuery(getUser)
+            .authoritiesByUsernameQuery(getAuth);
+		
+		System.err.println("Progress authenticate");
 	}
 }

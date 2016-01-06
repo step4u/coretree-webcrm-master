@@ -26,10 +26,13 @@ public interface MemberMapper {
 	Member findById(String id);
 	
 	@Select("select a.id, b.extension from users a join extensions b on a.idx=b.user_idx where b.extension = #{ext}")
-	String findIdByExt(String ext);
+	Member findIdByExt(String ext);
 	
 	@Select("select a.id, a.roles, b.extension from users a join extensions b on a.idx=b.user_idx where a.id = #{id}")
 	Member findExtById(String id);
+	
+	@Select("select id as username from users where id = #{id}")
+	Member getUsersById(String id);
 	
 	@Select("select count(idx) from users where id = #{id}")
 	int chkById(String id);

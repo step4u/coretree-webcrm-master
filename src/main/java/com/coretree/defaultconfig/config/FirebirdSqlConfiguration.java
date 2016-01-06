@@ -5,12 +5,15 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
+
 import java.sql.SQLException;
 
 import javax.sql.DataSource;
 import javax.validation.constraints.NotNull;
 
 //@Configuration
+//@Component
 @EnableConfigurationProperties
 @ConfigurationProperties(locations = "classpath:/jdbc.properties", prefix = "fbdb")
 public class FirebirdSqlConfiguration {

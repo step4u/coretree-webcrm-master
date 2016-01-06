@@ -23,7 +23,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class LoginHandler implements AuthenticationSuccessHandler {
 	
 	@Autowired
-	MemberMapper memberMapper;
+	private MemberMapper memberMapper;
 
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication auth)
@@ -33,49 +33,26 @@ public class LoginHandler implements AuthenticationSuccessHandler {
 		System.err.println("Authentication success : " + request.getContextPath());
 		
 		Collection auths = auth.getAuthorities();
-		boolean authchk = auths.stream().anyMatch(x -> x.equals(new SimpleGrantedAuthority("ROLE_ADMIN")));
+		// boolean authchk = auths.stream().anyMatch(x -> x.equals(new SimpleGrantedAuthority("ROLE_ADMIN")));
 		
-		if (authchk) {
-			String id = auth.getName();
-			Member info = memberMapper.findExtById(id);
-			
-			ObjectMapper mapper = new ObjectMapper();
-			CookieInfo user = new CookieInfo();
-			user.setExt(info.getExtension());
-			user.setRole(info.getRoles());
-			
-			//Object to JSON in file
-			//mapper.writeValue(new File("c:\\user.json"), user);
+		String id = auth.getName();
+		Member info = memberMapper.findExtById(id);
+		
+		ObjectMapper mapper = new ObjectMapper();
+		CookieInfo user = new CookieInfo();
+		user.setExt(info.getExtension());
+		user.setRole(info.getRoles());
+		
+		//Object to JSON in file
+		//mapper.writeValue(new File("c:\\user.json"), user);
 
-			//Object to JSON in String
-			String jsonInString = mapper.writeValueAsString(user);
-			
-			//response.sendRedirect(request.getContextPath() + "/_admin/index.html");
+		//Object to JSON in String
+		String jsonInString = mapper.writeValueAsString(user);
+		
+		//response.sendRedirect(request.getContextPath() + "/_admin/index.html");
 
-			Cookie cookie = new Cookie("crm.identity", jsonInString);
-			response.addCookie(cookie);
-		}
-		else
-		{
-			String id = auth.getName();
-			Member info = memberMapper.findExtById(id);
-			
-			ObjectMapper mapper = new ObjectMapper();
-			CookieInfo user = new CookieInfo();
-			user.setExt(info.getExtension());
-			user.setRole(info.getRoles());
-			
-			//Object to JSON in file
-			//mapper.writeValue(new File("c:\\user.json"), user);
-
-			//Object to JSON in String
-			String jsonInString = mapper.writeValueAsString(user);
-			
-			//response.sendRedirect(request.getContextPath() + "/_admin/index.html");
-
-			Cookie cookie = new Cookie("crm.identity", jsonInString);
-			response.addCookie(cookie);
-		}
+		Cookie cookie = new Cookie("crm.identity", jsonInString);
+		response.addCookie(cookie);
 		
 		response.sendRedirect("/");
 	}
