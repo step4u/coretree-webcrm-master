@@ -32,12 +32,11 @@ public class MemberController {
 	public LoginResult login(@PathVariable("id") String id, @PathVariable("pass") String pass) {
 		Member member = memberMapper.findById(id);
 		LoginResult result = new LoginResult();
-		System.err.println(id + "//" + pass + "/##/" + member.getId() + "//" + member.getPwd());
-		result.result = pass.equals(member.getPwd()) && id.equals(member.getId());
-		result.name = member.getName();
-		result.id = member.getId();
+		// System.err.println(id + "//" + pass + "/##/" + member.getId() + "//" + member.getPwd());
+		result.result = pass.equals(member.getPassword()) && id.equals(member.getUsername());
+		result.username = member.getUsername();
 		result.extension = member.getExtension();
-		result.roles = member.getRoles();
+		result.role = member.getRole();
 		return result;
 	}
 	
@@ -47,7 +46,7 @@ public class MemberController {
 		return result;
 	}
 	
-	@RequestMapping(value = "/member/add/{memberinfo}", method = RequestMethod.POST)
+/*	@RequestMapping(value = "/member/add/{memberinfo}", method = RequestMethod.POST)
 	public void addMember(@PathVariable("memberinfo") Member memberinfo) {
 		memberMapper.addMember(memberinfo);
 	}
@@ -60,5 +59,5 @@ public class MemberController {
 	@RequestMapping(value = "/member/modi/{memberinfo}", method = RequestMethod.POST)
 	public void modiMember(@PathVariable("memberinfo") Member memberinfo) {
 		memberMapper.modiMember(memberinfo);
-	}
+	}*/
 }

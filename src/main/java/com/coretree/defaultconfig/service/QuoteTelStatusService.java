@@ -200,8 +200,8 @@ public class QuoteTelStatusService implements ApplicationListener<BrokerAvailabi
 				
 				Member mem = memberMapper.findIdByExt(data.getExtension());
 				
-				if (mem.getId() == null) return;
-				if (mem.getId().isEmpty()) return;
+				if (mem.getUsername() == null) return;
+				if (mem.getUsername().isEmpty()) return;
 				
 				payload = new UcMessage();
 				payload.cmd = data.getCmd();
@@ -209,7 +209,7 @@ public class QuoteTelStatusService implements ApplicationListener<BrokerAvailabi
 				payload.caller = data.getCaller();
 				payload.callee = data.getCallee();
 				payload.status = data.getStatus();
-				this.msgTemplate.convertAndSendToUser(mem.getId(), "/queue/groupware", payload);
+				this.msgTemplate.convertAndSendToUser(mem.getUsername(), "/queue/groupware", payload);
 				break;
 		}
 	}

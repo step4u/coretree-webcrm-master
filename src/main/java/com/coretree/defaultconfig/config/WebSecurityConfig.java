@@ -59,8 +59,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		// auth.inMemoryAuthentication().withUser("test").password("1234").roles("USER", "ADMIN");
 		// auth.inMemoryAuthentication().withUser("test1").password("1234").roles("USER");
 		
-		String getUser = "select id as userid, pwd as userpwd from users where id='test'";
-		String getAuth = "select id as userid, pwd as userpwd, roles as authority from users where id='test'";
+		String getUser = "select username,password, enabled from users where username=?";
+		String getAuth = "select username, role from user_roles where username=?";
 
 		auth
         .jdbcAuthentication()

@@ -1,9 +1,8 @@
 package com.coretree.defaultconfig.model;
 
 public class LoginResult {
-	public String id;
-	public String name;
+	public String username;
 	public String extension;
-	public String roles;
+	public String role;
 	public Boolean result;
 }
