@@ -1,45 +1,39 @@
 package com.coretree.defaultconfig.mapper;
 
 public class Member {
-	private int idx;
-	private String id;
-	private String name;
-	private String pwd;
-	private String title;
+	private String username;
+	private String password;
+	private String uname;
+	private String posi;
 	private String tel;
 	private String cellular;
 	private String extension;
-	private String roles;
+	private String role;
+	private String status;
 	
-	public int getIdx() {
-		return idx;
+	public String getUsername() {
+		return username;
 	}
-	public void setIdx(int idx) {
-		this.idx = idx;
+	public void setUsername(String username) {
+		this.username = username;
 	}
-	public String getId() {
-		return id;
+	public String getUname() {
+		return uname;
 	}
-	public void setId(String id) {
-		this.id = id;
+	public void setUname(String uname) {
+		this.uname = uname;
 	}
-	public String getName() {
-		return name;
+	public String getPassword() {
+		return password;
 	}
-	public void setName(String name) {
-		this.name = name;
-	}
-	public String getPwd() {
-		return pwd;
-	}
-	public void setPwd(String pwd) {
-		this.pwd = pwd;
+	public void setPassword(String password) {
+		this.password = password;
 	}
 	public String getTitle() {
-		return title;
+		return posi;
 	}
-	public void setTitle(String title) {
-		this.title = title;
+	public void setPosi(String posi) {
+		this.posi = posi;
 	}
 	public String getTel() {
 		return tel;
@@ -59,15 +53,15 @@ public class Member {
 	public void setExtension(String extension) {
 		this.extension = extension;
 	}
-	public String getRoles() {
-		return roles;
+	public String getRole() {
+		return role;
 	}
-	public void getRoles(String roles) {
-		this.roles = roles;
+	public void getRole(String role) {
+		this.role = role;
 	}
 	
 	@Override
 	public String toString() {
-		return "Member [idx=" + idx + ", id=" + id + ", name=" + name + ", title=" + title + ", tel=" + tel + ", cellular=" + cellular + ", extension=" + extension + ", roles=" + roles + "]";
+		return "Member [username=" + username + ", uname=" + uname + ", posi=" + posi + ", tel=" + tel + ", cellular=" + cellular + ", extension=" + extension + ", role=" + role + "]";
 	}
 }

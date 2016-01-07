@@ -19,7 +19,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private LoginHandler loginSuccessHandler;
 	@Autowired
-	private DataSource datasrc;
+	private DataSource dataSrc;
 	// private LogoutHandler logoutSuccessHandler = new LogoutHandler();
 
 	@Override
@@ -56,18 +56,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-		// auth.inMemoryAuthentication().withUser("test").password("1234").roles("USER", "ADMIN");
-		// auth.inMemoryAuthentication().withUser("test1").password("1234").roles("USER");
-		
-		String getUser = "select id as userid, pwd as userpwd from users where id='test'";
-		String getAuth = "select id as userid, pwd as userpwd, roles as authority from users where id='test'";
+		String getUser = "select username, password, enabled from users where username=?";
+		String getAuth = "select username, password, role from users where username=?";
 
 		auth
         .jdbcAuthentication()
-        	.dataSource(datasrc)
+        	.dataSource(dataSrc)
             .usersByUsernameQuery(getUser)
             .authoritiesByUsernameQuery(getAuth);
 		
-		System.err.println("Progress authenticate");
+		// System.err.println("Progress authenticate");
 	}
 }
