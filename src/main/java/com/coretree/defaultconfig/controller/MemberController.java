@@ -27,7 +27,7 @@ public class MemberController {
 	public Member getMemberInfo(@PathVariable("id") String id) {
 		return memberMapper.findById(id);
 	}
-	
+/*	
 	@RequestMapping(value = "/member/login/{id}/{pass}", method = RequestMethod.POST)
 	public LoginResult login(@PathVariable("id") String id, @PathVariable("pass") String pass) {
 		Member member = memberMapper.findById(id);
@@ -40,6 +40,7 @@ public class MemberController {
 		result.roles = member.getRoles();
 		return result;
 	}
+	*/
 	
 	@RequestMapping("/member/chk/{id}")
 	public String chkId(@PathVariable("id") String id) {

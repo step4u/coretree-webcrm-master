@@ -41,7 +41,7 @@ public class LoginHandler implements AuthenticationSuccessHandler {
 		ObjectMapper mapper = new ObjectMapper();
 		CookieInfo user = new CookieInfo();
 		user.setExt(info.getExtension());
-		user.setRole(info.getRoles());
+		user.setRole(info.getRole());
 		
 		//Object to JSON in file
 		//mapper.writeValue(new File("c:\\user.json"), user);

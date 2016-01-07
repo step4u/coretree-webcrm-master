@@ -31,13 +31,13 @@ angular.module('app', ['ui.router', 'ui.bootstrap', 'ui.grid', 'ui.grid.selectio
         },
         views: {
           'content@': {
-            templateUrl: 'view/home.html',
-            controller: 'HomeCtrl'
-          },
+            templateUrl: 'view/addr.html',
+            controller: 'CtrlCustomer'
+          }/*,
           'maincontent@home': {
               templateUrl: 'view/addr.html',
               controller: 'CtrlCustomer'
-          }
+          }*/
         }
       })
       .state('addr', {
@@ -47,7 +47,7 @@ angular.module('app', ['ui.router', 'ui.bootstrap', 'ui.grid', 'ui.grid.selectio
           roles: ['User', 'Admin']
         },
         views: {
-          'maincontent@home': {
+          'content@': {
               templateUrl: 'view/addr.html',
               controller: 'CtrlCustomer'
           }
