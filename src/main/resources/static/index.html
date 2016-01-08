@@ -204,13 +204,19 @@
 		var worker;
 		function connect() {
 	        worker = new Worker('resources/js/ExtStatus_multi-worker.js');
-	        worker.addEventListener('message', function(e) {
+
+	        /* 	        worker.addEventListener('message', function(e) {
 	        	// update_ext_status(e.data);
-	        	console.log("worker front got message...." + e.data);
-	        });
+	        	console.log("worker front side got message...." + e.data);
+	        }); */
+	        
+	        worker.onmessage = function (event) {
+	        	// console.log("worker front side got message...." + event.data);
+	        	update_ext_status(event.data);
+			};
 	
 	        var command = {
-	        	cmd: 'connect',
+	        	cmd: 'connect'
 	        }
 	        worker.postMessage(JSON.stringify(command));
 		}
@@ -235,23 +241,11 @@
 	            });
 	            */
 
-	            worker = new Worker('resources/js/ExtStatus_multi-worker.js');
-	            worker.addEventListener('message', function(e) {
-	            	update_ext_status(e.data);
-	            });
-
-	            worker.postMessage({
-	            	sock: stompClient,
-	            	scope: angular.element($("#ctrlextstatus")).scope()
-	            });
-	            
-	            /*
 	            stompClient.subscribe("/topic/ext.status.*", function(message) {
 	            	var data = JSON.parse(message.body);
 	                // console.log("/topic/ext.status : " + data.extension + ", " + data.status);
 	                update_ext_status(data);
 	            });
-	            */
 	            
 	            stompClient.subscribe("/user/queue/groupware", function(message) {
 	            	// console.log('index.html /user/queus/groupware: ' + JSON.parse(message.body));
@@ -312,14 +306,12 @@
 	</script>
 	
 	<script>
-		/*
 	    function update_ext_status(data){
 	    	var scope = angular.element($("#ctrlextstatus")).scope();
 		    scope.$apply(function () {
 		        scope.updateExtStatus(data);
 		    });
 	    }
-		*/
 	    
 	    var trade = {
                 'cmd' : 0,
@@ -332,7 +324,8 @@
 	
 		$(document).ready(function(){
 		    $("#btn_connect").click(function(){
-		    	connect();
+		    	// connect();
+		    	connect2();
 		    });
 			
 		    $("#btn_disconnect").click(function(){

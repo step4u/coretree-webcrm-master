@@ -1,12 +1,19 @@
+window = document = this;
+importScripts("sockjs-0.3.4.js");
 importScripts("stomp.min.js");
 
+/*
 self.addEventListener('message', function(e) {
 	var data = JSON.parse(e.data);
-	//importScripts("./sockjs-0.3.4.js", "./stomp.min.js");
-
 	busyWork(data);
 });
+*/
 
+onmessage = function (event) {
+	var data = JSON.parse(event.data);
+	busyWork(data);
+};
+	
 function busyWork(data){
 	switch (data.cmd) {
 		case 'connect':
@@ -31,18 +38,19 @@ function busyWork(data){
 }
 
 var whoami;
-var stompClient;
+var client;
 
 function connect() {
-	console.log("websocket connected...");
-	var client = Stomp.client('ws://localhost:8080/webcrm');
+	var socket = new SockJS('/webcrm');
+	client = Stomp.over(socket);
+	
+	// client = Stomp.client('ws://localhost:8080/webcrm');
 	// client = Stomp.over(socket);
-	client.outgoing = 10000;
-	client.incoming = 10000;
+	// client.outgoing = 10000;
+	// client.incoming = 10000;
     
 	client.connect({}, function(frame) {
     	whoami = frame.headers['user-name'];
-        //console.log('index.html Connected: ' + frame);
 
         /*
         client.subscribe("/user/topic/callstatus", function(message) {
@@ -52,9 +60,10 @@ function connect() {
 
     	client.subscribe("/topic/ext.status.*", function(message) {
         	var data = JSON.parse(message.body);
-            // console.log("/topic/ext.status : " + data.extension + ", " + data.status);
+            console.log("worker /topic/ext.status : " + data.extension + ", " + data.status);
             // update_ext_status(data);
-        	self.postMessage(data);
+        	// self.postMessage(message.body);
+            postMessage(message.body);
         });
         
     	client.subscribe("/user/queue/groupware", function(message) {
@@ -65,6 +74,8 @@ function connect() {
     	client.subscribe("/user/queue/errors", function(message) {
         	console.log('index.html /app/queue/errors: ' + JSON.parse(message.body));
 		});
+
+    	console.log('index.html Connected: ' + frame);
     });
 }
 

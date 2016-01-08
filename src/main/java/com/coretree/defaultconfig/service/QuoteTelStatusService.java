@@ -66,7 +66,7 @@ public class QuoteTelStatusService implements ApplicationListener<BrokerAvailabi
 	}
 	
 	// sample
-	@Scheduled(fixedDelay=2000)
+	// @Scheduled(fixedDelay=2000)
 	public void sendQuotes() {
 		for (QuoteTelStatus quote : this.quoteGenerator.generateQuotes()) {
 			if (logger.isTraceEnabled()) {
@@ -79,7 +79,7 @@ public class QuoteTelStatusService implements ApplicationListener<BrokerAvailabi
 	}
 	
 	// test 5초마다 갱신
-	@Scheduled(fixedDelay=5000)
+	// @Scheduled(fixedDelay=5000)
 	public void sendCallStatus() {
 		for (QuoteTelStatus quote : this.quoteGenerator.generateQuotes()) {
 			if (logger.isTraceEnabled()) {
@@ -106,7 +106,7 @@ public class QuoteTelStatusService implements ApplicationListener<BrokerAvailabi
 	}
 	
 	// subscribe system informations, refresh on every 2 seconds.
-	@Scheduled(fixedDelay=60000)
+	// @Scheduled(fixedDelay=60000)
 	public void sendSystemInformations() {
 
 		

@@ -23,7 +23,8 @@
 			$scope.gridOptions.data.splice(index, 1);
 		};
 		
-		$scope.updateExtStatus = function(data) {
+		$scope.updateExtStatus = function(jsonData) {
+			var data = angular.fromJson(jsonData);
 //			var item = $.grep($scope.gridOptions.data, function(element, index){
 //				// console.log("element.innertel : " + element.innertel);
 //				return element.innertel == data.extension;
@@ -38,7 +39,10 @@
 				return element.innertel === data.extension;
 			});
 			
+			console.log("controller_telstatus 1 -> item : " + item);
+			
 			if (item) {
+				// console.log("controller_telstatus 2 -> item : " + item);
 				item.status = data.status;
 			}
 			
