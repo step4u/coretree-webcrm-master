@@ -29,7 +29,7 @@ public interface MemberMapper {
 	@Select("select a.username, b.extension from users a join extensions b on a.username=b.username where b.extension = #{ext}")
 	Member findIdByExt(String ext);
 	
-	@Select("select a.username, a.role, b.extension from users a join extensions b on a.username=b.username where a.username = #{id}")
+	@Select("select a.username, a.role, b.extension from users a join USERS_EXTS b on a.username=b.username where a.username = #{id}")
 	Member findExtById(String id);
 	
 	@Select("select username from users where username=#{id}")
