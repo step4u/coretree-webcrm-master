@@ -32,7 +32,7 @@ public class LoginHandler implements AuthenticationSuccessHandler {
 		
 		System.err.println("Authentication success : " + request.getContextPath());
 		
-		Collection auths = auth.getAuthorities();
+		// Collection auths = auth.getAuthorities();
 		// boolean authchk = auths.stream().anyMatch(x -> x.equals(new SimpleGrantedAuthority("ROLE_ADMIN")));
 		
 		String id = auth.getName();
@@ -40,6 +40,7 @@ public class LoginHandler implements AuthenticationSuccessHandler {
 		
 		ObjectMapper mapper = new ObjectMapper();
 		CookieInfo user = new CookieInfo();
+		user.setUsername(id);
 		user.setExt(info.getExtension());
 		user.setRole(info.getRole());
 		

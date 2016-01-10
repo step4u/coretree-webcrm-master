@@ -32,7 +32,6 @@
     <link rel="stylesheet" href="resources/css/simple-sidebar.css" />
 
     <link rel="stylesheet" href="resources/css/main.css" />    
-    <link rel="stylesheet" href="style.css" />
     <script src="script1.js"></script>
     <script src="contextmenu.js"></script>
     
@@ -92,28 +91,28 @@
         <div id="sidebar-wrapper">
             <ul class="sidebar-nav">
                 <li>
-                    <a ui-sref="addr">주소록</a>
+                    <a href="#/addr/0">주소록</a>
                 </li>
                 <li>
                 	<ul style="list-style: none; margin: 0; padding-left: 15px;">
                 		<li>
-                			<a href="#collapse1" data-toggle="collapse" id="publicaddr">공용 주소록 </a>
+                			<a href="#/addr/1" id="publicaddr">공용 주소록 </a>
                 		</li>
-                		<li id="collapse1" class="panel-collapse collapse">
+                		<li id="collapse1" class="panel-collapse collapse in">
                 			<ul style="list-style: none; margin: 0; padding-left: 25px;">
-                				<li><a href="addr00">협력업체</a></li>
-                				<li><a href="addr01">거래처</a></li>
-                				<li><a href="addr02">고객</a></li>
+                				<li><a href="#/addr/11">협력업체</a></li>
+                				<li><a href="#/addr/12">거래처</a></li>
+                				<li><a href="#/addr/13">고객</a></li>
                 			</ul>
                 		</li>
-            		<li>
-                			<a href="#collapse2" data-toggle="collapse" id="personaladdr">개인 주소록</a>
+            			<li>
+                			<a href="#/addr/2" data-toggle="collapse" id="personaladdr">개인 주소록</a>
                 		</li>
-                		<li id="collapse2" class="panel-collapse collapse">
+                		<li id="collapse2" class="panel-collapse collapse in">
                 			<ul style="list-style: none; margin: 0; padding-left: 25px;">
-                				<li><a href="addr10">협력업체</a></li>
-                				<li><a href="addr11">거래처</a></li>
-                				<li><a href="addr12">고객</a></li>
+                				<li><a href="#/addr/21">협력업체</a></li>
+                				<li><a href="#/addr/22">거래처</a></li>
+                				<li><a href="#/addr/23">고객</a></li>
                 			</ul>
                 		</li>
                 	</ul>
@@ -284,16 +283,14 @@
 		        $("#wrapper").toggleClass("toggled");
 		    });
 		    
-		    $("#publicaddr").click(function(e){
+/* 		    $("#publicaddr").click(function(e){
 		    	e.preventDefault();
-		    	console.log('publicaddr clicked');
-		    	location.href="addr0";
+		    	location.href="/#/addr/1/0";
 		    });
 		    $("#personaladdr").click(function(e){
 		    	e.preventDefault();
-		    	console.log('personaladdr clicked');
-		    	location.href="addr1";
-		    });
+		    	location.href="/#/addr/2/0";
+		    }); */
 		    
 		    var tmpidentity = $.cookie("crm.identity");
 		    crmidentity = JSON.parse(tmpidentity);
@@ -321,8 +318,8 @@
 	
 		$(document).ready(function(){
 		    $("#btn_connect").click(function(){
-		    	// connect();
-		    	connect2();
+		    	connect();
+		    	//connect2();
 		    });
 			
 		    $("#btn_disconnect").click(function(){

@@ -6,7 +6,8 @@
 		  };
 	
 	angular.module('app')
-	.controller('CtrlCustomer', ['$scope', '$http', 'i18nService', '$log', '$timeout', 'uiGridConstants', function ($scope, $http, i18nService, $log, $timeout, uiGridConstants) {
+	.controller('CtrlCustomer', ['$scope', '$http', 'i18nService', '$log', '$timeout', 'uiGridConstants', '$stateParams'
+	                             , function ($scope, $http, i18nService, $log, $timeout, uiGridConstants, $stateParams) {
 		// i18nService.setCurrentLang('ko');
 		/*
 		$scope.$on('$routeChangeSuccess', function($event, current) {
@@ -15,6 +16,7 @@
 			});
 		});
 		*/
+		console.log("CtrlCustomer->@stateParams: " + $stateParams.param);
 		
 		$scope.highlightFilteredHeader = function( row, rowRenderIndex, col, colRenderIndex ) {
 		    if( col.filters[0].term ){
@@ -32,7 +34,7 @@
 				enableSorting: true,
 				showGridFooter: false,
 				columnDefs: [
-			    		      { displayName: '고객이름', field: 'name', headerCellClass: 'white' , cellClass: 'grid-cell' },
+			    		      { displayName: '고객이름', field: 'uname', headerCellClass: 'white' , cellClass: 'grid-cell' },
 			    		      { displayName: '회사', field: 'company', headerCellClass:'white', cellClass: 'grid-cell' },
 			    		      { displayName: '전화번호', field: 'tel', headerCellClass: $scope.highlightFilteredHeader, cellClass: 'grid-cell' },
 			    		      { displayName: '휴대전화', field: 'cellular', headerCellClass: $scope.highlightFilteredHeader, cellClass: 'grid-cell' },
@@ -60,13 +62,13 @@
 			            } else {
 			            	paginationOptionsCustomer.sort = sortColumns[0].sort.direction;
 			            }
-			            getPage();
+			            $scope.getPage();
 			    	});
 			    	
 			    	gridApi.pagination.on.paginationChanged($scope, function (newPage, pageSize) {
 			    		paginationOptionsCustomer.pageNumber = newPage;
 			    		paginationOptionsCustomer.pageSize = pageSize;
-			            getPage();
+			    		$scope.getPage();
 			    	});
 			    	
 			    	gridApi.selection.on.rowSelectionChanged($scope,function(row){
@@ -81,38 +83,49 @@
 			    }
 		};
 		
-		var getPage = function() {
+		
+		$scope.getPage = function(searchtxt) {
+			console.log("getPage searchtxt: " + searchtxt);
+			
 			var url;
-			switch(paginationOptionsCustomer.sort) {
-				case uiGridConstants.ASC:
-					url = '/resources/apps/app_data_customer.json';
-					break;
-				case uiGridConstants.DESC:
-					url = '/resources/apps/app_data_customer.json';
-					break;
-				default:
-					url = '/resources/apps/app_data_customer.json';
-				break;
+			
+			if (searchtxt == ''){
+				//url = '/customer/' + $stateParams.param + '/' + crmidentity.username + '/' + paginationOptionsCustomer.pageNumber + '/' + paginationOptionsCustomer.pageSize;
+				url = '/customer/' + $stateParams.param + '/' + paginationOptionsCustomer.pageNumber + '/' + paginationOptionsCustomer.pageSize;
+			} else {
+				url = '/customer/' + $stateParams.param + '/' + searchtxt;
 			}
 			
-			$http.get(url)
+			if (typeof(searchtxt) == 'undefined'){
+				url = '/customer/' + $stateParams.param + '/' + paginationOptionsCustomer.pageNumber + '/' + paginationOptionsCustomer.pageSize;
+			}
+
+			var counturl = '/customer/count/' + $stateParams.param + '/' + crmidentity.username;
+			console.log("getPage counturl: " + counturl);
+			$http.get(counturl)
 			.success(function(data) {
-				// $scope.gridOptions.data = data;
-				/*
-				$timeout(function() {
-			        if($scope.gridApi.selection.selectRow){
-			          $scope.gridApi.selection.selectRow($scope.gridOptions.data[0]);
-			        }
-				});
-				*/
+				console.log("getPage data.length: " + data);
+				$scope.gridOptions.totalItems = data;
 				
-				$scope.gridOptions.totalItems = data.length;
-				var firstRow = (paginationOptionsCustomer.pageNumber - 1) * paginationOptionsCustomer.pageSize;
-				$scope.gridOptions.data = data.slice(firstRow, firstRow + paginationOptionsCustomer.pageSize);
+				$http.get(url)
+				.success(function(data) {
+					// $scope.gridOptions.data = data;
+					/*
+					$timeout(function() {
+				        if($scope.gridApi.selection.selectRow){
+				          $scope.gridApi.selection.selectRow($scope.gridOptions.data[0]);
+				        }
+					});
+					*/
+					
+					//var firstRow = (paginationOptionsCustomer.pageNumber - 1) * paginationOptionsCustomer.pageSize;
+					//$scope.gridOptions.data = data.slice(firstRow, firstRow + paginationOptionsCustomer.pageSize);
+					$scope.gridOptions.data = data;
+				});
 			});
 		}
 		
-		getPage();
+		$scope.getPage();
 		
 		$scope.deleteRow = function(row) {
 			var index = $scope.gridOptions.data.indexOf(row.entity);
@@ -121,9 +134,6 @@
 			$scope.gridOptions.totalItems--;
 			var firstRow = (paginationOptionsCustomer.pageNumber - 1) * paginationOptionsCustomer.pageSize;
 			$scope.gridOptions.data = $scope.gridOptions.data.slice(firstRow, firstRow + paginationOptionsCustomer.pageSize);
-			
-			alert($scope.gridOptions.data.length);
-			// getPage();
 		};
 		
 		$scope.getCurrentSelection = function() {

@@ -18,7 +18,7 @@ angular.module('app', ['ui.router', 'ui.bootstrap', 'ui.grid', 'ui.grid.selectio
   .config(['$stateProvider', '$urlRouterProvider',
     function($stateProvider, $urlRouterProvider) {
 
-      $urlRouterProvider.otherwise('/home');
+      $urlRouterProvider.otherwise('/addr/0');
 
       $stateProvider.state('site', {
         'abstract': true,
@@ -41,8 +41,8 @@ angular.module('app', ['ui.router', 'ui.bootstrap', 'ui.grid', 'ui.grid.selectio
         }
       })
       .state('addr', {
-        parent: 'home',
-        url: '/addr',
+        parent: 'site',
+        url: '/addr/:param',
         data: {
           roles: ['User', 'Admin']
         },
@@ -54,7 +54,7 @@ angular.module('app', ['ui.router', 'ui.bootstrap', 'ui.grid', 'ui.grid.selectio
         }
       })
       .state('calls', {
-        parent: 'home',
+        parent: 'site',
         url: '/calls',
         data: {
           roles: ['User', 'Admin']

@@ -2,9 +2,10 @@ package com.coretree.defaultconfig.mapper;
 
 public class Customer {
 	private int idx;
-	private int group_idx;
-	private int custgroup_idx;
+	private int groups_idx;
+	private int customgroups_idx;
 	private String uname;
+	private String company;
 	private String posi;
 	private String tel;
 	private String cellular;
@@ -14,14 +15,17 @@ public class Customer {
 	public int getIdx() { return this.idx; }
 	public void setIdx(int idx) { this.idx = idx; }
 	
-	public int getGroup_idx() { return this.group_idx; }
-	public void setGroup_idx(int group_idx) { this.group_idx = group_idx; }
+	public int getGroup_idx() { return this.groups_idx; }
+	public void setGroup_idx(int groups_idx) { this.groups_idx = groups_idx; }
 	
-	public int getCustgroup_idx() { return this.custgroup_idx; }
-	public void setCustgroup_idx(int custgroup_idx) { this.custgroup_idx = custgroup_idx; }
+	public int getCustgroup_idx() { return this.customgroups_idx; }
+	public void setCustgroup_idx(int customgroups_idx) { this.customgroups_idx = customgroups_idx; }
 	
 	public String getUname() { return uname; }
 	public void setUname(String uname) { this.uname = uname; }
+
+	public String getCompany() { return company; }
+	public void setCompany(String company) { this.company = company; }
 	
 	public String getTitle() { return posi; }
 	public void setPosi(String posi) { this.posi = posi; }
@@ -40,7 +44,7 @@ public class Customer {
 	
 	@Override
 	public String toString() {
-		return "Customer [idx=" + idx + ", group_idx=" + group_idx + ", custgroup_idx=" + custgroup_idx + ", uname=" + uname
+		return "Customer [idx=" + idx + ", groups_idx=" + groups_idx + ", customgroups_idx=" + customgroups_idx + ", uname=" + uname
 				+ ", posi=" + posi + ", tel=" + tel + ", cellular=" + cellular
 				+ ", extension=" + extension + ", email=" + email + "]";
 	}

@@ -2,45 +2,72 @@ package com.coretree.defaultconfig.mapper;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Options;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.mapping.StatementType;
 import org.springframework.boot.mybatis.autoconfigure.Mapper;
 
 @Mapper
 public interface CustomerMapper {
+	// @Result(column = "tcount")
+	@Select(value = "{ call GET_CUSTCOUNT ( #{group, mode=IN, jdbcType=VARCHAR}, #{username, mode=IN, jdbcType=VARCHAR} ) }")
+	@Options(statementType = StatementType.CALLABLE)
+	int count(@Param("group") String group, @Param("username") String username);
+	
 	@Results({
         @Result(property = "idx", column = "idx"),
-        @Result(property = "group_idx", column = "group_idx"),
-        @Result(property = "custgroup_idx", column = "custgroup_idx"),
+        @Result(property = "groups_idx", column = "groups_idx"),
+        @Result(property = "customgroups_idx", column = "customgroups_idx"),
+        @Result(property = "uname", column = "uname"),
+        @Result(property = "company", column = "company"),
+        @Result(property = "posi", column = "posi"),
+        @Result(property = "tel", column = "tel"),
+        @Result(property = "cellular", column = "cellular"),
+        @Result(property = "extension", column = "extension"),
+        @Result(property = "email", column = "email")
+	})
+	@Select("select first #{rowsperpage} skip ((#{curpage} - 1) * #{rowsperpage})"
+			+ " idx, uname, company, posi, tel, cellular, extension, email from customers order by uname asc")
+	List<Customer> findAll(@Param("curpage") String curpage
+			, @Param("rowsperpage") String rowsperpage
+			, @Param("group") String group
+			, @Param("username") String username);
+	
+/*	@Results({
+        @Result(property = "idx", column = "idx"),
+        @Result(property = "groups_idx", column = "groups_idx"),
+        @Result(property = "customgroups_idx", column = "customgroups_idx"),
         @Result(property = "uname", column = "uname"),
         @Result(property = "posi", column = "posi"),
         @Result(property = "tel", column = "tel"),
         @Result(property = "cellular", column = "cellular"),
         @Result(property = "extension", column = "extension"),
         @Result(property = "email", column = "email")
-      })
+	})*/
+	@Select("select idx, uname, company, posi, tel, cellular, extension, email from customers"
+			+ " where uname like #{searchtxt}"
+			+ " or tel like #{searchtxt}"
+			+ " or cellular like #{searchtxt}"
+			+ " or extension like #{searchtxt}"
+			+ " or company like #{searchtxt}")
+	List<Customer> findByTxt(@Param("searchtxt") String searchtxt);
 	
-	@Select("select count(idx) from customers")
-	int count();
-	
-	@Select("select first #{rowsperpage} skip (#{cuspage} * #{rowsperpage})idx, group_idx, custgroup_idx, uname, posi"
-			+ " tel, cellular, extension, email from customers order by uname asc")
-	List<Customer> findAll(int curpage, int rowsperpage);
-	
-	@Select("select first #{rowsperpage} skip (#{cuspage} * #{rowsperpage}) * from customers where uname = #{val} or extension = #{val}")
-	List<Customer> findByNameOrExt(int curpage, int rowsperpage, String val);
-	
-	@Select("insert into "
+	@Insert("insert into "
 			+ "(group_idx, custgroup_idx, uname, posi, tel, cellular, extension, email)"
 			+ " values "
 			+ "(#{group_idx}, #{custgroup_idx}, #{uname}, #{posi}, #{tel}, #{cellular}, #{extension}, #{email});")
 	void add(Customer obj);
 	
-	@Select("delete from customers where idx=#{idx}")
+	@Delete("delete from customers where idx=#{idx}")
 	void del(int idx);
 	
-	@Select("update customers set group_idx=#{group_idx}, custgroup_idx=#{custgroup_idx}, uname=#{uname}, posi=#{posi}"
+	@Update("update customers set group_idx=#{group_idx}, custgroup_idx=#{custgroup_idx}, uname=#{uname}, posi=#{posi}"
 			+ ", tel=#{tel}, cellular=#{cellular}, extension=#{extension}, email=#{email} where idx=#{idx}")
 	void modi(Customer obj);
 }
