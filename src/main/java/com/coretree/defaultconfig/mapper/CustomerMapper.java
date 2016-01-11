@@ -13,6 +13,8 @@ import org.apache.ibatis.annotations.Update;
 import org.apache.ibatis.mapping.StatementType;
 import org.springframework.boot.mybatis.autoconfigure.Mapper;
 
+import com.coretree.defaultconfig.model.Group;
+
 @Mapper
 public interface CustomerMapper {
 	// @Result(column = "tcount")
@@ -20,7 +22,7 @@ public interface CustomerMapper {
 	@Options(statementType = StatementType.CALLABLE)
 	int count(@Param("group") String group, @Param("username") String username);
 	
-	@Results({
+/*	@Results({
         @Result(property = "idx", column = "idx"),
         @Result(property = "groups_idx", column = "groups_idx"),
         @Result(property = "customgroups_idx", column = "customgroups_idx"),
@@ -31,11 +33,11 @@ public interface CustomerMapper {
         @Result(property = "cellular", column = "cellular"),
         @Result(property = "extension", column = "extension"),
         @Result(property = "email", column = "email")
-	})
-	@Select("select first #{rowsperpage} skip ((#{curpage} - 1) * #{rowsperpage})"
-			+ " idx, uname, company, posi, tel, cellular, extension, email from customers order by uname asc")
-	List<Customer> findAll(@Param("curpage") String curpage
-			, @Param("rowsperpage") String rowsperpage
+	})*/
+	@Select(value = "{ call GET_CUSTLIST ( #{curpage, mode=IN, jdbcType=INTEGER}, #{rowsperpage, mode=IN, jdbcType=INTEGER}, #{group, mode=IN, jdbcType=VARCHAR}, #{username, mode=IN, jdbcType=VARCHAR} ) }")
+	@Options(statementType = StatementType.CALLABLE)
+	List<Customer> findAll(@Param("curpage") int curpage
+			, @Param("rowsperpage") int rowsperpage
 			, @Param("group") String group
 			, @Param("username") String username);
 	
@@ -70,4 +72,7 @@ public interface CustomerMapper {
 	@Update("update customers set group_idx=#{group_idx}, custgroup_idx=#{custgroup_idx}, uname=#{uname}, posi=#{posi}"
 			+ ", tel=#{tel}, cellular=#{cellular}, extension=#{extension}, email=#{email} where idx=#{idx}")
 	void modi(Customer obj);
+	
+	@Select("select depthorder, txt from groups where char_length(depthorder)>1 order by depthorder asc")
+	Group getGroup();
 }

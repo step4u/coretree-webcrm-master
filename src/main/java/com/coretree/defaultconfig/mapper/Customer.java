@@ -2,8 +2,8 @@ package com.coretree.defaultconfig.mapper;
 
 public class Customer {
 	private int idx;
-	private int groups_idx;
-	private int customgroups_idx;
+	private String depthorder;
+	private String username;
 	private String uname;
 	private String company;
 	private String posi;
@@ -15,11 +15,11 @@ public class Customer {
 	public int getIdx() { return this.idx; }
 	public void setIdx(int idx) { this.idx = idx; }
 	
-	public int getGroup_idx() { return this.groups_idx; }
-	public void setGroup_idx(int groups_idx) { this.groups_idx = groups_idx; }
+	public String getDepthorder() { return this.depthorder; }
+	public void setDepthorder(String depthorder) { this.depthorder = depthorder; }
 	
-	public int getCustgroup_idx() { return this.customgroups_idx; }
-	public void setCustgroup_idx(int customgroups_idx) { this.customgroups_idx = customgroups_idx; }
+	public String getUsername() { return this.username; }
+	public void setUsername(String username) { this.username = username; }
 	
 	public String getUname() { return uname; }
 	public void setUname(String uname) { this.uname = uname; }
@@ -44,7 +44,7 @@ public class Customer {
 	
 	@Override
 	public String toString() {
-		return "Customer [idx=" + idx + ", groups_idx=" + groups_idx + ", customgroups_idx=" + customgroups_idx + ", uname=" + uname
+		return "Customer [idx=" + idx + ", depthorder=" + depthorder + ", username=" + username + ", uname=" + uname
 				+ ", posi=" + posi + ", tel=" + tel + ", cellular=" + cellular
 				+ ", extension=" + extension + ", email=" + email + "]";
 	}

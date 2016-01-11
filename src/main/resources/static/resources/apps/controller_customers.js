@@ -1,9 +1,9 @@
-	// 고객리스트
+/*	// 고객리스트
 	var paginationOptionsCustomer = {
 		    pageNumber: 1,
 		    pageSize: 20,
 		    sort: null
-		  };
+		  };*/
 	
 	angular.module('app')
 	.controller('CtrlCustomer', ['$scope', '$http', 'i18nService', '$log', '$timeout', 'uiGridConstants', '$stateParams'
@@ -16,7 +16,13 @@
 			});
 		});
 		*/
-		console.log("CtrlCustomer->@stateParams: " + $stateParams.param);
+		
+		// 고객리스트
+		var paginationOptions = {
+			    pageNumber: 1,
+			    pageSize: 20,
+			    sort: null
+			  };
 		
 		$scope.highlightFilteredHeader = function( row, rowRenderIndex, col, colRenderIndex ) {
 		    if( col.filters[0].term ){
@@ -31,7 +37,7 @@
 			    paginationPageSize: 20,
 			    useExternalPagination: true,
 			    useExternalSorting: true,
-				enableSorting: true,
+				enableSorting: false,
 				showGridFooter: false,
 				columnDefs: [
 			    		      { displayName: '고객이름', field: 'uname', headerCellClass: 'white' , cellClass: 'grid-cell' },
@@ -58,16 +64,16 @@
 			    	
 			    	$scope.gridApi.core.on.sortChanged($scope, function(grid, sortColumns) {
 			            if (sortColumns.length == 0) {
-			            	paginationOptionsCustomer.sort = null;
+			            	paginationOptions.sort = null;
 			            } else {
-			            	paginationOptionsCustomer.sort = sortColumns[0].sort.direction;
+			            	paginationOptions.sort = sortColumns[0].sort.direction;
 			            }
 			            $scope.getPage();
 			    	});
 			    	
 			    	gridApi.pagination.on.paginationChanged($scope, function (newPage, pageSize) {
-			    		paginationOptionsCustomer.pageNumber = newPage;
-			    		paginationOptionsCustomer.pageSize = pageSize;
+			    		paginationOptions.pageNumber = newPage;
+			    		paginationOptions.pageSize = pageSize;
 			    		$scope.getPage();
 			    	});
 			    	
@@ -83,28 +89,32 @@
 			    }
 		};
 		
+		group = $stateParams.param;
 		
 		$scope.getPage = function(searchtxt) {
-			console.log("getPage searchtxt: " + searchtxt);
-			
+			//console.log("getPage searchtxt: " + searchtxt);
 			var url;
 			
 			if (searchtxt == ''){
-				//url = '/customer/' + $stateParams.param + '/' + crmidentity.username + '/' + paginationOptionsCustomer.pageNumber + '/' + paginationOptionsCustomer.pageSize;
-				url = '/customer/' + $stateParams.param + '/' + paginationOptionsCustomer.pageNumber + '/' + paginationOptionsCustomer.pageSize;
+				url = '/customer/' + $stateParams.param + '/' + paginationOptions.pageNumber + '/' + paginationOptions.pageSize;
 			} else {
 				url = '/customer/' + $stateParams.param + '/' + searchtxt;
 			}
 			
 			if (typeof(searchtxt) == 'undefined'){
-				url = '/customer/' + $stateParams.param + '/' + paginationOptionsCustomer.pageNumber + '/' + paginationOptionsCustomer.pageSize;
+				url = '/customer/' + $stateParams.param + '/' + paginationOptions.pageNumber + '/' + paginationOptions.pageSize;
 			}
 
-			var counturl = '/customer/count/' + $stateParams.param + '/' + crmidentity.username;
+			var counturl = '/customer/count/' + $stateParams.param;
 			console.log("getPage counturl: " + counturl);
+			//console.log("getPage url: " + url);
 			$http.get(counturl)
 			.success(function(data) {
-				console.log("getPage data.length: " + data);
+				console.log("getPage totalItems: " + data);
+				if ($scope.gridOptions.totalItems != data) {
+					paginationOptions.pageNumber = 1;
+				}
+				
 				$scope.gridOptions.totalItems = data;
 				
 				$http.get(url)
@@ -132,8 +142,8 @@
 			$scope.gridOptions.data.splice(index, 1);
 			
 			$scope.gridOptions.totalItems--;
-			var firstRow = (paginationOptionsCustomer.pageNumber - 1) * paginationOptionsCustomer.pageSize;
-			$scope.gridOptions.data = $scope.gridOptions.data.slice(firstRow, firstRow + paginationOptionsCustomer.pageSize);
+			var firstRow = (paginationOptions.pageNumber - 1) * paginationOptions.pageSize;
+			$scope.gridOptions.data = $scope.gridOptions.data.slice(firstRow, firstRow + paginationOptions.pageSize);
 		};
 		
 		$scope.getCurrentSelection = function() {

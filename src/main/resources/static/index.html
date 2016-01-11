@@ -106,7 +106,7 @@
                 			</ul>
                 		</li>
             			<li>
-                			<a href="#/addr/2" data-toggle="collapse" id="personaladdr">개인 주소록</a>
+                			<a href="#/addr/2" id="personaladdr">개인 주소록</a>
                 		</li>
                 		<li id="collapse2" class="panel-collapse collapse in">
                 			<ul style="list-style: none; margin: 0; padding-left: 25px;">
@@ -220,6 +220,7 @@
 		var crmidentity;
 		var whoami;
 		var stompClient;
+		var group;
 		
 	    function connect2() {
 	        var socket = new SockJS('/webcrm');
@@ -431,7 +432,7 @@
 		        console.log("socktest sock sent");
 		    });
 		    
-		    if (crmidentity.role == "ADMIN") {
+		    if (crmidentity.role == "ROLE_ADMIN") {
 		    	$(".ADMIN").css("display", "inline");
 		    }
 		    
@@ -443,4 +444,15 @@
 		    // connect();
 		});
 	</script>
+	<style>
+		.modal-header, h4, .close {
+		    background-color: #3175AF;
+		    color:white !important;
+		    text-align: center;
+		    font-size: 30px;
+		}
+		.modal-footer {
+		    background-color: #f9f9f9;
+		}
+	</style>
 </html>
