@@ -15,19 +15,20 @@
     
     <select id="selectAll" parameterType="map" resultMap="callMap">
     	select first #{rowsperpage} skip ((#{curpage} - 1) * #{rowsperpage})
-                        idx, customers_idx, title, contents, regdate
-			from calls order by regdate desc
+			idx, custs_idx, direction, cust_tel, startdate, enddate, memo, regdate
+			from calls order
+			by regdate desc
     </select>
     
     <select id="selectByIdx" resultMap="callMap">
-    	select first idx, customers_idx, title, contents, regdate
+    	select idx, custs_idx, direction, cust_tel, startdate, enddate, memo, regdate
 			from calls
 			where idx=#{idx}
 			order by regdate desc
     </select>
     
     <select id="selectByTxt" resultMap="callMap">
-    	select first a.idx, b.uname, a.title, a.contents, a.regdate
+    	select first a.idx, b.uname, a.direction, a.cust_tel, a.startdate, a.enddate, a.memo, a.regdate
 			from calls a join customers b
 				on a.idx=b.customers_idx
 			where a.title like #{txt} or b.uname like #{txt}

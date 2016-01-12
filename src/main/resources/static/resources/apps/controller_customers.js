@@ -41,7 +41,7 @@
 				showGridFooter: false,
 				columnDefs: [
 			    		      { displayName: '고객이름', field: 'uname', headerCellClass: 'white' , cellClass: 'grid-cell' },
-			    		      { displayName: '회사', field: 'company', headerCellClass:'white', cellClass: 'grid-cell' },
+			    		      { displayName: '회사', field: 'firm', headerCellClass:'white', cellClass: 'grid-cell' },
 			    		      { displayName: '전화번호', field: 'tel', headerCellClass: $scope.highlightFilteredHeader, cellClass: 'grid-cell' },
 			    		      { displayName: '휴대전화', field: 'cellular', headerCellClass: $scope.highlightFilteredHeader, cellClass: 'grid-cell' },
 			    		      { displayName: '기타',

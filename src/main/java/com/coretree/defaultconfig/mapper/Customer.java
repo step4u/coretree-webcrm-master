@@ -5,7 +5,7 @@ public class Customer {
 	private String depthorder;
 	private String username;
 	private String uname;
-	private String company;
+	private String firm;
 	private String posi;
 	private String tel;
 	private String cellular;
@@ -24,8 +24,8 @@ public class Customer {
 	public String getUname() { return uname; }
 	public void setUname(String uname) { this.uname = uname; }
 
-	public String getCompany() { return company; }
-	public void setCompany(String company) { this.company = company; }
+	public String getFirm() { return firm; }
+	public void setFirm(String firm) { this.firm = firm; }
 	
 	public String getTitle() { return posi; }
 	public void setPosi(String posi) { this.posi = posi; }
@@ -45,7 +45,7 @@ public class Customer {
 	@Override
 	public String toString() {
 		return "Customer [idx=" + idx + ", depthorder=" + depthorder + ", username=" + username + ", uname=" + uname
-				+ ", company=" + company + ", posi=" + posi + ", tel=" + tel + ", cellular=" + cellular
+				+ ", firm=" + firm + ", posi=" + posi + ", tel=" + tel + ", cellular=" + cellular
 				+ ", extension=" + extension + ", email=" + email + "]";
 	}
 }
