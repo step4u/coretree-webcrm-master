@@ -27,13 +27,14 @@
 
 	<script src="resources/angularjs/grid-ui/3.0.7/ui-grid.min.js"></script>
     <link rel="stylesheet" href="resources/angularjs/grid-ui/3.0.7/ui-grid.min.css" />
-   	<script src="resources/js/BootStrapContextMenu.js"></script>
+   	<!-- <script src="resources/js/BootStrapContextMenu.js"></script> -->
     
     <link rel="stylesheet" href="resources/css/simple-sidebar.css" />
 
     <link rel="stylesheet" href="resources/css/main.css" />    
     <script src="script1.js"></script>
-    <script src="contextmenu.js"></script>
+    <!-- <script src="contextmenu.js"></script> -->
+    <script src="resources/js/contextMenu.js"></script>
     
     <script src="resources/js/sockjs-0.3.4.js"></script>
     <script src="resources/js/stomp.js"></script>
@@ -124,13 +125,18 @@
                     <a href="#/smses">SMS내역</a>
                 </li>
                 <li style="display: none;" class="ADMIN">
-                    <a href="records">녹취내역</a>
+                    <a href="#/records">녹취내역</a>
                 </li>
+<!--                 
                 <li style="display: none;" class="ADMIN">
                     <a href="counsellorcalls">상담원통화내역</a>
                 </li>
+ -->                
                 <li style="display: none;" class="ADMIN">
-                    <a href="counsellors">상담원관리</a>
+                    <a href="#/counsellors">상담원관리</a>
+                </li>
+                <li style="display: none;" class="ADMIN">
+                    <a href="#/extensions">내선관리</a>
                 </li>
             </ul>
         </div>
@@ -139,14 +145,25 @@
 		<div id="page-wrapper">
 			<div class="row">
 				<div class="col-lg-9">
-                    <div class="alert alert-dismissable alert-info">
-                        <!-- <button data-dismiss="alert" class="close" type="button">&times;</button> -->
-                        Welcome to the CRM for ThinkBox Cloud.
-                        <br />
-                        You can see a information of Telephony in this box.
+					<div class="row">
+	                    <div class="alert alert-dismissable alert-info col-lg-8">
+	                        <!-- <button data-dismiss="alert" class="close" type="button">&times;</button> -->
+	                        Welcome to the CRM for ThinkBox Cloud.
+	                        <br />
+	                        You can see a information of Telephony in this box.
+	                    </div>
+	                    <div class="col-lg-4">
+	                    	<input type="text" class="form-control" id="callnumber" placeholder="전화번호" style="margin-bottom: 14px;">
+	                    	<button type="button" class="btn btn-primary disabled btn-sm">전화걸기</button>
+	                    	<button type="button" class="btn btn-primary btn-sm">당겨받기</button>
+	                    	<button type="button" class="btn btn-primary disabled btn-sm">돌려주기</button>
+	                    	<button type="button" class="btn btn-primary disabled btn-sm">보류</button>
+	                    </div>
                     </div>
-					<!-- <div ui-view="maincontent"></div> -->
-					<div ui-view="content"></div>
+                    <div class="row">
+						<!-- <div ui-view="maincontent"></div> -->
+						<div ui-view="content"></div>
+					</div>
 	        	</div>
 		        <div class="col-lg-3">
 		        	<div ng-controller="CtrlCallStatus" id="ctrlcallstatus">
@@ -154,7 +171,7 @@
 		        		<!-- <button type="button" class="btn btn-primary btn-sm" id='scopetest'>테스트</button> -->
 		        	</div>
 					<div ng-controller="CtrlTelStatus" style="margin-top: 15px;" id="ctrlextstatus">
-						<div ui-grid="gridOptions" class="grid_tels" context-menu="menuOptions"></div>
+						<div ui-grid="gridOptions" class="grid_tels"></div>
 					</div>
 					<!-- 
 					<button type="button" class="btn btn-primary btn-sm" id='btn_connect'>Connect</button>
@@ -514,7 +531,7 @@
 		    	location.href = "/logout.html";
 		    });
 		    
-		    // connect();
+		    connect();
 		});
 	</script>
 	<style>

@@ -1,23 +1,27 @@
 	/* 내선 상태 */
 	angular.module('app')
 	.controller('CtrlTelStatus', ['$scope', '$http', 'uiGridConstants', function ($scope, $http, uiGridConstants) {
-		$scope.menuOptions = [
-		                      ['당겨받기', function ($itemScope) {
-		                          console.log("menuOptions 당겨받기");
-		                          console.log($itemScope);
-		                      }],
-		                      null,
-		                      ['돌려주기', function ($itemScope) {
-		                    	  console.log("menuOptions 돌려주기");
-		                    	  console.log(row);
-		                      }],
-		                      null,
-		                      ['청취', function ($itemScope) {
-		                    	  console.log("menuOptions 청취");
-		                    	  console.log($itemScope.row);
-		                      }]
-		                  ];
-		
+
+		$scope.menuOptions = function (item) {
+			var itm = item.entity;
+		    return [
+	            ['내선번호  [ ' + itm.innertel + ' ]', function(){return;}]
+	            ,null
+		        ,['전화 하기', function () {
+		        	console.log("전화하기: " + angular.toJson(item.entity));
+		        }]
+		        ,['당겨 받기', function () {
+		        	console.log("당겨받기: " + angular.toJson(item.entity));
+		        }]
+	            ,['돌려 주기', function () {
+		        	console.log("돌려주기: " + angular.toJson(item.entity));
+		        }]
+	            ,['청취', function () {
+		        	console.log("청취: " + angular.toJson(item.entity));
+		        }]
+		    ];
+		};
+
 		$scope.deleteRow = function(row) {
 			var index = $scope.gridOptions.data.indexOf(row.entity);
 			$scope.gridOptions.data.splice(index, 1);
@@ -74,6 +78,8 @@
 			    	})
 			    }
 		};
+		
+		$scope.gridOptions.rowTemplate = '<div ng-repeat="col in colContainer.renderedColumns track by col.colDef.name" class="ui-grid-cell" ui-grid-cell context-menu="grid.appScope.menuOptions(row)"></div>';
 	
 		$http.get('/resources/apps/app_data_tel_status.json')
 			.success(function(data) {

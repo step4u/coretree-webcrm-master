@@ -1,7 +1,7 @@
 'use strict';
 
 // angular.module('app', ['ui.router', 'ui.bootstrap', 'ui.grid', 'ui.grid.selection', 'ui.grid.pagination', 'ui.bootstrap.contextMenu'])
-angular.module('app', ['ui.router', 'ui.bootstrap', 'ui.grid', 'ui.grid.selection', 'ui.grid.pagination'])
+angular.module('app', ['ui.router', 'ui.bootstrap', 'ui.grid', 'ui.grid.selection', 'ui.grid.pagination', 'ui.bootstrap.contextMenu'])
 //  .controller('SigninCtrl', ['$scope', '$http', '$state', function($scope, $http, $state) {
 //
 //    }
@@ -76,6 +76,45 @@ angular.module('app', ['ui.router', 'ui.bootstrap', 'ui.grid', 'ui.grid.selectio
           'content@': {
               templateUrl: 'view/smses.html',
               controller: 'CtrlSmses'
+          }
+        }
+      })
+      .state('records', {
+        parent: 'site',
+        url: '/records',
+        data: {
+          roles: ['Admin']
+        },
+        views: {
+          'content@': {
+              templateUrl: 'view/records.html',
+              controller: 'CtrlRecords'
+          }
+        }
+      })
+      .state('counsellors', {
+        parent: 'site',
+        url: '/counsellors',
+        data: {
+          roles: ['Admin']
+        },
+        views: {
+          'content@': {
+              templateUrl: 'view/counsellors.html',
+              controller: 'CtrlCounsellors'
+          }
+        }
+      })
+      .state('extensions', {
+        parent: 'site',
+        url: '/extensions',
+        data: {
+          roles: ['Admin']
+        },
+        views: {
+          'content@': {
+              templateUrl: 'view/extensions.html',
+              controller: 'CtrlExtensions'
           }
         }
       })
