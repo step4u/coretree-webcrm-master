@@ -59,7 +59,7 @@
 				enableFiltering: false,
 		        enableColResize: false,
 		        enableHorizontalScrollbar: 0,
-		        enableVerticalScrollbar: 2,
+		        enableVerticalScrollbar: 1,
 			    onRegisterApi: function( gridApi ) {
 			    	$scope.gridApi = gridApi;
 			    	
@@ -181,7 +181,7 @@
 			$("#idx").val(item.idx);
 			$("#depthorder").val('string:' + item.depthorder);
 			$("#uname").val(item.uname);
-			$("#company").val(item.company);
+			$("#company").val(item.firm);
 			$("#posi").val(item.posi);
 			$("#tel").val(item.tel);
 			$("#cellular").val(item.cellular);

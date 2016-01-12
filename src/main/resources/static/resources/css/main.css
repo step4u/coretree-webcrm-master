@@ -1,6 +1,6 @@
 .grid {
 	width: 100%;
-	height: 670px;
+	height: 700px;
 }
 .grid_teller_status {
 	width: 100%;
@@ -8,7 +8,7 @@
 }
 .grid_tels {
 	width: 100%;
-	height: 700px;
+	height: 733px;
 }
 .grid_teller_status .ui-grid-contents-wrapper,
 .grid_tels .ui-grid-contents-wrapper,

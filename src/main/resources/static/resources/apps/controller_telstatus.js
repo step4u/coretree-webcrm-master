@@ -66,7 +66,7 @@
 			    groupHeaders: false,
 		        enableColResize: false,
 		        enableHorizontalScrollbar: 0,
-		        enableVerticalScrollbar: 2,
+		        enableVerticalScrollbar: 1,
 			    onRegisterApi: function( gridApi ) {
 			    	$scope.gridApi = gridApi;
 			    	$scope.gridApi.core.on.sortChanged( $scope, function( grid, sort ) {
