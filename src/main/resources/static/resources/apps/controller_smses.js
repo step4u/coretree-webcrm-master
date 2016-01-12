@@ -1,7 +1,6 @@
 	/* 통화내역 */
 	angular.module('app')
-	.controller('CtrlCall', ['$scope', '$http', '$log', '$timeout', 'uiGridConstants', function ($scope, $http, $log, $timeout, uiGridConstants) {
-		console.log("calls entered");
+	.controller('CtrlSms', ['$scope', '$http', '$log', '$timeout', 'uiGridConstants', function ($scope, $http, $log, $timeout, uiGridConstants) {
 		
 		var paginationOptions = {
 			    pageNumber: 1,
@@ -79,8 +78,6 @@
 		};
 		
 		$scope.getPage = function(txt) {
-			console.log("calls getPage");
-			
 			var url;
 			
 			if (txt == ''){
@@ -96,10 +93,6 @@
 			var counturl = '/call/get/count';
 			$http.get(counturl)
 			.success(function(data) {
-				
-				console.log("calls count:" + data);
-				console.log("calls paginationOptions.pageNumber:" + paginationOptions.pageNumber + ", paginationOptions.pageSize: " + paginationOptions.pageSize);
-				
 				if ($scope.gridOptions.totalItems != data) {
 					paginationOptions.pageNumber = 1;
 				}
@@ -108,7 +101,6 @@
 				
 				$http.get(url)
 				.success(function(data) {
-					console.log("calls list:" + data);
 					$scope.gridOptions.data = data;
 				});
 			});

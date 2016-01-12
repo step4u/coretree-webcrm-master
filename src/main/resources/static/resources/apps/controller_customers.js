@@ -31,7 +31,7 @@
 		      return 'white';
 		    }
 		  };
-		
+		  
 		$scope.gridOptions = {
 			    paginationPageSizes: [20, 50, 100],
 			    paginationPageSize: 20,
@@ -49,12 +49,13 @@
 			    		    	  enableFiltering: false,
 			    		    	  cellClass: 'grid-cell-align',
 			    		    	  headerCellClass: 'white',
-			    		    	  cellTemplate: '<button class="btn btn-primary btn-xs">전화걸기</button> <button class="btn btn-primary btn-xs">수정</button> <button class="btn btn-warning btn-xs" ng-click="grid.appScope.deleteRow(row)">삭제</button>'
+			    		    	  cellTemplate: '<button class="btn btn-primary btn-xs" ng-click="grid.appScope.makeCall(row)">전화걸기</button> <button class="btn btn-primary btn-xs" ng-click="grid.appScope.modiRow(row)">수정</button> <button class="btn btn-warning btn-xs" ng-click="grid.appScope.deleteRow(row)">삭제</button>'
 							  }
 			    		    ],
 			    groupHeaders: false,
 			    enableRowSelection: true,
 			    multiSelect: true,
+			    selectedItems: [],
 				enableFiltering: false,
 		        enableColResize: false,
 		        enableHorizontalScrollbar: 0,
@@ -85,6 +86,14 @@
 					gridApi.selection.on.rowSelectionChangedBatch($scope,function(rows){
 						var msg = 'rows changed ' + rows.length;
 						$log.log(msg);
+
+						$scope.gridOptions.selectedItems = rows;
+/*						
+						$.each($scope.gridOptions.selectedItems, function (index, value){
+							console.log( index + ": " + value );
+						});
+*/
+						// $scope.selectedItems = rows;
 					});
 			    }
 		};
@@ -96,21 +105,21 @@
 			var url;
 			
 			if (searchtxt == ''){
-				url = '/customer/' + $stateParams.param + '/' + paginationOptions.pageNumber + '/' + paginationOptions.pageSize;
+				url = '/customer/get/page/' + $stateParams.param + '/' + paginationOptions.pageNumber + '/' + paginationOptions.pageSize;
 			} else {
-				url = '/customer/' + $stateParams.param + '/' + searchtxt;
+				url = '/customer/get/search/' + $stateParams.param + '/' + searchtxt;
 			}
 			
 			if (typeof(searchtxt) == 'undefined'){
-				url = '/customer/' + $stateParams.param + '/' + paginationOptions.pageNumber + '/' + paginationOptions.pageSize;
+				url = '/customer/get/page/' + $stateParams.param + '/' + paginationOptions.pageNumber + '/' + paginationOptions.pageSize;
 			}
 
-			var counturl = '/customer/count/' + $stateParams.param;
-			console.log("getPage counturl: " + counturl);
-			//console.log("getPage url: " + url);
+			var counturl = '/customer/get/count/' + $stateParams.param;
+			// console.log("getPage counturl: " + counturl);
+			// console.log("getPage url: " + url);
 			$http.get(counturl)
 			.success(function(data) {
-				console.log("getPage totalItems: " + data);
+				// console.log("getPage totalItems: " + data);
 				if ($scope.gridOptions.totalItems != data) {
 					paginationOptions.pageNumber = 1;
 				}
@@ -137,13 +146,49 @@
 		
 		$scope.getPage();
 		
+		$scope.makeCall = function(row) {
+			custbhv = bhv.del;
+			var item = row.entity;
+		};
+		
 		$scope.deleteRow = function(row) {
+			custbhv = bhv.del;
+			var item = row.entity;
+			
+			$http.get('/customer/del/' + item.idx)
+			.success(function(data) {
+				$scope.getPage();
+				custbhv = bhv.none;
+			});
+/*			
 			var index = $scope.gridOptions.data.indexOf(row.entity);
 			$scope.gridOptions.data.splice(index, 1);
 			
 			$scope.gridOptions.totalItems--;
 			var firstRow = (paginationOptions.pageNumber - 1) * paginationOptions.pageSize;
 			$scope.gridOptions.data = $scope.gridOptions.data.slice(firstRow, firstRow + paginationOptions.pageSize);
+*/
+		};
+		
+		$scope.modiRow = function(row) {
+			custbhv = bhv.modi;
+			$("#addCustomer .modal-title").html("고객 수정");
+			
+			var item = row.entity;
+			//console.log("modiRow row.entity:" + item);
+			//console.log("modiRow row.entity:" + angular.toJson(item));
+
+			$("#idx").val(item.idx);
+			$("#depthorder").val('string:' + item.depthorder);
+			$("#uname").val(item.uname);
+			$("#company").val(item.company);
+			$("#posi").val(item.posi);
+			$("#tel").val(item.tel);
+			$("#cellular").val(item.cellular);
+			$("#extension").val(item.extension);
+			$("#email").val(item.email);
+			
+			$("#addCustomer").modal("show");
 		};
 		
 		$scope.getCurrentSelection = function() {

@@ -91,7 +91,7 @@
         <div id="sidebar-wrapper">
             <ul class="sidebar-nav">
                 <li>
-                    <a href="#/addr/0">주소록</a>
+                    <a href="#">주소록</a>
                 </li>
                 <li>
                 	<ul style="list-style: none; margin: 0; padding-left: 15px;">
@@ -118,10 +118,10 @@
                 	</ul>
                 </li>
                 <li>
-                    <a ui-sref="calls">통화내역</a>
+                    <a href="#/calls">통화내역</a>
                 </li>
                 <li>
-                    <a href="smses">SMS내역</a>
+                    <a href="#/smses">SMS내역</a>
                 </li>
                 <li style="display: none;" class="ADMIN">
                     <a href="records">녹취내역</a>
@@ -156,6 +156,7 @@
 					<div ng-controller="CtrlTelStatus" style="margin-top: 15px;" id="ctrlextstatus">
 						<div ui-grid="gridOptions" class="grid_tels" context-menu="menuOptions"></div>
 					</div>
+					<!-- 
 					<button type="button" class="btn btn-primary btn-sm" id='btn_connect'>Connect</button>
 					<button type="button" class="btn btn-primary btn-sm" id='btn_disconnect'>Disconnect</button>
 					<button type="button" class="btn btn-primary btn-sm" id='btn_makecall'>MakeCall</button>
@@ -165,6 +166,7 @@
 					<button type="button" class="btn btn-primary btn-sm" id='btn_transfer'>Transfer</button>
 					<button type="button" class="btn btn-primary btn-sm" id='btn_pickup'>PickUp</button>
 					<button type="button" class="btn btn-primary btn-sm" id='btn_reqextstatus'>Requset Extension Status</button>
+					 -->
 		        </div>
 			</div>
 		</div>
@@ -182,6 +184,9 @@
 	<script src="resources/apps/controller_telstatus.js"></script>
 	<script src="resources/apps/controller_customers.js"></script>
 	<script src="resources/apps/controller_calls.js"></script>
+	<script src="resources/apps/controller_smses.js"></script>
+	<script src="resources/apps/CtrlGroups.js"></script>
+	<script src="resources/js/local.js"></script>
 </body>
 	<script>
 	/*

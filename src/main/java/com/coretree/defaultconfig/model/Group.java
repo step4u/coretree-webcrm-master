@@ -12,6 +12,6 @@ public class Group {
 	
 	@Override
 	public String toString() {
-		return "Customer [depthorder=" + depthorder + ", txt=" + txt + "]";
+		return "Group [depthorder=" + depthorder + ", txt=" + txt + "]";
 	}
 }

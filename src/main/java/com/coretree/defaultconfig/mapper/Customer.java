@@ -39,13 +39,13 @@ public class Customer {
 	public String getExtension() { return extension; }
 	public void setExtension(String extension) { this.extension = extension; }
 	
-	public String getEmain() { return email; }
-	public void setEmain(String email) { this.email = email; }
+	public String getEmail() { return email; }
+	public void setEmail(String email) { this.email = email; }
 	
 	@Override
 	public String toString() {
 		return "Customer [idx=" + idx + ", depthorder=" + depthorder + ", username=" + username + ", uname=" + uname
-				+ ", posi=" + posi + ", tel=" + tel + ", cellular=" + cellular
+				+ ", company=" + company + ", posi=" + posi + ", tel=" + tel + ", cellular=" + cellular
 				+ ", extension=" + extension + ", email=" + email + "]";
 	}
 }

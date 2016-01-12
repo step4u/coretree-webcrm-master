@@ -2,7 +2,7 @@
 						<div ui-grid="gridOptions" ui-grid-selection ui-grid-pagination class="grid" id="ctrlcustomers"></div>
 					</div>
 					<div class="form-group form-inline" style='margin-top: 10px;'>
-						<input type='text' id='txtsearch' class='form-control' placeholder="전화번호 휴대전화" />
+						<input type='text' id='txtsearch' class='form-control' placeholder="전화번호 / 휴대전화" />
 						<button type='button' for='txtsearch' class="btn btn-info btn-sm" id="btnSearch">검색</button>
 						<button type="button" class="btn btn-warning btn-sm" style="float: right;" id="btnDel">삭제</button>
 						<button type="button" class="btn btn-primary btn-sm" style="float: right; margin-right: 10px;" id="btnAdd">등록</button>
@@ -18,42 +18,53 @@
 			</div>
 			<div class="modal-body">
         		<!-- <p>This is a large modal.</p>  -->
+				<div class="alert alert-warning fade in" style="display: none;" id="alertcust">
+		  			<strong>Warning!</strong> This alert box could indicate a warning that might need attention.
+				</div>
         		<div class="row">
-					<div class="form-group col-sm-4">
-				    	<label for="depthorder">그룹</label>
-				    	<select class="form-control" id="depthorder">
+					<div class="form-group col-sm-6" ng-controller="CtrlGroups">
+						<input type="hidden" id="idx">
+				    	<label class="control-label" for="depthorder">그룹</label>
+				    	<select class="form-control" ng-model="modeloption" id="depthorder" ng-options="option.depthorder as option.txt for option in options">
+				    		<option value="">:: 그룹선택 ::</option>
 				    	</select>
 				  	</div>
 			  	</div>
 			  	<div class="row">
 					<div class="form-group col-sm-6">
-				    	<label for="">이름</label>
-				    	<input type="text" class="form-control" id="uname">
+				    	<label for="uname">이름</label>
+				    	<input type="text" class="form-control" id="uname" placeholder="이름">
 				  	</div>
 				  	<div class="form-group col-sm-6">
-				    	<label for="firm">회사</label>
-				    	<input type="text" class="form-control" id="firm">
+				    	<label for="company">회사</label>
+				    	<input type="text" class="form-control" id="company" placeholder="회사">
 				  	</div>
 			  	</div>
 			  	<div class="row">
 				  	<div class="form-group col-sm-6">
 				    	<label for="tel">전화</label>
-				    	<input type="text" class="form-control" id="tel">
+				    	<input type="text" class="form-control" id="tel" placeholder="전화">
 				  	</div>
 				  	<div class="form-group col-sm-6">
 				    	<label for="cellular">휴대전화</label>
-				    	<input type="text" class="form-control" id="cellular">
+				    	<input type="text" class="form-control" id="cellular" placeholder="휴대전화">
 				  	</div>
 			  	</div>
 			  	<div class="row">
 				  	<div class="form-group col-sm-6">
 				    	<label for="extension">내선</label>
-				    	<input type="text" class="form-control" id="extension">
+				    	<input type="text" class="form-control" id="extension" placeholder="내선">
 			    	</div>
 			    	<div class="form-group col-sm-6">
-				    	<label for="email">E-mail</label>
-				    	<input type="email" class="form-control" id="email">
+				    	<label for="posi">직급</label>
+				    	<input type=text class="form-control" id="posi" placeholder="직급">
 				  	</div>
+			  	</div>
+			  	<div class="row">
+				  	<div class="form-group col-sm-8">
+				    	<label for="email">이메일</label>
+				    	<input type="text" class="form-control" id="email" placeholder="이메일">
+			    	</div>
 			  	</div>
       		</div>
       		<div class="modal-footer">
@@ -73,27 +84,104 @@
 	});
 	
 	$("#btnAdd").click(function(){
-		$('#addCustomer').modal();
+		custbhv = bhv.add;
+		$("#addCustomer .modal-title").html("고객 등록");
+		ClearForm();
+		
+		$('#addCustomer').modal("show");
+	});
+	
+	$("#btnDel").click(function(){
+    	var scope = angular.element($("#ctrlcustomers")).scope();
+	    scope.$apply(function () {
+	    	var seledtedItems = scope.gridOptions.selectedItems;
+
+			$.post("/customer/del/all", seledtedItems, function(response){
+				
+		    	var scope = angular.element($("#ctrlcustomers")).scope();
+			    scope.$apply(function () {
+			        scope.getPage('');
+			    });
+			});
+	    	
+	        // console.log("scope.gridOptions.selectedItems : " + scope.gridOptions.selectedItems);
+	    });
 	});
 	
 	$("#btnSave").click(function(){
-		var obj = {
-			idx: '',
-			depthorder: $("#depthorder").val(),
-			username: crmidentity.username,
-			uname: $("#uname").val(),
-			company: $("#company").val(),
-			posi: $("#posi").val(),
-			tel: $("#tel").val(),
-			cellular: $("#cellular").val(),
-			extension: $("#extension").val(),
-			email: $("#email").val()
-		};
-		
-		
-		
-		$.getJSON('/customer/add/' + obj, function(data){
-			alert(data);
-		});
+		SaveCust();
 	});
+	
+	function SaveCust() {
+		var obj = {
+				idx: $("#idx").val(),
+				depthorder: $("#depthorder").val() == "" ? $("#depthorder").val() : $("#depthorder").val().replace("string:", ""),
+				username: crmidentity.username,
+				uname: $("#uname").val(),
+				company: $("#company").val(),
+				posi: $("#posi").val(),
+				tel: $("#tel").val(),
+				cellular: $("#cellular").val(),
+				extension: $("#extension").val(),
+				email: $("#email").val()
+		};
+			
+		//console.log("obj.depthorder: " + obj.depthorder);
+		
+		if (obj.depthorder == "") {
+			$("#alertcust").html("<strong>필수입력</strong> 그룹을 선택하세요.").css('display', 'block');
+			$("#depthorder").focus();
+			return;
+		}
+		if (obj.uname == "") {
+			$("#alertcust").html("<strong>필수입력</strong> 이름을 입력하세요.").css('display', 'block');
+			$("#uname").focus();
+			return;
+		}
+		if (!(obj.tel != "" || obj.cellular != "")) {
+			$("#alertcust").html("<strong>필수입력</strong> 전화번호와 휴대전화 하나는 입력해야합니다.").css('display', 'block');
+			if (obj.tel == "") {
+				$("#tel").focus();
+				return;
+			}
+			if (obj.cellular == "") {
+				$("#cellular").focus();
+				return;
+			}
+		}
+		
+		var url;
+		
+		if (custbhv == bhv.add) {
+			url = "/customer/add/";
+		} else if (custbhv == bhv.modi) {
+			url = "/customer/modi/";
+		}
+		
+		$.post(url, obj, function(response){
+			// console.log("cust bhv: " + bhv + ", response: " + response + ", response.data: " + response.data);
+			$('#addCustomer').modal("hide");
+			ClearForm();
+			
+	    	var scope = angular.element($("#ctrlcustomers")).scope();
+		    scope.$apply(function () {
+		        scope.getPage('');
+		    });
+			
+			custbhv = bhv.none;
+		});
+	}
+	
+	function ClearForm() {
+		// console.log("group.length: " + group.length + ", group: " + group);
+		$("#idx").val('-1');
+		group.length == 2 ? $("#depthorder").val('string:' + group) : $("#depthorder option:eq(0)").prop("selected", true);
+		$("#uname").val('');
+		$("#company").val('');
+		$("#posi").val('');
+		$("#tel").val('');
+		$("#cellular").val('');
+		$("#extension").val('');
+		$("#email").val('');
+	}
 </script>

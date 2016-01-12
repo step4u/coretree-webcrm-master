@@ -18,7 +18,7 @@ angular.module('app', ['ui.router', 'ui.bootstrap', 'ui.grid', 'ui.grid.selectio
   .config(['$stateProvider', '$urlRouterProvider',
     function($stateProvider, $urlRouterProvider) {
 
-      $urlRouterProvider.otherwise('/addr/0');
+      $urlRouterProvider.otherwise('/addr/11');
 
       $stateProvider.state('site', {
         'abstract': true,
@@ -60,9 +60,22 @@ angular.module('app', ['ui.router', 'ui.bootstrap', 'ui.grid', 'ui.grid.selectio
           roles: ['User', 'Admin']
         },
         views: {
-          'maincontent@home': {
+          'content@': {
               templateUrl: 'view/calls.html',
               controller: 'CtrlCall'
+          }
+        }
+      })
+      .state('smses', {
+        parent: 'site',
+        url: '/smses',
+        data: {
+          roles: ['User', 'Admin']
+        },
+        views: {
+          'content@': {
+              templateUrl: 'view/smses.html',
+              controller: 'CtrlSmses'
           }
         }
       })

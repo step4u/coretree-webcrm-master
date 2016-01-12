@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.coretree.defaultconfig.mapper.Customer;
 import com.coretree.defaultconfig.mapper.CustomerMapper;
+import com.coretree.defaultconfig.model.Group;
 
 @RestController
 public class CustomerController {
@@ -19,13 +20,13 @@ public class CustomerController {
 	@Autowired
 	CustomerMapper mapper;
 	
-	@RequestMapping(path="/customer/count/{group}", method=RequestMethod.GET)
+	@RequestMapping(path="/customer/get/count/{group}", method=RequestMethod.GET)
 	public int getCount(@PathVariable("group") String group, Principal principal) {
 		String username = principal.getName();
 		return mapper.count(group, username);
 	}
 	
-	@RequestMapping(path="/customer/{group}/{curpage}/{rowsperpage}", method=RequestMethod.GET)
+	@RequestMapping(path="/customer/get/page/{group}/{curpage}/{rowsperpage}", method=RequestMethod.GET)
 	public List<Customer> getAll(@PathVariable("group") String group
 			, @PathVariable("curpage") int curpage
 			, @PathVariable("rowsperpage") int rowsperpage
@@ -34,28 +35,34 @@ public class CustomerController {
 		return mapper.findAll(curpage, rowsperpage, group, username);
 	}
 	
-	@RequestMapping(path="/customer/{group}/{searchtxt}", method=RequestMethod.GET)
-	public List<Customer> getByTxt(@PathVariable("searchtxt") String searchtxt) {
+	@RequestMapping(path="/customer/get/search/{group}/{searchtxt}", method=RequestMethod.GET)
+	public List<Customer> getByTxt(@PathVariable("searchtxt") String searchtxt, Principal principal) {
 		return mapper.findByTxt("%" + searchtxt + "%");
 	}
 	
-	@RequestMapping(path="/customer/add/{data}", method=RequestMethod.GET)
-	public void add(@PathVariable("data") Customer data, Principal principal) {
-		mapper.add(data);
+	@RequestMapping(path="/customer/get/group", method=RequestMethod.GET)
+	public List<Group> getGroup(Principal principal) {
+		return mapper.getGroup();
 	}
 	
-	@RequestMapping(path="/customer/modi/{group}/{data}", method=RequestMethod.GET)
-	public void modi(@PathVariable("group") String group, @PathVariable("data") Customer data, Principal principal) {
-		mapper.modi(data);
+	@RequestMapping(path="/customer/add/", method=RequestMethod.POST)
+	public void add(Customer cust, Principal principal) {
+		// System.err.print(cust.toString());
+		mapper.add(cust);
 	}
 	
-	@RequestMapping(path="/customer/modi/{group}/{idx}", method=RequestMethod.GET)
-	public void del(@PathVariable("group") String group, @PathVariable("idx") int idx, Principal principal) {
+	@RequestMapping(path="/customer/modi/", method=RequestMethod.POST)
+	public void modi(Customer cust, Principal principal) {
+		mapper.modi(cust);
+	}
+	
+	@RequestMapping(path="/customer/del/{idx}", method=RequestMethod.GET)
+	public void del(@PathVariable("idx") int idx, Principal principal) {
 		mapper.del(idx);
 	}
 	
-	@RequestMapping(path="/customer/get/group", method=RequestMethod.GET)
-	public void del(Principal principal) {
-		mapper.getGroup();
+	@RequestMapping(path="/customer/del/all", method=RequestMethod.POST)
+	public void del(ArrayList<Customer> custs, Principal principal) {
+		mapper.delAll(custs);
 	}
 }

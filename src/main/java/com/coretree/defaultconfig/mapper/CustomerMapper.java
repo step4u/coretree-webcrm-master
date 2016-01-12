@@ -1,13 +1,12 @@
 package com.coretree.defaultconfig.mapper;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Result;
-import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 import org.apache.ibatis.mapping.StatementType;
@@ -60,19 +59,27 @@ public interface CustomerMapper {
 			+ " or company like #{searchtxt}")
 	List<Customer> findByTxt(@Param("searchtxt") String searchtxt);
 	
-	@Insert("insert into "
-			+ "(group_idx, custgroup_idx, uname, posi, tel, cellular, extension, email)"
+	@Insert("insert into customers "
+			+ "(depthorder, username, company, uname, posi, tel, cellular, extension, email)"
 			+ " values "
-			+ "(#{group_idx}, #{custgroup_idx}, #{uname}, #{posi}, #{tel}, #{cellular}, #{extension}, #{email});")
-	void add(Customer obj);
+			+ "(#{depthorder}, #{username, mode=IN, jdbcType=VARCHAR}, #{company, mode=IN, jdbcType=VARCHAR}, #{uname, mode=IN, jdbcType=VARCHAR}, #{posi, mode=IN, jdbcType=VARCHAR}, #{tel, mode=IN, jdbcType=VARCHAR}, #{cellular, mode=IN, jdbcType=VARCHAR}, #{extension, mode=IN, jdbcType=VARCHAR}, #{email, mode=IN, jdbcType=VARCHAR});")
+	void add(Customer cust);
 	
 	@Delete("delete from customers where idx=#{idx}")
 	void del(int idx);
 	
-	@Update("update customers set group_idx=#{group_idx}, custgroup_idx=#{custgroup_idx}, uname=#{uname}, posi=#{posi}"
+	@Delete("<script>"
+			+ "delete from customers where "
+			+ "<foreach collection=\"list\" item=\"item\">"
+			+ "idx=#{item.idx}"
+			+ "</foreach>"
+			+ "</script>")
+	void delAll(ArrayList<Customer> list);
+	
+	@Update("update customers set depthorder=#{depthorder}, username=#{username}, company=#{company}, uname=#{uname}, posi=#{posi}"
 			+ ", tel=#{tel}, cellular=#{cellular}, extension=#{extension}, email=#{email} where idx=#{idx}")
 	void modi(Customer obj);
 	
 	@Select("select depthorder, txt from groups where char_length(depthorder)>1 order by depthorder asc")
-	Group getGroup();
+	List<Group> getGroup();
 }

@@ -1,0 +1,47 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.coretree.defaultconfig.mapper.CallMapper">
+
+    <resultMap id="callMap" type="com.coretree.defaultconfig.mapper.Call">
+        <id     property="idx"    		column="idx" />
+        <result property="customer_idx" column="customer_idx" />
+        <result property="title"       	column="title" />
+        <result property="contents"     column="contents" />
+        <result property="regdate"      column="regdate" />
+    </resultMap>
+    
+    <select id="count" resultType="java.lang.Integer">
+    	select count(idx) from calls
+    </select>
+    
+    <select id="selectAll" parameterType="map" resultMap="callMap">
+    	select first #{rowsperpage} skip ((#{curpage} - 1) * #{rowsperpage})
+                        idx, customers_idx, title, contents, regdate
+			from calls order by regdate desc
+    </select>
+    
+    <select id="selectByIdx" resultMap="callMap">
+    	select first idx, customers_idx, title, contents, regdate
+			from calls
+			where idx=#{idx}
+			order by regdate desc
+    </select>
+    
+    <select id="selectByTxt" resultMap="callMap">
+    	select first a.idx, b.uname, a.title, a.contents, a.regdate
+			from calls a join customers b
+				on a.idx=b.customers_idx
+			where a.title like #{txt} or b.uname like #{txt}
+			order by regdate desc
+    </select>
+    
+    <select id="del">
+		delete from calls where idx=#{idx}
+    </select>
+
+    <select id="delAll" parameterType="java.util.List">
+		delete from calls where
+		<foreach collection="list" item="item" separator=",">
+			 idx=#{item.idx}
+		</foreach>
+    </select>    
+</mapper>
