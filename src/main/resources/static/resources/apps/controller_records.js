@@ -26,17 +26,14 @@
 				enableSorting: true,
 				showGridFooter: false,
 				columnDefs: [
-			    		      { displayName: '이름', field: 'name', headerCellClass: 'white', cellClass: 'grid-cell', width: 120 },
-			    		      { displayName: '전화번호', field: 'tel', headerCellClass:'white', cellClass: 'grid-cell', width: 120 },
-			    		      { displayName: '날짜', field: 'date', headerCellClass: 'white', cellClass: 'grid-cell', width: 120 },
-			    		      { displayName: '시각', field: 'time', headerCellClass: 'white', cellClass: 'grid-cell', width: 100 },
-			    		      { displayName: '통화시간', field: 'duration', headerCellClass: 'white', cellClass: 'grid-cell', width: 100 },
-			    		      { displayName: '상담내용', field: 'memo', headerCellClass: 'white', cellClass: 'grid-cell' },
+			    		      { displayName: '내선번호', field: 'extension', headerCellClass: 'white', cellClass: 'grid-cell', width: 100 },
+			    		      { displayName: '상대번호', field: 'peernum', headerCellClass:'white', cellClass: 'grid-cell', width: 120 },
+			    		      { displayName: '등록일', field: 'time', headerCellClass: 'white', cellClass: 'grid-cell', width: 120 },
+			    		      { displayName: '파일', field: 'filename', headerCellClass: 'white', cellClass: 'grid-cell', width: 400 },
 			    		      { displayName: '기타', field: 'etc',
 			    		    	  headerCellClass: 'white',
 			    		    	  cellClass: 'grid-cell-align',
-			    		    	  width: 120,
-			    		    	  cellTemplate: '<button class="btn btn-primary btn-xs" ng-click="grid.appScope.viewRow(row)">보기</button>'
+			    		    	  cellTemplate: '<button class="btn btn-primary btn-xs" ng-click="grid.appScope.listenRow(row, this)">듣기</button> <button class="btn btn-warning btn-xs" ng-click="grid.appScope.getRow(row)">저장</button>'
 							  }
 			    		    ],
 			    groupHeaders: false,
@@ -80,21 +77,21 @@
 		};
 		
 		$scope.getPage = function(txt) {
-			console.log("calls getPage");
+			console.log("records getPage");
 			
 			var url;
 			
 			if (txt == ''){
-				url = '/call/get/all/' + paginationOptions.pageNumber + '/' + paginationOptions.pageSize;
+				url = '/record/get/all/' + paginationOptions.pageNumber + '/' + paginationOptions.pageSize;
 			} else {
-				url = '/call/get/search/' + txt;
+				url = '/record/get/search/' + txt;
 			}
 			
 			if (typeof(txt) == 'undefined'){
-				url = '/call/get/all/' + paginationOptions.pageNumber + '/' + paginationOptions.pageSize;
+				url = '/record/get/all/' + paginationOptions.pageNumber + '/' + paginationOptions.pageSize;
 			}
 			
-			var counturl = '/call/get/count';
+			var counturl = '/record/get/count';
 			$http.get(counturl)
 			.success(function(data) {
 				
@@ -117,14 +114,18 @@
 		
 		$scope.getPage();
 		
-		$scope.viewRow = function(row) {
+		$scope.listenRow = function(row, obj) {
 			var item = row.entity;
+			//document.getElementById("audioplayer").src = "/media/test.mp3";
+			//document.getElementById("ogg_src").src = "movie.ogg";
+			//document.getElementById("audioplayer").load();
+			//document.getElementById("audioplayer").play();
+			//$("#audioplayer").attr("src", "/media/" + item.filename).load().play();
+			// $("#audioplayer").src = "/media/" + item.filename;
+			// $("#audioplayer").load().play();
 			
-			$http.get('/call/get/' + item.idx)
-			.success(function(data) {
-				$scope.getPage();
-				custbhv = bhv.none;
-			});
+			var player = $.globalEval("<audio src='" + "/media/" + item.filename + "' controls></audio>");
+			$(player).effect("drop");
 		};
 		
 		$scope.deleteRow = function(row) {
