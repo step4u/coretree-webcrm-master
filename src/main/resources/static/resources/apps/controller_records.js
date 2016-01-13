@@ -1,8 +1,9 @@
 	/* 통화내역 */
 	angular.module('app')
-	.controller('CtrlCall', ['$scope', '$http', '$log', '$timeout', 'uiGridConstants', function ($scope, $http, $log, $timeout, uiGridConstants) {
+	.controller('CtrlRecords', ['$scope', '$http', 'uiGridConstants', function ($scope, $http, uiGridConstants) {
+
 		console.log("calls entered");
-		
+
 		var paginationOptions = {
 			    pageNumber: 1,
 			    pageSize: 20,

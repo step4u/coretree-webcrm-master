@@ -5,12 +5,19 @@
   	<meta charset="utf-8">
   	<meta name="viewport" content="width=device-width, initial-scale=1">
   	
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+	<script type="text/javascript" src="/resources/jquery/jquery.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
-	
+
+<!--     <link rel="stylesheet" href="/resources/jquery-ui-1.11.4.custom/jquery-ui.min.css" />
+	<script src="/resources/jquery-ui-1.11.4.custom/jquery-ui.min.js"></script> -->
+    
     <link rel="stylesheet" href="/resources/bootstrap/css/bootstrap.min.css" />
     <link rel="stylesheet" href="resources/bootstrap/css/bootstrap-theme.min.css" />
-	<script src="resources/bootstrap/js/bootstrap.min.js"></script>
+	<script src="/resources/bootstrap/js/bootstrap.min.js"></script>
+	
+	<script src="/resources/moment/moment-with-locales.min.js"></script>
+	<link rel="stylesheet" href="/resources/eonasdan-bootstrap-datetimepicker/bootstrap-datetimepicker.min.css" />
+	<script src="/resources/eonasdan-bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
 	
 	<script src="https://code.angularjs.org/1.4.8/angular.min.js"></script>
     <script src="https://code.angularjs.org/1.4.8/angular-touch.min.js"></script>
@@ -20,20 +27,18 @@
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.14.3/ui-bootstrap-tpls.min.js"></script>
     <script src="http://angular-ui.github.io/ui-router/release/angular-ui-router.js"></script>
-
-    <script src="resources/angularjs/grid-ui/grunt-scripts/csv.js"></script>
-    <script src="resources/angularjs/grid-ui/grunt-scripts/pdfmake.js"></script>
-    <script src="resources/angularjs/grid-ui/grunt-scripts/vfs_fonts.js"></script>
-
-	<script src="resources/angularjs/grid-ui/3.0.7/ui-grid.min.js"></script>
-    <link rel="stylesheet" href="resources/angularjs/grid-ui/3.0.7/ui-grid.min.css" />
-   	<!-- <script src="resources/js/BootStrapContextMenu.js"></script> -->
     
-    <link rel="stylesheet" href="resources/css/simple-sidebar.css" />
+    <script src="/resources/angularjs/grid-ui/grunt-scripts/csv.js"></script>
+    <script src="/resources/angularjs/grid-ui/grunt-scripts/pdfmake.js"></script>
+    <script src="/resources/angularjs/grid-ui/grunt-scripts/vfs_fonts.js"></script>
+    
+	<script src="/resources/angularjs/grid-ui/3.0.7/ui-grid.min.js"></script>
+    <link rel="stylesheet" href="/resources/angularjs/grid-ui/3.0.7/ui-grid.min.css" />
+    
+    <link rel="stylesheet" href="/resources/css/simple-sidebar.css" />
 
     <link rel="stylesheet" href="resources/css/main.css" />    
     <script src="script1.js"></script>
-    <!-- <script src="contextmenu.js"></script> -->
     <script src="resources/js/contextMenu.js"></script>
     
     <script src="resources/js/sockjs-0.3.4.js"></script>
@@ -133,10 +138,10 @@
                 </li>
  -->                
                 <li style="display: none;" class="ADMIN">
-                    <a href="#/counsellors">상담원관리</a>
+                    <a href="#/extensions">내선관리</a>
                 </li>
                 <li style="display: none;" class="ADMIN">
-                    <a href="#/extensions">내선관리</a>
+                    <a href="#/counsellors">상담원관리</a>
                 </li>
             </ul>
         </div>
@@ -270,6 +275,7 @@
 	<script src="resources/apps/controller_customers.js"></script>
 	<script src="resources/apps/controller_calls.js"></script>
 	<script src="resources/apps/controller_smses.js"></script>
+	<script src="resources/apps/controller_records.js"></script>
 	<script src="resources/apps/CtrlGroups.js"></script>
 	<script src="resources/js/local.js"></script>
 	
@@ -531,7 +537,7 @@
 		    	location.href = "/logout.html";
 		    });
 		    
-		    connect();
+		    connect2();
 		});
 	</script>
 	<style>

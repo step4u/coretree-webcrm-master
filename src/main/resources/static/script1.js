@@ -1,13 +1,8 @@
 'use strict';
 
-// angular.module('app', ['ui.router', 'ui.bootstrap', 'ui.grid', 'ui.grid.selection', 'ui.grid.pagination', 'ui.bootstrap.contextMenu'])
 angular.module('app', ['ui.router', 'ui.bootstrap', 'ui.grid', 'ui.grid.selection', 'ui.grid.pagination', 'ui.bootstrap.contextMenu'])
-//  .controller('SigninCtrl', ['$scope', '$http', '$state', function($scope, $http, $state) {
-//
-//    }
-//  ])
-  .controller('HomeCtrl', ['$scope', '$state',
-    function($scope, $state) {
+  .controller('HomeCtrl', ['$scope', '$state', function($scope, $state) {
+
       $scope.signout = function() {
         // principal.authenticate(null);
         disconnect();
