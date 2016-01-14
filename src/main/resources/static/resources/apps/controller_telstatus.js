@@ -28,34 +28,95 @@
 		};
 		
 		$scope.updateExtStatus = function(jsonData) {
-			var data = angular.fromJson(jsonData);
-//			var item = $.grep($scope.gridOptions.data, function(element, index){
-//				// console.log("element.innertel : " + element.innertel);
-//				return element.innertel == data.extension;
-//			}); 
-//			//console.log("updateExtStatus item : " + item.innertel + ", data.extension : " + data.extension);
-//			var idx = $scope.gridOptions.data.indexOf(item.entity);
-//			item.status = data.status;
-//			//$scope.gridOptions.data.splice(idx, 1);
-//			//$scope.gridOptions.data.splice(idx, 0, item);
+			var extitem = angular.fromJson(jsonData);
+			
+/*			
+			$.each($scope.gridOptions.data, function(index, element){
+				if (element.innertel === extitem.extension) {
+					switch (extitem.status) {
+						case UC_CALL_STATE_UNREG:
+							element.status = '미등록';
+							extstatecount.unreg++;
+							break;
+						case UC_CALL_STATE_IDLE:
+							element.status = '대기중';
+							extstatecount.idle++;
+							break;
+						case UC_CALL_STATE_INVITING:
+							element.status = '통화시도';
+							extstatecount.invite++;
+							break;
+						case UC_CALL_STATE_RINGING:
+							element.status = '전화울림';
+							extstatecount.ring++;
+							break;
+						case UC_CALL_STATE_BUSY:
+							element.status = '통화중';
+							extstatecount.busy++;
+							break;
+					}
+				}
+				
+				if (extitem.extension === crmidentity.ext) {
+					SetMyState(extitem, extstatecount);
+				}
+			});
+*/
+/*			extstatecount.unreg = 0;
+			extstatecount.idle = 0;
+			extstatecount.invite = 0;
+			extstatecount.ring = 0;
+			extstatecount.busy = 0;*/
 			
 			var item = $scope.gridOptions.data.find(function(element, index){
-				return element.innertel === data.extension;
+				
+				if (crmidentity.ext != element.innertel) {
+					switch (element.status) {
+						case '미등록':
+							extstatecount.unreg++;
+							break;
+						case '대기중':
+							extstatecount.idle++;
+							break;
+						case '통화시도':
+							extstatecount.invite++;
+							break;
+						case '전화울림':
+							extstatecount.ring++;
+							break;
+						case '통화중':
+							extstatecount.busy++;
+							break;
+					}					
+				}
+				
+				return element.innertel === extitem.extension;
 			});
 			
-			console.log("controller_telstatus 1 -> item : " + item);
-			
 			if (item) {
-				// console.log("controller_telstatus 2 -> item : " + item);
-				item.status = data.status;
+				switch (extitem.status) {
+					case UC_CALL_STATE_UNREG:
+						item.status = '미등록';
+						break;
+					case UC_CALL_STATE_IDLE:
+						item.status = '대기중';
+						break;
+					case UC_CALL_STATE_INVITING:
+						item.status = '통화시도';
+						break;
+					case UC_CALL_STATE_RINGING:
+						item.status = '전화울림';
+						break;
+					case UC_CALL_STATE_BUSY:
+						item.status = '통화중';
+						break;
+				}
 			}
 			
-			//console.log("item.status : " + item.status);
-			//var idx = $scope.gridOptions.data.indexOf(item);
-			//item.status = data.status;
-			//console.log("item.status : " + item.status);
-			//$scope.gridOptions.data.splice(idx, 1);
-			//$scope.gridOptions.data.splice(idx, 0, item);
+			if (crmidentity.ext == extitem.extension) {
+				console.log("extstatecount->extitem.extension: " + extitem.extension + ", invite: " + extstatecount.invite + ", ring: " + extstatecount.ring);
+				SetMyState(extitem, extstatecount);
+			}
 		};
 		
 		$scope.gridOptions = {

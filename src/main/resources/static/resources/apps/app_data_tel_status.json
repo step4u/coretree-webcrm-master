@@ -1,12 +1,12 @@
 [
     {
         "innertel": "2001",
-		"status": "통화중",
+		"status": "대기중",
 		"duration": "00:09:10"
     },
     {
         "innertel": "2002",
-		"status": "통화중",
+		"status": "대기중",
 		"duration": "00:09:10"
     },
     {
@@ -16,7 +16,7 @@
     },
     {
         "innertel": "2004",
-		"status": "통화중",
+		"status": "대기중",
 		"duration": "00:09:10"
     },
     {
@@ -31,17 +31,17 @@
     },
     {
         "innertel": "3003",
-		"status": "통화중",
+		"status": "대기중",
 		"duration": "00:09:10"
     },
     {
         "innertel": "3004",
-		"status": "통화중",
+		"status": "대기중",
 		"duration": "00:09:10"
     },
     {
         "innertel": "3005",
-		"status": "통화중",
+		"status": "대기중",
 		"duration": "00:09:10"
     },
     {
@@ -51,7 +51,7 @@
     },
     {
         "innertel": "3007",
-		"status": "통화중",
+		"status": "대기중",
 		"duration": "00:09:10"
     },
     {
@@ -61,17 +61,17 @@
     },
     {
         "innertel": "3009",
-		"status": "통화중",
+		"status": "대기중",
 		"duration": "00:09:10"
     },
     {
         "innertel": "3010",
-		"status": "통화중",
+		"status": "대기중",
 		"duration": "00:09:10"
     },
     {
         "innertel": "3011",
-		"status": "통화중",
+		"status": "대기중",
 		"duration": "00:09:10"
     },
     {
@@ -81,27 +81,27 @@
     },
     {
         "innertel": "3013",
-		"status": "통화중",
+		"status": "대기중",
 		"duration": "00:09:10"
     },
     {
         "innertel": "3014",
-		"status": "통화중",
+		"status": "대기중",
 		"duration": "00:09:10"
     },
     {
         "innertel": "3015",
-		"status": "통화중",
+		"status": "대기중",
 		"duration": "00:09:10"
     },
     {
         "innertel": "3016",
-		"status": "통화중",
+		"status": "대기중",
 		"duration": "00:09:10"
     },
     {
         "innertel": "3017",
-		"status": "통화중",
+		"status": "대기중",
 		"duration": "00:09:10"
     },
     {
@@ -111,12 +111,12 @@
     },
     {
         "innertel": "3019",
-		"status": "통화중",
+		"status": "대기중",
 		"duration": "00:09:10"
     },
     {
         "innertel": "3020",
-		"status": "통화중",
+		"status": "대기중",
 		"duration": "00:09:10"
     },
     {

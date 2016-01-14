@@ -116,16 +116,23 @@
 		
 		$scope.listenRow = function(row, obj) {
 			var item = row.entity;
-			//document.getElementById("audioplayer").src = "/media/test.mp3";
-			//document.getElementById("ogg_src").src = "movie.ogg";
-			//document.getElementById("audioplayer").load();
-			//document.getElementById("audioplayer").play();
-			//$("#audioplayer").attr("src", "/media/" + item.filename).load().play();
-			// $("#audioplayer").src = "/media/" + item.filename;
-			// $("#audioplayer").load().play();
+			var path = item.filename.substring(0,4) + '-' + item.filename.substring(4,6) + '-' + item.filename.substring(6,8);
+/*			
+			console.log("path : " + path);
+			document.getElementById("audioplayer").src = "/media/" + path + '/' + item.filename;
+			// document.getElementById("ogg_src").src = "movie.ogg";
+			document.getElementById("audioplayer").load();
+			document.getElementById("audioplayer").play();
+*/			
+
+			var player = document.getElementById("audioplayer");
+			player.src = "/media/" + path + "/" + item.filename;
+			player.load();
+			player.play();
 			
-			var player = $.globalEval("<audio src='" + "/media/" + item.filename + "' controls></audio>");
-			$(player).effect("drop");
+			player.onprogress = function() {
+				alert("Downloading video");
+			};
 		};
 		
 		$scope.deleteRow = function(row) {

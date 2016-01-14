@@ -37,12 +37,15 @@
     
     <link rel="stylesheet" href="/resources/css/simple-sidebar.css" />
 
-    <link rel="stylesheet" href="resources/css/main.css" />    
     <script src="script1.js"></script>
     <script src="resources/js/contextMenu.js"></script>
     
     <script src="resources/js/sockjs-0.3.4.js"></script>
     <script src="resources/js/stomp.js"></script>
+
+    <link rel="stylesheet" href="resources/css/main.css" />    
+	<script src="resources/js/MessageValues.js"></script>
+	<script src="resources/js/local.js"></script>
 </head>
 <body>
     <div id="wrapper">
@@ -159,10 +162,10 @@
 	                    </div>
 	                    <div class="col-lg-4">
 	                    	<input type="text" class="form-control" id="callnumber" placeholder="전화번호" style="margin-bottom: 14px;">
-	                    	<button type="button" class="btn btn-primary disabled btn-sm">전화걸기</button>
-	                    	<button type="button" class="btn btn-primary btn-sm">당겨받기</button>
-	                    	<button type="button" class="btn btn-primary disabled btn-sm">돌려주기</button>
-	                    	<button type="button" class="btn btn-primary disabled btn-sm">보류</button>
+	                    	<button type="button" class="btn btn-primary disabled btn-sm" id="btnCall">전화걸기</button>
+	                    	<button type="button" class="btn btn-primary btn-sm" id="btnPickup">당겨받기</button>
+	                    	<button type="button" class="btn btn-primary disabled btn-sm" id="btnTransfer">돌려주기</button>
+	                    	<button type="button" class="btn btn-primary disabled btn-sm" id="btnHold">보류</button>
 	                    </div>
                     </div>
                     <div class="row">
@@ -277,8 +280,7 @@
 	<script src="resources/apps/controller_smses.js"></script>
 	<script src="resources/apps/controller_records.js"></script>
 	<script src="resources/apps/CtrlGroups.js"></script>
-	<script src="resources/js/local.js"></script>
-	
+
 	<script>
 	/*
 	    (function() {
@@ -336,13 +338,16 @@
 
 	            stompClient.subscribe("/topic/ext.status.*", function(message) {
 	            	var data = JSON.parse(message.body);
-	                // console.log("/topic/ext.status : " + data.extension + ", " + data.status);
+	                console.log("/topic/ext.status: " + data.extension + ", " + data.status);
+	                console.log("/topic/ext.status: " + data.extension + ", " + message.body);
 	                update_ext_status(data);
 	            });
 	            
 	            stompClient.subscribe("/user/queue/groupware", function(message) {
-	            	// console.log('index.html /user/queus/groupware: ' + JSON.parse(message.body));
-	            	// console.log('index.html /user/queus/groupware: ' + message.body);
+	            	// console.log('/user/queus/groupware: ' + JSON.parse(message.body));
+	            	console.log('/user/queus/groupware: ' + message.body);
+	            	
+	            	TreatMySelf(JSON.parse(message.body));
 				});
 	            
 	            stompClient.subscribe("/user/queue/errors", function(message) {
@@ -398,6 +403,25 @@
 	
 	<script>
 	    function update_ext_status(data){
+	    	if (crmidentity.ext == data.extension) {
+	            if (data.cmd == UC_CALL_STATE_IDLE || data.cmd == UC_CALL_STATE_UNREG) {
+	                currentCallInfo.cmd = 0;
+	                currentCallInfo.ext = '';
+	                currentCallInfo.caller = '';
+	                currentCallInfo.callee = '';
+	                currentCallInfo.unconditional = '';
+	                currentCallInfo.status = -1;
+	            } else {
+	                currentCallInfo.cmd = data.cmd;
+	                currentCallInfo.ext = data.extension;
+	                currentCallInfo.caller = data.caller;
+	                currentCallInfo.callee = data.callee;
+	                currentCallInfo.unconditional = data.unconditional;
+	                currentCallInfo.status = data.status;
+	            }
+	            console.log("Transfer3: " + JSON.stringify(currentCallInfo));
+	    	}
+            
 	    	var scope = angular.element($("#ctrlextstatus")).scope();
 		    scope.$apply(function () {
 		        scope.updateExtStatus(data);
@@ -405,12 +429,12 @@
 	    }
 	    
 	    var trade = {
-                'cmd' : 0,
-                'extension' : '3001',
-                'caller' : '',
-                'callee' : '',
-                'unconditional' : '',
-                'status': -1
+                cmd : 0,
+                extension : '3001',
+                caller : '',
+                callee : '',
+                unconditional : '',
+                status: -1
               };
 	
 		$(document).ready(function(){
@@ -426,12 +450,12 @@
 		    $("#btn_makecall").click(function(){
 		    	// makecall
 		        trade = {
-		                'cmd' : 74,
-		                'extension' : '3001',
-		                'caller' : '3001',
-		                'callee' : '01045455962',
-		                'unconditional' : '',
-		                'status': -1
+		                cmd : 74,
+		                extension : '3001',
+		                caller : '3001',
+		                callee : '01045455962',
+		                unconditional : '',
+		                status: -1
 		              };
 		        
 		     	stompClient.send("/app/traders", {}, JSON.stringify(trade));
@@ -441,12 +465,12 @@
 		    $("#btn_dropcall").click(function(){
 		    	// pickup
 		        trade = {
-		                'cmd' : 76,
-		                'extension' : '3001',
-		                'caller' : '3001',
-		                'callee' : '01045455962',
-		                'unconditional' : '',
-		                'status': -1
+		                cmd : 76,
+		                extension : '3001',
+		                caller : '3001',
+		                callee : '01045455962',
+		                unconditional : '',
+		                status: -1
 		              };
 		        
 		     	stompClient.send("/app/traders", {}, JSON.stringify(trade));
@@ -456,12 +480,12 @@
 		    $("#btn_holdcall").click(function(){
 		    	// pickup
 		        trade = {
-		                'cmd' : 82,
-		                'extension' : '3001',
-		                'caller' : '01045455962',
-		                'callee' : '3001',
-		                'unconditional' : '',
-		                'status': -1
+		                cmd : 82,
+		                extension : '3001',
+		                caller : '01045455962',
+		                callee : '3001',
+		                unconditional : '',
+		                status: -1
 		              };
 		        
 		     	stompClient.send("/app/traders", {}, JSON.stringify(trade));
@@ -471,12 +495,12 @@
 		    $("#btn_activecall").click(function(){
 		    	// pickup
 		        trade = {
-		                'cmd' : 84,
-		                'extension' : '3001',
-		                'caller' : '01045455962',
-		                'callee' : '3001',
-		                'unconditional' : '',
-		                'status': -1
+		                cmd : 84,
+		                extension : '3001',
+		                caller : '01045455962',
+		                callee : '3001',
+		                unconditional : '',
+		                status: -1
 		              };
 		        
 		     	stompClient.send("/app/traders", {}, JSON.stringify(trade));
@@ -486,12 +510,12 @@
 		    $("#btn_transfer").click(function(){
 		    	// transfer
 		        trade = {
-		                'cmd' : 86,
-		                'extension' : '3001',
-		                'caller' : '01045455962',
-		                'callee' : '3001',
-		                'unconditional' : '3002',
-		                'status': -1
+		                cmd : 86,
+		                extension : '3001',
+		                caller : '01045455962',
+		                callee : '3001',
+		                unconditional : '3002',
+		                status: -1
 		              };
 		        
 		     	stompClient.send("/app/traders", {}, JSON.stringify(trade));
@@ -501,12 +525,12 @@
 		    $("#btn_pickup").click(function(){
 		    	// pickup
 		        trade = {
-		                'cmd' : 80,
-		                'extension' : '3002',
-		                'caller' : '',
-		                'callee' : '3001',
-		                'unconditional' : '',
-		                'status': -1
+		                cmd : 80,
+		                extension : '3002',
+		                caller : '',
+		                callee : '3001',
+		                unconditional : '',
+		                status: -1
 		              };
 		        
 		     	stompClient.send("/app/traders", {}, JSON.stringify(trade));
@@ -516,12 +540,12 @@
 		    $("#btn_reqextstatus").click(function(){
 		    	// Requset Extension Status
 		        trade = {
-		                'cmd' : 64,
-		                'extension' : '3001',
-		                'caller' : '3001',
-		                'callee' : '3001',
-		                'unconditional' : '3001',
-		                'status': -1
+		                cmd: 64,
+		                extension: '3001',
+		                caller: '3001',
+		                callee: '3001',
+		                unconditional: '3001',
+		                status: -1
 		              };
 		        
 		     	stompClient.send("/app/traders", {}, JSON.stringify(trade));

@@ -92,7 +92,7 @@ public class QuoteTelStatusService implements ApplicationListener<BrokerAvailabi
 	}
 	
 	// subscribe extension status, refresh on every 2 seconds.
-	//@Scheduled(fixedDelay=5000)
+	@Scheduled(fixedDelay=5000)
 	public void sendExtensionStatus() {
 		UcMessage msg = new UcMessage();
 		msg.cmd = Const4pbx.UC_BUSY_EXT_REQ;
@@ -189,6 +189,9 @@ public class QuoteTelStatusService implements ApplicationListener<BrokerAvailabi
 				payload = new UcMessage();
 				payload.cmd = data.getCmd();
 				payload.extension = data.getExtension();
+				payload.caller = data.getCaller();
+				payload.callee = data.getCallee();
+				payload.unconditional = data.getUnconditional();
 				payload.status = data.getStatus();
 				this.messagingTemplate.convertAndSend("/topic/ext.status." + data.getExtension(), payload);
 				break;
@@ -198,7 +201,9 @@ public class QuoteTelStatusService implements ApplicationListener<BrokerAvailabi
 				if (data.getExtension() == null) return;
 				if (data.getExtension().isEmpty()) return;
 				
-				Member mem = memberMapper.findIdByExt(data.getExtension());
+				// Member mem = memberMapper.findIdByExt(data.getExtension());
+				Member mem = new Member();
+				mem.setUsername("test1");
 				
 				if (mem.getUsername() == null) return;
 				if (mem.getUsername().isEmpty()) return;
