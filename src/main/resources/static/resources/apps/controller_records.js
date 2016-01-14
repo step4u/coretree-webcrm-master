@@ -26,11 +26,11 @@
 				enableSorting: true,
 				showGridFooter: false,
 				columnDefs: [
-			    		      { displayName: '내선번호', field: 'extension', headerCellClass: 'white', cellClass: 'grid-cell', width: 100 },
-			    		      { displayName: '상대번호', field: 'peernum', headerCellClass:'white', cellClass: 'grid-cell', width: 120 },
-			    		      { displayName: '등록일', field: 'time', headerCellClass: 'white', cellClass: 'grid-cell', width: 120 },
-			    		      { displayName: '파일', field: 'filename', headerCellClass: 'white', cellClass: 'grid-cell', width: 400 },
-			    		      { displayName: '기타', field: 'etc',
+			    		      { displayName: '내선번호', field: 'extension', headerCellClass: 'white', cellClass: 'grid-cell', width: 120 },
+			    		      { displayName: '상대번호', field: 'peernum', headerCellClass:'white', cellClass: 'grid-cell', width: 150 },
+			    		      { displayName: '등록일', field: 'time', headerCellClass: 'white', cellClass: 'grid-cell', width: 150 },
+			    		      { displayName: '파일', field: 'filename', headerCellClass: 'white', cellClass: 'grid-cell' },
+			    		      { displayName: '기타', field: 'etc', width: 120,
 			    		    	  headerCellClass: 'white',
 			    		    	  cellClass: 'grid-cell-align',
 			    		    	  cellTemplate: '<button class="btn btn-primary btn-xs" ng-click="grid.appScope.listenRow(row, this)">듣기</button> <button class="btn btn-warning btn-xs" ng-click="grid.appScope.getRow(row)">저장</button>'

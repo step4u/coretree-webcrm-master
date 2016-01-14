@@ -31,7 +31,9 @@
 			hold: 5
 		}
 	
+	// 고객 등록, 수정, 삭제 시 사용
 	var custbhv = bhv.none;
+	// crm 상태 구분할 때 사용
 	var MyState = crmstate.idle; 
 	
 	$(function(){
