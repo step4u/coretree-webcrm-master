@@ -1,17 +1,17 @@
 					<div ng-controller="CtrlCounsellors">
 						<div ui-grid="gridOptions" ui-grid-selection ui-grid-pagination class="grid" id="ctrlcounsellors"></div>
 						<div class="form-group form-inline" style='margin-top: 10px;'>
-							<input type='text' id='txtsearch' class='form-control' placeholder="상담원명 내선번호" />
-							<button type='button' id='btnsearch' for='txtsearch' class="btn btn-info btn-sm" ng-click="getPage('app_data_counsellor2.json')")>검색</button>
+							<input type='text' id='txtsearch' class='form-control' placeholder="������ ������ȣ" />
+							<button type='button' id='btnsearch' for='txtsearch' class="btn btn-info btn-sm" ng-click="getPage('app_data_counsellor2.json')")>�˻�</button>
 							<span style="float: right;">
-								<button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modal-counsellor-add">등록</button>
-								<button type="button" class="btn btn-warning btn-sm">삭제</button>
+								<button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modal-counsellor-add">���</button>
+								<button type="button" class="btn btn-warning btn-sm">����</button>
 							</span>
 						</div>
 					</div>
 					
 
-  <!-- Modal 상담원 등록/수정 -->
+  <!-- Modal ���� ���/���� -->
   <div class="modal fade" id="modal-counsellor-add" role="dialog">
     <div class="modal-dialog">
     
@@ -19,42 +19,42 @@
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">주소추가</h4>
+          <h4 class="modal-title">�ּ��߰�</h4>
         </div>
         <div class="modal-body">
           <form role="form" class="form-inline">
           	<div class="form-group">
-          		<label for="id">아이디 : </label>
-          		<input type="text" class="form-control" id="id" placeholder="아이디" />
-          		<label for="ext">내선번호 : </label>
-          		<input type="text" class="form-control" id="ext" placeholder="내선번호" />
+          		<label for="id">���̵� : </label>
+          		<input type="text" class="form-control" id="id" placeholder="���̵�" />
+          		<label for="ext">������ȣ : </label>
+          		<input type="text" class="form-control" id="ext" placeholder="������ȣ" />
 		    </div>
 		    <br/><br/>
 		    <div class="form-group">
-			    <label for="pwd1">비밀번호 : </label>
-			    <input type="password" class="form-control" id="pwd1" placeholder="비밀번호" />
-				<label for="pwd2">비밀번호 확인 : </label>
-			    <input type="text" class="form-control" id="pwd2" placeholder="비밀번호" />
+			    <label for="pwd1">��й�ȣ : </label>
+			    <input type="password" class="form-control" id="pwd1" placeholder="��й�ȣ" />
+				<label for="pwd2">��й�ȣ Ȯ�� : </label>
+			    <input type="text" class="form-control" id="pwd2" placeholder="��й�ȣ" />
 		    </div>
 		    <br/><br/>
 		    <div class="form-group">
-		    	<label for="username">이름 : </label>
-			    <input type="text" class="form-control" id="username" placeholder="이름" />
-			    <label for="usertitle">직책 : </label>
-			    <input type="text" class="form-control" id="usertitle" placeholder="직책" />
+		    	<label for="username">�̸� : </label>
+			    <input type="text" class="form-control" id="username" placeholder="�̸�" />
+			    <label for="usertitle">��å : </label>
+			    <input type="text" class="form-control" id="usertitle" placeholder="��å" />
 		    </div>
 		    <br/><br/>
 		    <div class="form-group">
-		    	<label for="tel1">연락처1 : </label>
-			    <input type="text" class="form-control" id="tel1" placeholder="전화번호" />
-			    <label for="tel2">연락처2 : </label>
-			    <input type="text" class="form-control" id="tel2" placeholder="휴대전화" />
+		    	<label for="tel1">����ó1 : </label>
+			    <input type="text" class="form-control" id="tel1" placeholder="��ȭ��ȣ" />
+			    <label for="tel2">����ó2 : </label>
+			    <input type="text" class="form-control" id="tel2" placeholder="�޴���ȭ" />
 		    </div>
           </form>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-warning" id="btn_counsellers_save">저장</button>
-          <button type="button" class="btn btn-primary" data-dismiss="modal" id="btn_counsellers_close">닫기</button>
+          <button type="button" class="btn btn-warning" id="btn_counsellers_save">����</button>
+          <button type="button" class="btn btn-primary" data-dismiss="modal" id="btn_counsellers_close">�ݱ�</button>
         </div>
       </div>
       

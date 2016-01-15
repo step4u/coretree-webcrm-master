@@ -2,10 +2,10 @@
 						<div ui-grid="gridOptions" ui-grid-selection ui-grid-pagination class="grid" id="ctrlcalls"></div>
 					</div>
 					<div class="form-group form-inline" style='margin-top: 10px;'>
-						<input type='text' id='txtsearch' class='form-control' placeholder="ì „í™”ë²ˆí˜¸ / íœ´ëŒ€ì „í™”" />
-						<button type='button' for='txtsearch' class="btn btn-info btn-sm" id="btnSearch">ê²€ìƒ‰</button>
-						<button type="button" class="btn btn-warning btn-sm" style="float: right;" id="btnDel">ì‚­ì œ</button>
-						<!-- <button type="button" class="btn btn-primary btn-sm" style="float: right; margin-right: 10px;" id="btnAdd">ë“±ë¡</button> -->
+						<input type='text' id='txtsearch' class='form-control' placeholder="ÀüÈ­¹øÈ£ / ÈŞ´ëÀüÈ­" />
+						<button type='button' for='txtsearch' class="btn btn-info btn-sm" id="btnSearch">°Ë»ö</button>
+						<button type="button" class="btn btn-warning btn-sm" style="float: right;" id="btnDel">»èÁ¦</button>
+						<!-- <button type="button" class="btn btn-primary btn-sm" style="float: right; margin-right: 10px;" id="btnAdd">µî·Ï</button> -->
 					</div>
 					
 <!-- Modal -->
@@ -14,7 +14,7 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4 class="modal-title">í†µí™” ì •ë³´</h4>
+				<h4 class="modal-title">ÅëÈ­ Á¤º¸</h4>
 			</div>
 			<div class="modal-body">
 				<div class="alert alert-warning fade in" style="display: none;" id="alert">
@@ -23,52 +23,52 @@
         		<div class="row">
 					<div class="form-group col-sm-6" ng-controller="CtrlGroups">
 						<input type="hidden" id="idx">
-				    	<label class="control-label" for="depthorder">ê·¸ë£¹</label>
+				    	<label class="control-label" for="depthorder">±×·ì</label>
 				    	<select class="form-control" ng-model="modeloption" id="depthorder" ng-options="option.depthorder as option.txt for option in options">
-				    		<option value="">:: ê·¸ë£¹ì„ íƒ ::</option>
+				    		<option value="">:: ±×·ì¼±ÅÃ ::</option>
 				    	</select>
 				  	</div>
 			  	</div>
 			  	<div class="row">
 					<div class="form-group col-sm-6">
-				    	<label for="uname">ì´ë¦„</label>
-				    	<input type="text" class="form-control" id="uname" placeholder="ì´ë¦„">
+				    	<label for="uname">ÀÌ¸§</label>
+				    	<input type="text" class="form-control" id="uname" placeholder="ÀÌ¸§">
 				  	</div>
 				  	<div class="form-group col-sm-6">
-				    	<label for="company">íšŒì‚¬</label>
-				    	<input type="text" class="form-control" id="company" placeholder="íšŒì‚¬">
-				  	</div>
-			  	</div>
-			  	<div class="row">
-				  	<div class="form-group col-sm-6">
-				    	<label for="tel">ì „í™”</label>
-				    	<input type="text" class="form-control" id="tel" placeholder="ì „í™”">
-				  	</div>
-				  	<div class="form-group col-sm-6">
-				    	<label for="cellular">íœ´ëŒ€ì „í™”</label>
-				    	<input type="text" class="form-control" id="cellular" placeholder="íœ´ëŒ€ì „í™”">
+				    	<label for="company">È¸»ç</label>
+				    	<input type="text" class="form-control" id="company" placeholder="È¸»ç">
 				  	</div>
 			  	</div>
 			  	<div class="row">
 				  	<div class="form-group col-sm-6">
-				    	<label for="extension">ë‚´ì„ </label>
-				    	<input type="text" class="form-control" id="extension" placeholder="ë‚´ì„ ">
+				    	<label for="tel">ÀüÈ­</label>
+				    	<input type="text" class="form-control" id="tel" placeholder="ÀüÈ­">
+				  	</div>
+				  	<div class="form-group col-sm-6">
+				    	<label for="cellular">ÈŞ´ëÀüÈ­</label>
+				    	<input type="text" class="form-control" id="cellular" placeholder="ÈŞ´ëÀüÈ­">
+				  	</div>
+			  	</div>
+			  	<div class="row">
+				  	<div class="form-group col-sm-6">
+				    	<label for="extension">³»¼±</label>
+				    	<input type="text" class="form-control" id="extension" placeholder="³»¼±">
 			    	</div>
 			    	<div class="form-group col-sm-6">
-				    	<label for="posi">ì§ê¸‰</label>
-				    	<input type=text class="form-control" id="posi" placeholder="ì§ê¸‰">
+				    	<label for="posi">Á÷±Ş</label>
+				    	<input type=text class="form-control" id="posi" placeholder="Á÷±Ş">
 				  	</div>
 			  	</div>
 			  	<div class="row">
 				  	<div class="form-group col-sm-8">
-				    	<label for="email">ì´ë©”ì¼</label>
-				    	<input type="text" class="form-control" id="email" placeholder="ì´ë©”ì¼">
+				    	<label for="email">ÀÌ¸ŞÀÏ</label>
+				    	<input type="text" class="form-control" id="email" placeholder="ÀÌ¸ŞÀÏ">
 			    	</div>
 			  	</div>
       		</div>
       		<div class="modal-footer">
-        		<!-- <button type="button" class="btn btn-primary" id="btnSave">ì €ì¥</button>  -->
-        		<button type="button" class="btn btn-default" data-dismiss="modal">ë‹«ê¸°</button>
+        		<!-- <button type="button" class="btn btn-primary" id="btnSave">ÀúÀå</button>  -->
+        		<button type="button" class="btn btn-default" data-dismiss="modal">´İ±â</button>
       		</div>
     	</div>
   	</div>
@@ -84,7 +84,7 @@
 	
 	$("#btnAdd").click(function(){
 		custbhv = bhv.add;
-		$("#Modal .modal-title").html("ê³ ê° ë“±ë¡");
+		$("#Modal .modal-title").html("°í°´ µî·Ï");
 		ClearForm();
 		
 		$('#Modal').modal("show");
@@ -124,17 +124,17 @@
 		};
 			
 		if (obj.depthorder == "") {
-			$("#alert").html("<strong>í•„ìˆ˜ì…ë ¥</strong> ê·¸ë£¹ì„ ì„ íƒí•˜ì„¸ìš”.").css('display', 'block');
+			$("#alert").html("<strong>ÇÊ¼öÀÔ·Â</strong> ±×·ìÀ» ¼±ÅÃÇÏ¼¼¿ä.").css('display', 'block');
 			$("#depthorder").focus();
 			return;
 		}
 		if (obj.uname == "") {
-			$("#alert").html("<strong>í•„ìˆ˜ì…ë ¥</strong> ì´ë¦„ì„ ì…ë ¥í•˜ì„¸ìš”.").css('display', 'block');
+			$("#alert").html("<strong>ÇÊ¼öÀÔ·Â</strong> ÀÌ¸§À» ÀÔ·ÂÇÏ¼¼¿ä.").css('display', 'block');
 			$("#uname").focus();
 			return;
 		}
 		if (!(obj.tel != "" || obj.cellular != "")) {
-			$("#alert").html("<strong>í•„ìˆ˜ì…ë ¥</strong> ì „í™”ë²ˆí˜¸ì™€ íœ´ëŒ€ì „í™” í•˜ë‚˜ëŠ” ì…ë ¥í•´ì•¼í•©ë‹ˆë‹¤.").css('display', 'block');
+			$("#alert").html("<strong>ÇÊ¼öÀÔ·Â</strong> ÀüÈ­¹øÈ£¿Í ÈŞ´ëÀüÈ­ ÇÏ³ª´Â ÀÔ·ÂÇØ¾ßÇÕ´Ï´Ù.").css('display', 'block');
 			if (obj.tel == "") {
 				$("#tel").focus();
 				return;
