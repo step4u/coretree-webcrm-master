@@ -30,44 +30,6 @@
 		$scope.updateExtStatus = function(jsonData) {
 			var extitem = angular.fromJson(jsonData);
 			
-/*			
-			$.each($scope.gridOptions.data, function(index, element){
-				if (element.innertel === extitem.extension) {
-					switch (extitem.status) {
-						case UC_CALL_STATE_UNREG:
-							element.status = '미등록';
-							extstatecount.unreg++;
-							break;
-						case UC_CALL_STATE_IDLE:
-							element.status = '대기중';
-							extstatecount.idle++;
-							break;
-						case UC_CALL_STATE_INVITING:
-							element.status = '통화시도';
-							extstatecount.invite++;
-							break;
-						case UC_CALL_STATE_RINGING:
-							element.status = '전화울림';
-							extstatecount.ring++;
-							break;
-						case UC_CALL_STATE_BUSY:
-							element.status = '통화중';
-							extstatecount.busy++;
-							break;
-					}
-				}
-				
-				if (extitem.extension === crmidentity.ext) {
-					SetMyState(extitem, extstatecount);
-				}
-			});
-*/
-/*			extstatecount.unreg = 0;
-			extstatecount.idle = 0;
-			extstatecount.invite = 0;
-			extstatecount.ring = 0;
-			extstatecount.busy = 0;*/
-			
 			var item = $scope.gridOptions.data.find(function(element, index){
 				
 				if (crmidentity.ext != element.innertel) {
@@ -114,7 +76,7 @@
 			}
 			
 			if (crmidentity.ext == extitem.extension) {
-				console.log("extstatecount->extitem.extension: " + extitem.extension + ", invite: " + extstatecount.invite + ", ring: " + extstatecount.ring);
+				// console.log("extstatecount->extitem.extension: " + extitem.extension + ", invite: " + extstatecount.invite + ", ring: " + extstatecount.ring);
 				SetMyState(extitem, extstatecount);
 			}
 		};
@@ -123,7 +85,7 @@
 				enableSorting: false,
 				showGridFooter: false,
 				columnDefs: [
-				 		      { displayName: '내선번호', field: 'innertel', headerCellClass: 'white', cellClass: 'grid-cell' },
+				 		      { displayName: '내선번호', field: 'extension', headerCellClass: 'white', cellClass: 'grid-cell' },
 				 		      { displayName: '상태', field: 'status', headerCellClass:'white', cellClass: 'grid-cell' },
 				 		      { displayName: '기타', field: 'etc', headerCellClass:'white', cellClass: 'grid-cell-align',
 				 		    	  cellTemplate: '<button class="btn btn-primary btn-xs">청취</button>' }
@@ -142,8 +104,9 @@
 		
 		$scope.gridOptions.rowTemplate = '<div ng-repeat="col in colContainer.renderedColumns track by col.colDef.name" class="ui-grid-cell" ui-grid-cell context-menu="grid.appScope.menuOptions(row)"></div>';
 	
-		$http.get('/resources/apps/app_data_tel_status.json')
+		$http.get('/extension/get/all/0/0')
 			.success(function(data) {
+				console.log(JSON.stringify(data));
 				$scope.gridOptions.data = data;
 			}
 		);

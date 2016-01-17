@@ -17,29 +17,29 @@
 			<div class="collapse navbar-collapse navbar-ex1-collapse">
 			    <ul class="nav navbar-nav navbar-right">
 			    	<li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" id="userstatus"><span class="glyphicon glyphicon-plus-sign"></span> �����</a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" id="userstatus"><span class="glyphicon glyphicon-plus-sign"></span> 대기중</a>
                         <ul class="dropdown-menu">
-                        	<li class="dropdown-header">������� ����</li>
+                        	<li class="dropdown-header">현재상태 설정</li>
                             <li class="divider"></li>
-                            <li><a href="#"><span class="glyphicon glyphicon-plus-sign"></span> �����</a></li>
-                            <li><a href="#"><span class="glyphicon glyphicon-ok-sign"></span> ��ȭ��</a></li>
-                            <li><a href="#"><span class="glyphicon glyphicon-minus-sign"></span> �ڸ����</a></li>
-                            <li><a href="#"><span class="glyphicon glyphicon-remove-sign"></span> ���Űź�</a></li>
+                            <li><a href="#"><span class="glyphicon glyphicon-plus-sign"></span> 대기중</a></li>
+                            <li><a href="#"><span class="glyphicon glyphicon-ok-sign"></span> 통화중</a></li>
+                            <li><a href="#"><span class="glyphicon glyphicon-minus-sign"></span> 자리비움</a></li>
+                            <li><a href="#"><span class="glyphicon glyphicon-remove-sign"></span> 수신거부</a></li>
                         </ul>
                     </li>
 			    	<li class="dropdown">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown" id="systeminfo"> �ý��� ���� (8001)</a>
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown" id="systeminfo"> 시스템 정상 (8001)</a>
                         <ul class="dropdown-menu">
-                        	<li class="dropdown-header">�ý��� ����</li>
+                        	<li class="dropdown-header">시스템 정보</li>
                             <li class="divider"></li>
-                            <li><a href="#"> ��ũ�뷮 : 565GB</a></li>
-                            <li><a href="#"> ���� ��ȭ : 476��</a></li>
-                            <li><a href="#"> �ְ� ��ȭ : 2223��</a></li>
-                            <li><a href="#"> ��ü ��ȭ  : 5655789��</a></li>
+                            <li><a href="#"> 디스크용량 : 565GB</a></li>
+                            <li><a href="#"> 금일 통화 : 476건</a></li>
+                            <li><a href="#"> 주간 통화 : 2223건</a></li>
+                            <li><a href="#"> 전체 통화  : 5655789건</a></li>
                         </ul>
 		        	</li>
 			    	<li class="dropdown">
-						<a href="#" id="logout"> �α׾ƿ�</a>
+						<a href="#" id="logout"> 로그아웃</a>
 		        	</li>
 			    </ul>
 			</div>
@@ -49,46 +49,46 @@
         <div id="sidebar-wrapper">
             <ul class="sidebar-nav">
                 <li>
-                    <a ui-sref="addr">�ּҷ�</a>
+                    <a ui-sref="addr">주소록</a>
                 </li>
                 <li>
                 	<ul style="list-style: none; margin: 0; padding-left: 15px;">
                 		<li>
-                			<a href="#collapse1" data-toggle="collapse" id="publicaddr">���� �ּҷ� </a>
+                			<a href="#collapse1" data-toggle="collapse" id="publicaddr">공용 주소록 </a>
                 		</li>
                 		<li id="collapse1" class="panel-collapse collapse">
                 			<ul style="list-style: none; margin: 0; padding-left: 25px;">
-                				<li><a href="addr00">���¾�ü</a></li>
-                				<li><a href="addr01">�ŷ�ó</a></li>
-                				<li><a href="addr02">����</a></li>
+                				<li><a href="addr00">협력업체</a></li>
+                				<li><a href="addr01">거래처</a></li>
+                				<li><a href="addr02">고객</a></li>
                 			</ul>
                 		</li>
             		<li>
-                			<a href="#collapse2" data-toggle="collapse" id="personaladdr">���� �ּҷ�</a>
+                			<a href="#collapse2" data-toggle="collapse" id="personaladdr">개인 주소록</a>
                 		</li>
                 		<li id="collapse2" class="panel-collapse collapse">
                 			<ul style="list-style: none; margin: 0; padding-left: 25px;">
-                				<li><a href="addr10">���¾�ü</a></li>
-                				<li><a href="addr11">�ŷ�ó</a></li>
-                				<li><a href="addr12">����</a></li>
+                				<li><a href="addr10">협력업체</a></li>
+                				<li><a href="addr11">거래처</a></li>
+                				<li><a href="addr12">고객</a></li>
                 			</ul>
                 		</li>
                 	</ul>
                 </li>
                 <li>
-                    <a ui-sref="calls">��ȭ����</a>
+                    <a ui-sref="calls">통화내역</a>
                 </li>
                 <li>
-                    <a href="smses">SMS����</a>
+                    <a href="smses">SMS내역</a>
                 </li>
                 <li style="display: none;" class="ADMIN">
-                    <a href="records">���볻��</a>
+                    <a href="records">녹취내역</a>
                 </li>
                 <li style="display: none;" class="ADMIN">
-                    <a href="counsellorcalls">������ȭ����</a>
+                    <a href="counsellorcalls">상담원통화내역</a>
                 </li>
                 <li style="display: none;" class="ADMIN">
-                    <a href="counsellors">��������</a>
+                    <a href="counsellors">상담원관리</a>
                 </li>
             </ul>
         </div>
@@ -108,7 +108,7 @@
 		        <div class="col-lg-3">
 		        	<div ng-controller="CtrlCallStatus" id="ctrlcallstatus">
 		        		<div ui-grid="gridOptions" class="grid_teller_status"></div>
-		        		<!-- <button type="button" class="btn btn-primary btn-sm" id='scopetest'>�׽�Ʈ</button> -->
+		        		<!-- <button type="button" class="btn btn-primary btn-sm" id='scopetest'>테스트</button> -->
 		        	</div>
 					<div ng-controller="CtrlTelStatus" style="margin-top: 15px;" id="ctrlextstatus">
 						<div ui-grid="gridOptions" class="grid_tels" context-menu="menuOptions"></div>

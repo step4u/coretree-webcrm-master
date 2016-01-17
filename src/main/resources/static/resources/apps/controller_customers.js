@@ -1,10 +1,4 @@
-/*	// 고객리스트
-	var paginationOptionsCustomer = {
-		    pageNumber: 1,
-		    pageSize: 20,
-		    sort: null
-		  };*/
-	
+	// 고객리스트
 	angular.module('app')
 	.controller('CtrlCustomer', ['$scope', '$http', 'i18nService', '$log', '$timeout', 'uiGridConstants', '$stateParams'
 	                             , function ($scope, $http, i18nService, $log, $timeout, uiGridConstants, $stateParams) {

@@ -15,19 +15,19 @@
 						        <span class="glyphicon glyphicon-calendar"></span>
 						    </span>
 						</div>
-						<input type='text' id='txtsearch' class='form-control' placeholder="ÀüÈ­¹øÈ£ / ÈÞ´ëÀüÈ­" style="margin-left: 10px; max-width: 11em;" />
-						<button type='button' for='txtsearch' class="btn btn-info btn-sm" id="btnSearch">°Ë»ö</button>
-						<button type="button" class="btn btn-warning btn-sm" style="float: right;" id="btnDel">»èÁ¦</button>
+						<input type='text' id='txtsearch' class='form-control' placeholder="ì „í™”ë²ˆí˜¸ / íœ´ëŒ€ì „í™”" style="margin-left: 10px; max-width: 11em;" />
+						<button type='button' for='txtsearch' class="btn btn-info btn-sm" id="btnSearch">ê²€ìƒ‰</button>
+						<button type="button" class="btn btn-warning btn-sm" style="float: right;" id="btnDel">ì‚­ì œ</button>
 					</div>
 <script>
 	$(document).ready(function(){
 	    $('#datetimepicker1').datetimepicker({
 	    	locale: 'ko',
-	    	format: 'YYYY-MM-DD HH:mm'
+	    	format: 'YYYY-MM-DD HH:mm:ss'
 	    });
 	    $('#datetimepicker2').datetimepicker({
 	    	locale: 'ko',
-	    	format: 'YYYY-MM-DD HH:mm',
+	    	format: 'YYYY-MM-DD HH:mm:ss',
 	    	useCurrent: false
 	    });
 	    $("#datetimepicker1").on("dp.change", function (e) {

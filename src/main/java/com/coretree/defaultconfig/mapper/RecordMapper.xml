@@ -11,14 +11,15 @@
     </resultMap>
     
     <select id="count" resultType="java.lang.Long">
-    	select count(idx) from recinfo
+    	select count(idx) from recinfo where regdate=current_timestamp
     </select>
     
     <select id="selectAll" parameterType="map" resultMap="recordMap">
     	select first #{rowsperpage} skip ((#{curpage} - 1) * #{rowsperpage})
 			idx, ext, extension, peernum, filename, regdate
-			from recinfo order
-			by regdate desc
+			from recinfo
+			where regdate=current_timestamp
+			order by regdate desc
     </select>
     
     <select id="selectByIdx" resultMap="recordMap">

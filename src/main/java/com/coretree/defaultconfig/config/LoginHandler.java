@@ -35,12 +35,12 @@ public class LoginHandler implements AuthenticationSuccessHandler {
 		// Collection auths = auth.getAuthorities();
 		// boolean authchk = auths.stream().anyMatch(x -> x.equals(new SimpleGrantedAuthority("ROLE_ADMIN")));
 		
-		String id = auth.getName();
-		Member info = memberMapper.findExtById(id);
+		String username = auth.getName();
+		Member info = memberMapper.selectByIdx(username);
 		
 		ObjectMapper mapper = new ObjectMapper();
 		CookieInfo user = new CookieInfo();
-		user.setUsername(id);
+		user.setUsername(username);
 		user.setExt(info.getExtension());
 		user.setRole(info.getRole());
 		

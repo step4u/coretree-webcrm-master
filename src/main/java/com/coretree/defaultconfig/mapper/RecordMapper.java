@@ -10,7 +10,7 @@ import org.springframework.boot.mybatis.autoconfigure.Mapper;
 public interface RecordMapper {
 	long count();
 	List<Record> selectAll(@Param("curpage") int curpage, @Param("rowsperpage") int rowsperpage);
-	List<Record> selectByIdx(@Param("idx") long idx);
+	Record selectByIdx(@Param("idx") long idx);
 	List<Record> selectByTxt(@Param("txt") String txt);
     void del(long idx);
     void delAll(@Param("list") ArrayList<Record> list);

@@ -1,103 +1,147 @@
 					<div>
-						<div ui-grid="gridOptions" ui-grid-selection ui-grid-pagination class="grid" id="ctrlcalls"></div>
+						<div ui-grid="gridOptions" ui-grid-selection ui-grid-pagination class="grid" id="ctrlcounsellers"></div>
 					</div>
 					<div class="form-group form-inline" style='margin-top: 10px;'>
-						<input type='text' id='txtsearch' class='form-control' placeholder="��ȭ��ȣ / �޴���ȭ" />
-						<button type='button' for='txtsearch' class="btn btn-info btn-sm" id="btnSearch">�˻�</button>
-						<button type="button" class="btn btn-warning btn-sm" style="float: right;" id="btnDel">����</button>
-						<!-- <button type="button" class="btn btn-primary btn-sm" style="float: right; margin-right: 10px;" id="btnAdd">���</button> -->
+						<input type='text' id='txtsearch' class='form-control' placeholder="전화번호 / 휴대전화" />
+						<button type='button' for='txtsearch' class="btn btn-info btn-sm" id="btn_Search">검색</button>
+						<button type="button" class="btn btn-warning btn-sm" style="float: right;" id="btn_Del">삭제</button>
+						<button type="button" class="btn btn-primary btn-sm" style="float: right; margin-right: 10px;" id="btn_Add">등록</button>
 					</div>
-					
+
 <!-- Modal -->
-<div class="modal fade" id="Modal" role="dialog">
+<div class="modal fade" id="ModalUser" role="dialog">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4 class="modal-title">��ȭ ����</h4>
+				<h4 class="modal-title">사용자(상담원) 정보</h4>
 			</div>
 			<div class="modal-body">
+				<form class="form-horizontal" role="form">
 				<div class="alert alert-warning fade in" style="display: none;" id="alert">
 		  			<strong>Warning!</strong> This alert box could indicate a warning that might need attention.
 				</div>
-        		<div class="row">
-					<div class="form-group col-sm-6" ng-controller="CtrlGroups">
-						<input type="hidden" id="idx">
-				    	<label class="control-label" for="depthorder">�׷�</label>
-				    	<select class="form-control" ng-model="modeloption" id="depthorder" ng-options="option.depthorder as option.txt for option in options">
-				    		<option value="">:: �׷켱�� ::</option>
-				    	</select>
-				  	</div>
-			  	</div>
-			  	<div class="row">
-					<div class="form-group col-sm-6">
-				    	<label for="uname">�̸�</label>
-				    	<input type="text" class="form-control" id="uname" placeholder="�̸�">
-				  	</div>
-				  	<div class="form-group col-sm-6">
-				    	<label for="company">ȸ��</label>
-				    	<input type="text" class="form-control" id="company" placeholder="ȸ��">
-				  	</div>
-			  	</div>
-			  	<div class="row">
-				  	<div class="form-group col-sm-6">
-				    	<label for="tel">��ȭ</label>
-				    	<input type="text" class="form-control" id="tel" placeholder="��ȭ">
-				  	</div>
-				  	<div class="form-group col-sm-6">
-				    	<label for="cellular">�޴���ȭ</label>
-				    	<input type="text" class="form-control" id="cellular" placeholder="�޴���ȭ">
-				  	</div>
-			  	</div>
-			  	<div class="row">
-				  	<div class="form-group col-sm-6">
-				    	<label for="extension">����</label>
-				    	<input type="text" class="form-control" id="extension" placeholder="����">
+				<div class="form-group">
+					<div class="col-sm-2">
+			    		<label class="control-label" for="username">아이디</label>
 			    	</div>
-			    	<div class="form-group col-sm-6">
-				    	<label for="posi">����</label>
-				    	<input type=text class="form-control" id="posi" placeholder="����">
-				  	</div>
-			  	</div>
-			  	<div class="row">
-				  	<div class="form-group col-sm-8">
-				    	<label for="email">�̸���</label>
-				    	<input type="text" class="form-control" id="email" placeholder="�̸���">
+			    	<div class="col-sm-4">
+			    		<input type="text" class="form-control" id="username" placeholder="아이디">
+		    		</div>
+		    		<div class="col-sm-2">
+			    		<button type="button" class="btn btn-default" id="btn_Chk1">중복확인</button>
+			    		<input type="hidden" id="confirm_id" value="0">
 			    	</div>
 			  	</div>
+				<div class="form-group">
+					<div class="col-sm-2">
+			    		<label class="control-label" for="password">비밀번호</label>
+			    	</div>
+			    	<div class="col-sm-4">
+			    		<input type="password" class="form-control" id="password" placeholder="비밀번호" />
+			    	</div>
+			    	<div class="col-sm-2">
+			    		<label class="control-label" for="password_confirm">비밀번호</label>
+		    		</div>
+			    	<div class="col-sm-4">
+			    		<input type="password" class="form-control" id="password_confirm" placeholder="비밀번호 확인" />
+			    	</div>
+			  	</div>
+				<div class="form-group">
+					<div class="col-sm-2">
+						<label for="uname">이름</label>
+					</div>
+			    	<div class="col-sm-4">
+			    		<input type="text" class="form-control" id="uname" placeholder="이름" />
+			    	</div>
+		    		<div class="col-sm-2">
+			    		<label for="posi">직급</label>
+			    	</div>
+			    	<div class="col-sm-4">
+			    		<input type=text class="form-control" id="posi" placeholder="직급" />
+			    	</div>
+			  	</div>
+			  	<div class="form-group">
+			  		<div class="col-sm-2">
+			    		<label for="tel">전화</label>
+			    	</div>
+			    	<div class="col-sm-4">
+			    		<input type="text" class="form-control" id="tel" placeholder="전화" />
+			    	</div>
+			  		<div class="col-sm-2">
+			    		<label for="cellular">휴대전화</label>
+			    	</div>
+			    	<div class="col-sm-4">
+			    		<input type="text" class="form-control" id="cellular" placeholder="휴대전화" />
+			    	</div>
+			  	</div>
+				</form>
       		</div>
       		<div class="modal-footer">
-        		<!-- <button type="button" class="btn btn-primary" id="btnSave">����</button>  -->
-        		<button type="button" class="btn btn-default" data-dismiss="modal">�ݱ�</button>
+        		<button type="button" class="btn btn-primary" id="btn_Save">저장</button>
+        		<button type="button" class="btn btn-default" id="btn_Close">닫기</button>
       		</div>
     	</div>
   	</div>
 </div>
   
 <script>
-	$("#btnSearch").click(function(){
-    	var scope = angular.element($("#ctrlcalls")).scope();
+	$(document).ready(function(){
+		custbhv = bhv.none;
+	});
+
+	$("#btn_Search").click(function(){
+    	var scope = angular.element($("#ctrlcounsellers")).scope();
 	    scope.$apply(function () {
 	        scope.getPage($("#txtsearch").val().trim());
 	    });
 	});
 	
-	$("#btnAdd").click(function(){
-		custbhv = bhv.add;
-		$("#Modal .modal-title").html("���� ���");
+	$("#btn_Add").click(function(){
 		ClearForm();
+		$("#ModalUser .modal-title").html("사용자(상담원) 추가");
+		$('#ModalUser').modal("show");
+		$("#username").focus();
 		
-		$('#Modal').modal("show");
+		custbhv = bhv.add;
 	});
 	
-	$("#btnDel").click(function(){
-    	var scope = angular.element($("#ctrlcalls")).scope();
+	$("#btn_Chk1").click(function(){
+		var obj = {
+				username: $("#username").val()
+			};
+		
+		if ($("#username").val() == "") {
+			$("#alert").html("<strong>필수입력</strong> 아이디를 입력하세요.").css('display', 'block');
+			$("#username").focus();
+			return;
+		}
+		
+		$.get("/member/chk/" + obj.username, function(response){
+			var data = JSON.parse(response);
+			
+			if (data.result == 1) {
+				$("#alert").html("사용할 수 있는 아이디 입니다.").css('display', 'block');
+				$("#password").focus();
+				$("#confirm_id").val(data.result);
+				return;
+			} else {
+				$("#alert").html("<strong>필수입력</strong> 사용할 수 없는 아이디 입니다.").css('display', 'block');
+				$("#username").focus();
+				$("#confirm_id").val(data.result);
+				return;
+			}
+		});
+	});
+	
+	$("#btn_Del").click(function(){
+    	var scope = angular.element($("#ctrlcounsellers")).scope();
 	    scope.$apply(function () {
 	    	var seledtedItems = scope.gridOptions.selectedItems;
 
-			$.post("/call/del/all", seledtedItems, function(response){
+			$.post("/member/del/all", seledtedItems, function(response){
 				
-		    	var scope = angular.element($("#ctrlcalls")).scope();
+		    	var scope = angular.element($("#ctrlcounsellers")).scope();
 			    scope.$apply(function () {
 			        scope.getPage('');
 			    });
@@ -105,59 +149,92 @@
 	    });
 	});
 	
-	$("#btnSave").click(function(){
-		SaveCust();
+	$("#btn_Save").click(function(){
+		SaveInfo();
 	});
 	
-	function SaveCust() {
+	$("#btn_Close").click(function(){
+		ClearForm();
+		$('#ModalUser').modal("hide");
+		
+		custbhv = bhv.none;
+	});
+	
+	function SaveInfo() {
 		var obj = {
-				idx: $("#idx").val(),
-				depthorder: $("#depthorder").val() == "" ? $("#depthorder").val() : $("#depthorder").val().replace("string:", ""),
-				username: crmidentity.username,
-				uname: $("#uname").val(),
-				company: $("#company").val(),
-				posi: $("#posi").val(),
-				tel: $("#tel").val(),
-				cellular: $("#cellular").val(),
-				extension: $("#extension").val(),
-				email: $("#email").val()
+			username: $("#username").val(),
+			password: $("#password").val(),
+			uname: $("#uname").val(),
+			posi: $("#posi").val(),
+			tel: $("#tel").val(),
+			cellular: $("#cellular").val(),
+			extension: '',
+			role: '',
+			status: '',
+			enabled: '1'
 		};
-			
-		if (obj.depthorder == "") {
-			$("#alert").html("<strong>�ʼ��Է�</strong> �׷��� �����ϼ���.").css('display', 'block');
-			$("#depthorder").focus();
-			return;
-		}
-		if (obj.uname == "") {
-			$("#alert").html("<strong>�ʼ��Է�</strong> �̸��� �Է��ϼ���.").css('display', 'block');
-			$("#uname").focus();
-			return;
-		}
-		if (!(obj.tel != "" || obj.cellular != "")) {
-			$("#alert").html("<strong>�ʼ��Է�</strong> ��ȭ��ȣ�� �޴���ȭ �ϳ��� �Է��ؾ��մϴ�.").css('display', 'block');
-			if (obj.tel == "") {
-				$("#tel").focus();
+		
+		if (custbhv == bhv.add) {
+			if (obj.username == "") {
+				$("#alert").html("<strong>필수입력</strong> 아이디를 입력하세요.").css('display', 'block');
+				$("#username").focus();
 				return;
 			}
-			if (obj.cellular == "") {
-				$("#cellular").focus();
+			if (obj.password == "") {
+				$("#alert").html("<strong>필수입력</strong> 비밀번호를 입력하세요.").css('display', 'block');
+				$("#password").focus();
 				return;
+			}
+			if ($("#password_confirm").val() == "") {
+				$("#alert").html("<strong>필수입력</strong> 비밀번호 확인을 입력하세요.").css('display', 'block');
+				$("#password_confirm").focus();
+				return;
+			}
+			if (obj.password != $("#password_confirm").val()) {
+				$("#alert").html("<strong>필수입력</strong> 비밀번호가 일치하지 않습니다.").css('display', 'block');
+				$("#password_confirm").focus();
+				$("#password_confirm").select();
+				return;
+			}
+			if (obj.uname == "") {
+				$("#alert").html("<strong>필수입력</strong> 이름을 입력하세요.").css('display', 'block');
+				$("#uname").focus();
+				return;
+			}
+			if ($("#confirm_id").val() == "0" || $("#confirm_id").val() == "") {
+				$("#alert").html("<strong>필수입력</strong> 아이디 중복 확인을 하세요.").css('display', 'block');
+				$("#confirm_id").focus();
+				return;
+			}
+		} else if (custbhv == bhv.modi) {
+			if (obj.uname == "") {
+				$("#alert").html("<strong>필수입력</strong> 이름을 입력하세요.").css('display', 'block');
+				$("#uname").focus();
+				return;
+			}
+			if (obj.password != "") {
+				if (obj.password != $("#password_confirm").val()) {
+					$("#alert").html("<strong>필수입력</strong> 비밀번호가 일치하지 않습니다.").css('display', 'block');
+					$("#password").focus();
+					return;
+				}
 			}
 		}
 		
 		var url;
 		
 		if (custbhv == bhv.add) {
-			url = "/customer/add/";
+			url = "/member/add";
 		} else if (custbhv == bhv.modi) {
-			url = "/customer/modi/";
+			url = "/member/modi";
 		}
 		
 		$.post(url, obj, function(response){
-			$('#Modal').modal("hide");
+			$('#ModalUser').modal("hide");
+			
 			ClearForm();
 			
-	    	var scope = angular.element($("#ctrlcalls")).scope();
+	    	var scope = angular.element($("#ctrlcounsellers")).scope();
 		    scope.$apply(function () {
 		        scope.getPage('');
 		    });
@@ -167,14 +244,17 @@
 	}
 	
 	function ClearForm() {
-		$("#idx").val('-1');
-		group.length == 2 ? $("#depthorder").val('string:' + group) : $("#depthorder option:eq(0)").prop("selected", true);
+		$("#username").val('');
+		$("#password").val('');
+		$("#password_confirm").val('');
 		$("#uname").val('');
-		$("#company").val('');
 		$("#posi").val('');
 		$("#tel").val('');
 		$("#cellular").val('');
-		$("#extension").val('');
-		$("#email").val('');
+		
+		$("#username").removeAttr("readonly");
+		$("#btn_Chk1").css("display", "block");
+		$("#alert").css("display", "none");
+		$("#confirm_id").val("");
 	}
 </script>

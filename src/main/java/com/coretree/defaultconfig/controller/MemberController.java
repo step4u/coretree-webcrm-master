@@ -1,5 +1,6 @@
 package com.coretree.defaultconfig.controller;
 
+import java.security.Principal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,50 +17,46 @@ import com.coretree.defaultconfig.model.LoginResult;
 public class MemberController {
 	
 	@Autowired
-	MemberMapper memberMapper;
+	MemberMapper mapper;
 	
-	@RequestMapping("/member/all")
-	public List<Member> getMembers() {
-		return memberMapper.findAll();
+	@RequestMapping(path="/member/get/count", method=RequestMethod.GET)
+	public int getCount(Principal principal) {
+		return mapper.count();
+	}
+	
+	@RequestMapping(path="/member/get/all/{curpage}/{rowsperpage}", method=RequestMethod.GET)
+	public List<Member> getMembers(@PathVariable("curpage") int curpage, @PathVariable("rowsperpage") int rowsperpage, Principal principa) {
+		return mapper.selectAll(curpage, rowsperpage);
 	}
 
-	@RequestMapping("/member/get/{id}")
-	public Member getMemberInfo(@PathVariable("id") String id) {
-		return memberMapper.findById(id);
+	@RequestMapping("/member/get/{username}")
+	public Member getMemberInfo(@PathVariable("username") String username, Principal principa) {
+		return mapper.selectByIdx(username);
 	}
-/*	
-	@RequestMapping(value = "/member/login/{id}/{pass}", method = RequestMethod.POST)
-	public LoginResult login(@PathVariable("id") String id, @PathVariable("pass") String pass) {
-		Member member = memberMapper.findById(id);
-		LoginResult result = new LoginResult();
-		System.err.println(id + "//" + pass + "/##/" + member.getId() + "//" + member.getPwd());
-		result.result = pass.equals(member.getPwd()) && id.equals(member.getId());
-		result.name = member.getName();
-		result.id = member.getId();
-		result.extension = member.getExtension();
-		result.roles = member.getRoles();
-		return result;
-	}
-	*/
 	
-	@RequestMapping("/member/chk/{id}")
-	public String chkId(@PathVariable("id") String id) {
-		String result = String.format("{\"result\":%d}", memberMapper.chkById(id));
+	@RequestMapping("/member/get/search/{txt}")
+	public List<Member> getMemberByTxt(@PathVariable("txt") String txt, Principal principal) {
+		return mapper.selectByTxt("%" + txt + "%");
+	}
+	
+	@RequestMapping(value = "/member/chk/{username}", method = RequestMethod.GET)
+	public String chkId(@PathVariable("username") String username, Principal principal) {
+		String result = String.format("{\"result\": %d}", mapper.chkById(username));
 		return result;
 	}
 	
-	@RequestMapping(value = "/member/add/{memberinfo}", method = RequestMethod.POST)
-	public void addMember(@PathVariable("memberinfo") Member memberinfo) {
-		memberMapper.addMember(memberinfo);
+	@RequestMapping(value = "/member/add", method = RequestMethod.POST)
+	public void addMember(Member memberinfo, Principal principal) {
+		mapper.add(memberinfo);
 	}
 	
 	@RequestMapping(value = "/member/del/{id}", method = RequestMethod.GET)
-	public void delMember(@PathVariable("id") String id) {
-		memberMapper.delMember(id);
+	public void delMember(@PathVariable("id") String id, Principal principal) {
+		mapper.del(id);
 	}
 	
-	@RequestMapping(value = "/member/modi/{memberinfo}", method = RequestMethod.POST)
-	public void modiMember(@PathVariable("memberinfo") Member memberinfo) {
-		memberMapper.modiMember(memberinfo);
+	@RequestMapping(value = "/member/modi", method = RequestMethod.POST)
+	public void modiMember(Member memberinfo) {
+		mapper.modi(memberinfo);
 	}
 }

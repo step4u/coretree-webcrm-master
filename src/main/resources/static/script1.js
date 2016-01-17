@@ -70,7 +70,7 @@ angular.module('app', ['ui.router', 'ui.bootstrap', 'ui.grid', 'ui.grid.selectio
         views: {
           'content@': {
               templateUrl: 'view/smses.html',
-              controller: 'CtrlSmses'
+              controller: 'CtrlSms'
           }
         }
       })
@@ -78,7 +78,7 @@ angular.module('app', ['ui.router', 'ui.bootstrap', 'ui.grid', 'ui.grid.selectio
         parent: 'site',
         url: '/records',
         data: {
-          roles: ['Admin']
+          roles: ['User', 'Admin']
         },
         views: {
           'content@': {
@@ -91,7 +91,7 @@ angular.module('app', ['ui.router', 'ui.bootstrap', 'ui.grid', 'ui.grid.selectio
         parent: 'site',
         url: '/counsellors',
         data: {
-          roles: ['Admin']
+          roles: ['User', 'Admin']
         },
         views: {
           'content@': {
@@ -102,14 +102,14 @@ angular.module('app', ['ui.router', 'ui.bootstrap', 'ui.grid', 'ui.grid.selectio
       })
       .state('extensions', {
         parent: 'site',
-        url: '/extensions',
+        url: '/exts',
         data: {
-          roles: ['Admin']
+          roles: ['USER', 'Admin']
         },
         views: {
           'content@': {
               templateUrl: 'view/extensions.html',
-              controller: 'CtrlExtensions'
+              controller: 'CtrlExts'
           }
         }
       })

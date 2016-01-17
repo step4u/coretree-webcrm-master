@@ -78,7 +78,7 @@ public class QuoteTelStatusService implements ApplicationListener<BrokerAvailabi
 		}
 	}
 	
-	// test 5초마다 갱신
+	// test
 	// @Scheduled(fixedDelay=5000)
 	public void sendCallStatus() {
 		for (QuoteTelStatus quote : this.quoteGenerator.generateQuotes()) {
@@ -92,7 +92,7 @@ public class QuoteTelStatusService implements ApplicationListener<BrokerAvailabi
 	}
 	
 	// subscribe extension status, refresh on every 2 seconds.
-	@Scheduled(fixedDelay=5000)
+	// @Scheduled(fixedDelay=5000)
 	public void sendExtensionStatus() {
 		UcMessage msg = new UcMessage();
 		msg.cmd = Const4pbx.UC_BUSY_EXT_REQ;

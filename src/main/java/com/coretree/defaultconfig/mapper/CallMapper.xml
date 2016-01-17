@@ -10,14 +10,15 @@
     </resultMap>
     
     <select id="count" resultType="java.lang.Integer">
-    	select count(idx) from calls
+    	select count(idx) from calls where regdate=current_timestamp
     </select>
     
     <select id="selectAll" parameterType="map" resultMap="callMap">
     	select first #{rowsperpage} skip ((#{curpage} - 1) * #{rowsperpage})
 			idx, custs_idx, direction, cust_tel, startdate, enddate, memo, regdate
-			from calls order
-			by regdate desc
+			from calls
+			regdate=current_timestamp
+			order by regdate desc
     </select>
     
     <select id="selectByIdx" resultMap="callMap">

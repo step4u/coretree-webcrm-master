@@ -1,0 +1,66 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.coretree.defaultconfig.mapper.ExtensionMapper">
+
+    <resultMap id="resMap" type="com.coretree.defaultconfig.mapper.Extension">
+        <id	property="extension"	column="extension" />
+        <result property="username"		column="username" />
+        <result property="status"		column="status" />
+    </resultMap>
+    
+    <select id="count" resultType="java.lang.Integer">
+    	select count(extension) from extensions;
+    </select>
+    
+    <select id="selectAll" parameterType="map" resultMap="resMap">
+    	select 
+    	<if test="rowsperpage > 0 and curpage > 0">
+    		first #{rowsperpage} skip ((#{curpage} - 1) * #{rowsperpage})
+    	</if>
+			a.extension extension, (select uname from users where username=b.username) uname, '대기중' status
+			from extensions a join users_exts b
+				on a.extension=b.extension 
+			 order by a.extension asc
+    </select>
+    
+    <select id="selectByIdx" resultMap="resMap">
+    	select a.extension, (select uname from users where username=b.username) as username, '대기중' as status
+			from extensions a join users_exts b
+				on a.extension=b.extension 
+			where a.extension=#{ext}
+    </select>
+    
+    <select id="selectByTxt" resultMap="resMap">
+    	select a.extension, (select uname from users where username=b.username) as username, '대기중' as status
+			from extensions a join users_exts b
+				on a.extension=b.extension 
+			where a.extension like #{txt} or b.username like #{txt}
+    </select>
+    
+    <insert id="add">
+    	insert into extensions (extension) values (#{extension})
+    </insert>
+
+    <select id="chkById" resultType="java.lang.Integer">
+    	select case when count(extension) > 0 then 0 else 1 end from extensions where extension=#{ext}
+    </select>
+    
+    <delete id="del">
+    	delete from extensions where extension=#{ext};
+    	delete from users_exts where extension=#{ext};
+    </delete>
+    
+    <delete id="delAll" parameterType="java.util.List">
+		delete from extensions where
+		<foreach collection="list" item="item" separator=",">
+			 extension=#{item.extension};
+		</foreach>
+		delete from users_exts where
+		<foreach collection="list" item="item" separator=",">
+			 extension=#{item.extension};
+		</foreach>
+    </delete>
+    
+    <update id="modi">
+		update users_exts set username=#{username} where extension=#{extension}
+    </update>
+</mapper>

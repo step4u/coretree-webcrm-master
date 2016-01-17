@@ -41,20 +41,19 @@ public interface CustomerMapper {
 			, @Param("group") String group
 			, @Param("username") String username);
 	
-	@Select("select a.idx, a.uname, a.firm_idx, a.posi, a.tel, a.cellular, a.extension, a.email"
-			+ " from customers a join firms b"
-			+ " on a.firm_idx=b.idx"
-			+ " where a.uname like #{searchtxt}"
-			+ " or a.tel like #{searchtxt}"
-			+ " or a.cellular like #{searchtxt}"
-			+ " or a.extension like #{searchtxt}"
-			+ " or b.fname like #{searchtxt}")
+	@Select("select idx, uname, firm, posi, tel, cellular, extension, email"
+			+ " from customers"
+			+ " where uname like #{searchtxt}"
+			+ " or tel like #{searchtxt}"
+			+ " or cellular like #{searchtxt}"
+			+ " or extension like #{searchtxt}"
+			+ " or firm like #{searchtxt}")
 	List<Customer> findByTxt(@Param("searchtxt") String searchtxt);
 	
 	@Insert("insert into customers "
-			+ "(depthorder, username, firm_idx, uname, posi, tel, cellular, extension, email)"
+			+ "(depthorder, username, firm, uname, posi, tel, cellular, extension, email)"
 			+ " values "
-			+ "(#{depthorder}, #{username, mode=IN, jdbcType=VARCHAR}, #{firm_idx, mode=IN, jdbcType=VARCHAR}, #{uname, mode=IN, jdbcType=VARCHAR}, #{posi, mode=IN, jdbcType=VARCHAR}, #{tel, mode=IN, jdbcType=VARCHAR}, #{cellular, mode=IN, jdbcType=VARCHAR}, #{extension, mode=IN, jdbcType=VARCHAR}, #{email, mode=IN, jdbcType=VARCHAR});")
+			+ "(#{depthorder}, #{username, mode=IN, jdbcType=VARCHAR}, #{firm, mode=IN, jdbcType=VARCHAR}, #{uname, mode=IN, jdbcType=VARCHAR}, #{posi, mode=IN, jdbcType=VARCHAR}, #{tel, mode=IN, jdbcType=VARCHAR}, #{cellular, mode=IN, jdbcType=VARCHAR}, #{extension, mode=IN, jdbcType=VARCHAR}, #{email, mode=IN, jdbcType=VARCHAR});")
 	void add(Customer cust);
 	
 	@Delete("delete from customers where idx=#{idx}")
@@ -68,7 +67,7 @@ public interface CustomerMapper {
 			+ "</script>")
 	void delAll(ArrayList<Customer> list);
 	
-	@Update("update customers set depthorder=#{depthorder}, username=#{username}, firm_idx=#{firm_idx}, uname=#{uname}, posi=#{posi}"
+	@Update("update customers set depthorder=#{depthorder}, username=#{username}, firm=#{firm}, uname=#{uname}, posi=#{posi}"
 			+ ", tel=#{tel}, cellular=#{cellular}, extension=#{extension}, email=#{email} where idx=#{idx}")
 	void modi(Customer obj);
 	
