@@ -37,6 +37,9 @@
 	var MyState = crmstate.idle; 
 	
 	$(function(){
+		/*** call status renew ***/
+		setInterval(SetCallState, 5000);
+		
 	    /*** script for address book ***/
 		$("#btnSave").click(function(){
 			SaveCust();
@@ -278,6 +281,35 @@
 		extstatecount.invite = 0;
 		extstatecount.ring = 0;
 		extstatecount.busy = 0;
+	}
+	
+	function SetCallState() {
+    	var scope0 = angular.element($("#ctrlcallstatus")).scope();
+    	//console.log("SetCallState scope1: " + JSON.stringify(scope0.gridOptions.data));
+
+		var scope1 = angular.element($("#ctrlextstatus")).scope();
+		scope1.$apply(function () {
+	    	var data = scope1.gridOptions.data.filter(function(element, index){
+	    		// console.log("SetCallState element.status: " + element.status);
+	    		return element.status == '통화중';
+	    	});
+	    	scope0.gridOptions.data[0].count = data.length;
+	    	// console.log("SetCallState data0length: " + data.length);
+	    	
+	    	data = scope1.gridOptions.data.filter(function(element, index){
+	    		// console.log("SetCallState element.status: " + element.status);
+	    		return element.status == '대기중';
+	    	});
+	    	scope0.gridOptions.data[1].count = data.length;
+	    	// console.log("SetCallState data1.length: " + data.length);
+	    	
+	    	data = scope1.gridOptions.data.filter(function(element, index){
+	    		// console.log("SetCallState element.status: " + element.status);
+	    		return element.status == '연결중';
+	    	});
+	    	scope0.gridOptions.data[2].count = data.length;
+	    	// console.log("SetCallState data2.length: " + data.length);
+	    });
 	}
 	
 	function TreatMySelf(item) {

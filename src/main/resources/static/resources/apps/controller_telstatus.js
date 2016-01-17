@@ -5,15 +5,42 @@
 		$scope.menuOptions = function (item) {
 			var itm = item.entity;
 		    return [
-	            ['내선번호  [ ' + itm.innertel + ' ]', function(){return;}]
+	            ['내선번호  [ ' + itm.extension + ' ]', function(){return;}]
 	            ,null
 		        ,['전화 하기', function () {
+					trade = {
+			                cmd: 74,
+			                extension: crmidentity.ext,
+			                caller: crmidentity.ext,
+			                callee: itm.extension,
+			                unconditional: '',
+			                status: -1
+			              };
+			     	stompClient.send("/app/traders", {}, JSON.stringify(trade));
 		        	console.log("전화하기: " + angular.toJson(item.entity));
 		        }]
 		        ,['당겨 받기', function () {
+					trade = {
+			                cmd: 80,
+			                extension: crmidentity.ext,
+			                caller: '',
+			                callee: itm.extension,
+			                unconditional: '',
+			                status: -1
+			              };
+			     	stompClient.send("/app/traders", {}, JSON.stringify(trade));
 		        	console.log("당겨받기: " + angular.toJson(item.entity));
 		        }]
 	            ,['돌려 주기', function () {
+	    	        trade = {
+	    	                cmd: 86,
+	    	                extension: crmidentity.ext,
+	    	                caller: currentCallInfo.caller,
+	    	                callee: currentCallInfo.callee,
+	    	                unconditional: itm.extension,
+	    	                status: -1
+	    	              };
+			     	stompClient.send("/app/traders", {}, JSON.stringify(trade));
 		        	console.log("돌려주기: " + angular.toJson(item.entity));
 		        }]
 	            ,['청취', function () {
@@ -52,7 +79,7 @@
 					}					
 				}
 				
-				return element.innertel === extitem.extension;
+				return element.extension === extitem.extension;
 			});
 			
 			if (item) {
@@ -74,9 +101,9 @@
 						break;
 				}
 			}
-			
+
 			if (crmidentity.ext == extitem.extension) {
-				// console.log("extstatecount->extitem.extension: " + extitem.extension + ", invite: " + extstatecount.invite + ", ring: " + extstatecount.ring);
+				console.log("extstatecount->extitem.extension: " + extitem.extension + ", invite: " + extstatecount.invite + ", ring: " + extstatecount.ring);
 				SetMyState(extitem, extstatecount);
 			}
 		};

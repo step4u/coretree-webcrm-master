@@ -1,8 +1,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.coretree.defaultconfig.mapper.ExtensionMapper">
 
-    <resultMap id="resMap" type="com.coretree.defaultconfig.mapper.Extension">
-        <id	property="extension"	column="extension" />
+    <resultMap id="extensionMap" type="com.coretree.defaultconfig.mapper.Extension">
+        <id		property="extension"	column="extension" />
         <result property="username"		column="username" />
         <result property="status"		column="status" />
     </resultMap>
@@ -11,7 +11,7 @@
     	select count(extension) from extensions;
     </select>
     
-    <select id="selectAll" parameterType="map" resultMap="resMap">
+    <select id="selectAll" parameterType="map" resultMap="extensionMap">
     	select 
     	<if test="rowsperpage > 0 and curpage > 0">
     		first #{rowsperpage} skip ((#{curpage} - 1) * #{rowsperpage})
@@ -22,14 +22,14 @@
 			 order by a.extension asc
     </select>
     
-    <select id="selectByIdx" resultMap="resMap">
+    <select id="selectByIdx" resultMap="extensionMap">
     	select a.extension, (select uname from users where username=b.username) as username, '대기중' as status
 			from extensions a join users_exts b
 				on a.extension=b.extension 
 			where a.extension=#{ext}
     </select>
     
-    <select id="selectByTxt" resultMap="resMap">
+    <select id="selectByTxt" resultMap="extensionMap">
     	select a.extension, (select uname from users where username=b.username) as username, '대기중' as status
 			from extensions a join users_exts b
 				on a.extension=b.extension 
