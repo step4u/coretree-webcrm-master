@@ -21,7 +21,7 @@
 		$("#addCustomer .modal-title").html("고객 등록");
 		ClearForm();
 		
-		$('#addCustomer').modal("show");
+		$('#addCustomer').modal({backdrop: false});
 	});
 	
 	$("#btnDel").click(function(){

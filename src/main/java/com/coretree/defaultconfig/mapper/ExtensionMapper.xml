@@ -16,7 +16,7 @@
     	<if test="rowsperpage > 0 and curpage > 0">
     		first #{rowsperpage} skip ((#{curpage} - 1) * #{rowsperpage})
     	</if>
-			a.extension extension, (select uname from users where username=b.username) uname, '대기중' status
+			a.extension, (select uname from users where username=b.username), '대기중' status
 			from extensions a join users_exts b
 				on a.extension=b.extension 
 			 order by a.extension asc

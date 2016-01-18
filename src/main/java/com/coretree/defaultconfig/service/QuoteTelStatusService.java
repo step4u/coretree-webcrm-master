@@ -219,6 +219,8 @@ public class QuoteTelStatusService implements ApplicationListener<BrokerAvailabi
 						call.setStatus(data.getStatus());
 						callMapper.add(call);
 						curcalls.put(call.getCust_tel(), call);
+						
+						payload.call_idx = call.getIdx();
 					} else {
 						if (call.getStatus() == Const4pbx.UC_CALL_STATE_INVITING
 								|| call.getStatus() == Const4pbx.UC_CALL_STATE_RINGING) {
@@ -267,6 +269,8 @@ public class QuoteTelStatusService implements ApplicationListener<BrokerAvailabi
 							payload.calleename = member.getUname();
 						}
 					}
+					
+					payload.call_idx = call.getIdx();
 					this.msgTemplate.convertAndSendToUser(member.getUsername(), "/queue/groupware", payload);
 				}
 				break;
@@ -277,8 +281,6 @@ public class QuoteTelStatusService implements ApplicationListener<BrokerAvailabi
 				if (data.getExtension().isEmpty()) return;
 				
 				Member mem = memberMapper.selectByExt(data.getExtension());
-/*				Member mem = new Member();
-				mem.setUsername("test1");*/
 				
 				if (mem.getUsername() == null) return;
 				if (mem.getUsername().isEmpty()) return;

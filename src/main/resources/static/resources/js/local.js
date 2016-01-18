@@ -53,6 +53,10 @@
 			var custbhv = bhv.none;
 			$("#addCustomer").modal("hide");
 		});
+		
+		$("#btnMemo").click(function(){
+			
+		});
 		/*** script for address book ***/
 
 		
@@ -385,7 +389,7 @@
 									});
 								}
 								
-								$("#addCustomer").modal("show");
+								$("#addCustomer").modal({backdrop: false});
 								
 								if ($("#ctrlcalls").length) {
 							    	var scope = angular.element($("#ctrlcalls")).scope();

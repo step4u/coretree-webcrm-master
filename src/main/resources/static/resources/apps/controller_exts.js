@@ -25,12 +25,12 @@
 				showGridFooter: false,
 				columnDefs: [
 			    		      { displayName: '내선번호', field: 'extension', headerCellClass:'white', cellClass: 'grid-cell', width: 120 },
-			    		      { displayName: '사용자(상담원)', field: 'username', headerCellClass: 'white', cellClass: 'grid-cell', width: 150 },
+			    		      { displayName: '사용자(상담원)', field: 'uname', headerCellClass: 'white', cellClass: 'grid-cell', width: 150 },
 			    		      { displayName: '기타', field: 'etc',
 			    		    	  headerCellClass: 'white',
 			    		    	  cellClass: 'grid-cell-align',
 			    		    	  width: 120,
-			    		    	  cellTemplate: '<button class="btn btn-primary btn-xs" ng-click="grid.appScope.viewRow(row)">보기</button>'
+			    		    	  cellTemplate: '<button class="btn btn-primary btn-xs" ng-click="grid.appScope.modiRow(row)">수정</button>'
 							  },
 							  { displayName: '', field: 'blank', headerCellClass: 'white', cellClass: 'grid-cell' }
 			    		    ],
@@ -98,6 +98,7 @@
 				
 				$http.get(url)
 				.success(function(data) {
+					// console.log(JSON.stringify(data));
 					$scope.gridOptions.data = data;
 				});
 			});
@@ -135,7 +136,7 @@
 			$("#idx").val(item.idx);
 			$("#depthorder").val('string:' + item.depthorder);
 			$("#uname").val(item.uname);
-			$("#company").val(item.company);
+			$("#firm").val(item.company);
 			$("#posi").val(item.posi);
 			$("#tel").val(item.tel);
 			$("#cellular").val(item.cellular);

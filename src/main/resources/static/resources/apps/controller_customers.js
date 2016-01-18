@@ -182,7 +182,7 @@
 			$("#extension").val(item.extension);
 			$("#email").val(item.email);
 			
-			$("#addCustomer").modal("show");
+			$("#addCustomer").modal({backdrop: false});
 		};
 		
 		$scope.getCurrentSelection = function() {
