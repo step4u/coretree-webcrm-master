@@ -13,7 +13,7 @@ angular.module('app', ['ui.router', 'ui.bootstrap', 'ui.grid', 'ui.grid.selectio
   .config(['$stateProvider', '$urlRouterProvider',
     function($stateProvider, $urlRouterProvider) {
 
-      $urlRouterProvider.otherwise('/addr/11');
+      $urlRouterProvider.otherwise('/calls');
 
       $stateProvider.state('site', {
         'abstract': true,

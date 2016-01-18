@@ -35,6 +35,11 @@ public class CustomerController {
 		return mapper.findAll(curpage, rowsperpage, group, username);
 	}
 	
+	@RequestMapping(path="/customer/get/idx/{idx}", method=RequestMethod.GET)
+	public Customer getByIdx(@PathVariable("idx") long idx, Principal principal) {
+		return mapper.findByIdx(idx);
+	}
+	
 	@RequestMapping(path="/customer/get/search/{group}/{searchtxt}", method=RequestMethod.GET)
 	public List<Customer> getByTxt(@PathVariable("searchtxt") String searchtxt, Principal principal) {
 		return mapper.findByTxt("%" + searchtxt + "%");

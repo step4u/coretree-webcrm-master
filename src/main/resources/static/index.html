@@ -8,8 +8,8 @@
 	<script type="text/javascript" src="/resources/jquery/jquery.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
 
-<!--     <link rel="stylesheet" href="/resources/jquery-ui-1.11.4.custom/jquery-ui.min.css" />
-	<script src="/resources/jquery-ui-1.11.4.custom/jquery-ui.min.js"></script> -->
+    <link rel="stylesheet" href="/resources/jquery-ui-1.11.4.custom/jquery-ui.min.css" />
+	<script src="/resources/jquery-ui-1.11.4.custom/jquery-ui.min.js"></script>
     
     <link rel="stylesheet" href="/resources/bootstrap/css/bootstrap.min.css" />
     <link rel="stylesheet" href="resources/bootstrap/css/bootstrap-theme.min.css" />
@@ -38,14 +38,14 @@
     <link rel="stylesheet" href="/resources/css/simple-sidebar.css" />
 
     <script src="script1.js"></script>
-    <script src="resources/js/contextMenu.js"></script>
+    <script src="/resources/js/contextMenu.js"></script>
     
-    <script src="resources/js/sockjs-0.3.4.js"></script>
-    <script src="resources/js/stomp.js"></script>
+    <script src="/resources/js/sockjs-0.3.4.js"></script>
+    <script src="/resources/js/stomp.js"></script>
 
     <link rel="stylesheet" href="resources/css/main.css" />    
-	<script src="resources/js/MessageValues.js"></script>
-	<script src="resources/js/local.js"></script>
+	<script src="/resources/js/MessageValues.js"></script>
+	<script src="/resources/js/local.js"></script>
 </head>
 <body>
     <div id="wrapper">
@@ -154,11 +154,11 @@
 			<div class="row">
 				<div class="col-lg-9">
 					<div class="row">
-	                    <div class="alert alert-dismissable alert-info col-lg-8">
+	                    <div class="alert alert-dismissable alert-info col-lg-8" id="mainalert">
 	                        <!-- <button data-dismiss="alert" class="close" type="button">&times;</button> -->
-	                        Welcome to the CRM for ThinkBox Cloud.
+	                        	대기중...
 	                        <br />
-	                        You can see a information of Telephony in this box.
+	                        <br />
 	                    </div>
 	                    <div class="col-lg-4">
 	                    	<input type="text" class="form-control" id="callnumber" placeholder="전화번호" style="margin-bottom: 14px;">
@@ -234,7 +234,7 @@
 				  	</div>
 				  	<div class="form-group col-sm-6">
 				    	<label for="company">회사</label>
-				    	<input type="text" class="form-control" id="company" placeholder="회사">
+				    	<input type="text" class="form-control" id="firm" placeholder="회사">
 				  	</div>
 			  	</div>
 			  	<div class="row">
@@ -266,7 +266,7 @@
       		</div>
       		<div class="modal-footer">
         		<button type="button" class="btn btn-primary" id="btnSave">저장</button>
-        		<button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+        		<button type="button" class="btn btn-default" id="btnClose">닫기</button>
       		</div>
     	</div>
   	</div>
@@ -325,30 +325,19 @@
 	    function connect2() {
 	        var socket = new SockJS('/webcrm');
 	        stompClient = Stomp.over(socket);
-	        stompClient.outgoing = 10000;
-	        stompClient.incoming = 10000;
+	        stompClient.outgoing = 20000;
+	        stompClient.incoming = 20000;
 	        
 	        stompClient.connect({}, function(frame) {
 	        	whoami = frame.headers['user-name'];
-	            //console.log('index.html Connected: ' + frame);
-
-	            /*
-	            stompClient.subscribe("/user/topic/callstatus", function(message) {
-	            	console.log('index.html /topic/callstatus: ' + JSON.parse(message.body));
-	            });
-	            */
 
 	            stompClient.subscribe("/topic/ext.status.*", function(message) {
 	            	var data = JSON.parse(message.body);
-	                console.log("/topic/ext.status: " + data.extension + ", " + data.status);
-	                console.log("/topic/ext.status: " + data.extension + ", " + message.body);
 	                update_ext_status(data);
 	            });
 	            
 	            stompClient.subscribe("/user/queue/groupware", function(message) {
-	            	// console.log('/user/queus/groupware: ' + JSON.parse(message.body));
-	            	console.log('/user/queus/groupware: ' + message.body);
-	            	
+	            	console.log("/user/queue/groupware: " + message.body);
 	            	TreatMySelf(JSON.parse(message.body));
 				});
 	            
@@ -405,6 +394,7 @@
 	
 	<script>
 	    function update_ext_status(data){
+/*
 	    	if (crmidentity.ext == data.extension) {
 	            if (data.cmd == UC_CALL_STATE_IDLE || data.cmd == UC_CALL_STATE_UNREG) {
 	                currentCallInfo.cmd = 0;
@@ -421,9 +411,9 @@
 	                currentCallInfo.unconditional = data.unconditional;
 	                currentCallInfo.status = data.status;
 	            }
-	            console.log("Transfer3: " + JSON.stringify(currentCallInfo));
+	            // console.log("Transfer3: " + JSON.stringify(currentCallInfo));
 	    	}
-            
+ */
 	    	var scope = angular.element($("#ctrlextstatus")).scope();
 		    scope.$apply(function () {
 		        scope.updateExtStatus(data);

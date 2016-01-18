@@ -14,7 +14,7 @@ import com.coretree.defaultconfig.mapper.Call;
 import com.coretree.defaultconfig.mapper.CallMapper;
 
 @RestController
-public class CallsController {
+public class CallController {
 	
 	@Autowired
 	CallMapper mapper;
@@ -36,12 +36,10 @@ public class CallsController {
 		return mapper.selectByTxt("%" + txt + "%");
 	}
 
-/*
-	@RequestMapping(path="/call/modi/", method=RequestMethod.POST)
-	public void modi(Call call, Principal principal) {
-		mapper.modi(call);
+	@RequestMapping(path="/call/add", method=RequestMethod.POST)
+	public void add(Call call, Principal principal) {
+		mapper.add(call);
 	}
-*/
 	
 	@RequestMapping(path="/call/del/{idx}", method=RequestMethod.GET)
 	public void remove(@PathVariable("idx") int idx, Principal principal) {

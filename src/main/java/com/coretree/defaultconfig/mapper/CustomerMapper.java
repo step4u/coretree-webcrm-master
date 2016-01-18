@@ -50,6 +50,19 @@ public interface CustomerMapper {
 			+ " or firm like #{searchtxt}")
 	List<Customer> findByTxt(@Param("searchtxt") String searchtxt);
 	
+	@Select("select idx, depthorder, username, uname, firm, posi, tel, cellular, extension, email"
+			+ " from customers"
+			+ " where idx = #{idx}")
+	Customer findByIdx(@Param("idx") long idx);
+	
+	@Select("select first 1 idx, uname, firm, posi, tel, cellular, extension, email"
+			+ " from customers"
+			+ " where 1=1"
+			+ " and tel like #{telnum}"
+			+ " or cellular like #{telnum}"
+			+ " or extension like #{telnum}")
+	Customer findByExt(@Param("telnum") String telnum);
+	
 	@Insert("insert into customers "
 			+ "(depthorder, username, firm, uname, posi, tel, cellular, extension, email)"
 			+ " values "

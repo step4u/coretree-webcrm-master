@@ -133,7 +133,7 @@
 	
 		$http.get('/extension/get/all/0/0')
 			.success(function(data) {
-				console.log(JSON.stringify(data));
+				// console.log(JSON.stringify(data));
 				$scope.gridOptions.data = data;
 			}
 		);

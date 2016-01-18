@@ -3,21 +3,26 @@
 
     <resultMap id="callMap" type="com.coretree.defaultconfig.mapper.Call">
         <id     property="idx"    		column="idx" />
-        <result property="customer_idx" column="customer_idx" />
-        <result property="title"       	column="title" />
-        <result property="contents"     column="contents" />
-        <result property="regdate"      column="regdate" />
+        <result property="custs_idx" 	column="custs_idx" />
+        <result property="cust_tel"     column="cust_tel" />
+        <result property="startdate"    column="startdate" />
+        <result property="enddate"    	column="enddate" />
+        <result property="memo"      	column="memo" />
+        <result property="status"      	column="status" />
     </resultMap>
     
     <select id="count" resultType="java.lang.Integer">
-    	select count(idx) from calls where regdate=current_timestamp
+    	select count(idx) from calls where cast(regdate as date)=cast(current_timestamp as date)
     </select>
     
     <select id="selectAll" parameterType="map" resultMap="callMap">
     	select first #{rowsperpage} skip ((#{curpage} - 1) * #{rowsperpage})
-			idx, custs_idx, direction, cust_tel, startdate, enddate, memo, regdate
-			from calls
-			regdate=current_timestamp
+			idx
+			, (select uname from customers where idx=a.custs_idx) as cust_name
+			, custs_idx, direction, cust_tel, startdate, enddate, memo, regdate
+			, iif(datediff(second from startdate to enddate) is null, 0, datediff(second from startdate to enddate)) diff
+			from calls a
+			where cast(regdate as date)=cast(current_timestamp as date)
 			order by regdate desc
     </select>
     
@@ -36,14 +41,27 @@
 			order by regdate desc
     </select>
     
-    <select id="del">
+    <insert id="add" useGeneratedKeys="true" keyProperty="idx" keyColumn="idx">
+    	insert into calls
+    		(cust_tel, startdate)
+    		values
+    		(#{cust_tel}, #{startdate})
+    </insert>
+    
+    <update id="modiStatus">
+    	update calls
+    		set status=#{status}, enddate=#{enddate}
+    	where idx=#{idx}
+    </update>
+    
+    <delete id="del">
 		delete from calls where idx=#{idx}
-    </select>
-
-    <select id="delAll" parameterType="java.util.List">
+    </delete>
+    
+    <delete id="delAll" parameterType="java.util.List">
 		delete from calls where
 		<foreach collection="list" item="item" separator=",">
 			 idx=#{item.idx}
 		</foreach>
-    </select>    
+    </delete>    
 </mapper>

@@ -1,7 +1,7 @@
 package com.coretree.defaultconfig.mapper;
 
 public class Customer {
-	private int idx;
+	private long idx;
 	private String depthorder;
 	private String username;
 	private String uname;
@@ -12,8 +12,8 @@ public class Customer {
 	private String extension;
 	private String email;
 	
-	public int getIdx() { return this.idx; }
-	public void setIdx(int idx) { this.idx = idx; }
+	public long getIdx() { return this.idx; }
+	public void setIdx(long idx) { this.idx = idx; }
 	
 	public String getDepthorder() { return this.depthorder; }
 	public void setDepthorder(String depthorder) { this.depthorder = depthorder; }
@@ -21,25 +21,25 @@ public class Customer {
 	public String getUsername() { return this.username; }
 	public void setUsername(String username) { this.username = username; }
 	
-	public String getUname() { return uname; }
+	public String getUname() { return this.uname; }
 	public void setUname(String uname) { this.uname = uname; }
 
-	public String getFirm() { return firm; }
+	public String getFirm() { return this.firm; }
 	public void setFirm(String firm) { this.firm = firm; }
 	
-	public String getTitle() { return posi; }
+	public String getPosi() { return this.posi; }
 	public void setPosi(String posi) { this.posi = posi; }
 	
-	public String getTel() { return tel; }
+	public String getTel() { return this.tel; }
 	public void setTel(String tel) { this.tel = tel; }
 	
-	public String getCellular() { return cellular; }
+	public String getCellular() { return this.cellular; }
 	public void setCellular(String cellular) { this.cellular = cellular; }
 	
-	public String getExtension() { return extension; }
+	public String getExtension() { return this.extension; }
 	public void setExtension(String extension) { this.extension = extension; }
 	
-	public String getEmail() { return email; }
+	public String getEmail() { return this.email; }
 	public void setEmail(String email) { this.email = email; }
 	
 	@Override

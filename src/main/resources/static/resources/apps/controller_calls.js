@@ -22,14 +22,18 @@
 			    paginationPageSize: 20,
 			    useExternalPagination: true,
 			    useExternalSorting: true,
-				enableSorting: true,
+				enableSorting: false,
 				showGridFooter: false,
 				columnDefs: [
-			    		      { displayName: '이름', field: 'name', headerCellClass: 'white', cellClass: 'grid-cell', width: 120 },
-			    		      { displayName: '전화번호', field: 'tel', headerCellClass:'white', cellClass: 'grid-cell', width: 120 },
-			    		      { displayName: '날짜', field: 'date', headerCellClass: 'white', cellClass: 'grid-cell', width: 120 },
-			    		      { displayName: '시각', field: 'time', headerCellClass: 'white', cellClass: 'grid-cell', width: 100 },
-			    		      { displayName: '통화시간', field: 'duration', headerCellClass: 'white', cellClass: 'grid-cell', width: 100 },
+			    		      { displayName: '이름', field: 'cust_name', headerCellClass: 'white', cellClass: 'grid-cell', width: 120 },
+			    		      { displayName: '전화번호', field: 'cust_tel', headerCellClass:'white', cellClass: 'grid-cell', width: 120 },
+			    		      { displayName: '날짜', field: 'startdate', headerCellClass: 'white', cellClass: 'grid-cell', width: 120
+			    		    	, type: 'date'
+			    		    	, cellFilter: 'date:\'yyyy-MM-dd\'' },
+			    		      { displayName: '시각', field: 'startdate', headerCellClass: 'white', cellClass: 'grid-cell', width: 100
+			    		    	, type: 'date'
+			    		    	, cellFilter: 'date:\'HH:mm:ss\'' },
+			    		      { displayName: '통화시간', field: 'diff', headerCellClass: 'white', cellClass: 'grid-cell', width: 100 },
 			    		      { displayName: '상담내용', field: 'memo', headerCellClass: 'white', cellClass: 'grid-cell' },
 			    		      { displayName: '기타', field: 'etc',
 			    		    	  headerCellClass: 'white',
@@ -51,16 +55,16 @@
 			    	
 			    	$scope.gridApi.core.on.sortChanged($scope, function(grid, sortColumns) {
 			            if (sortColumns.length == 0) {
-			            	paginationOptionsCall.sort = null;
+			            	paginationOptions.sort = null;
 			            } else {
-			            	paginationOptionsCall.sort = sortColumns[0].sort.direction;
+			            	paginationOptions.sort = sortColumns[0].sort.direction;
 			            }
 			            $scope.getPage();
 			    	});
 			    	
 			    	gridApi.pagination.on.paginationChanged($scope, function (newPage, pageSize) {
-			    		paginationOptionsCall.pageNumber = newPage;
-			    		paginationOptionsCall.pageSize = pageSize;
+			    		paginationOptions.pageNumber = newPage;
+			    		paginationOptions.pageSize = pageSize;
 			    		$scope.getPage();
 			    	});
 			    	
@@ -79,7 +83,7 @@
 		};
 		
 		$scope.getPage = function(txt) {
-			console.log("calls getPage");
+			// console.log("calls getPage");
 			
 			var url;
 			
@@ -93,13 +97,12 @@
 				url = '/call/get/all/' + paginationOptions.pageNumber + '/' + paginationOptions.pageSize;
 			}
 			
+			console.log("calls getPage url: " + url);
+			
 			var counturl = '/call/get/count';
 			$http.get(counturl)
 			.success(function(data) {
-				
-				console.log("calls count:" + data);
-				console.log("calls paginationOptions.pageNumber:" + paginationOptions.pageNumber + ", paginationOptions.pageSize: " + paginationOptions.pageSize);
-				
+				console.log("calls getPage data: " + data);
 				if ($scope.gridOptions.totalItems != data) {
 					paginationOptions.pageNumber = 1;
 				}
@@ -108,7 +111,7 @@
 				
 				$http.get(url)
 				.success(function(data) {
-					console.log("calls list:" + data);
+					console.log("calls list:" + JSON.stringify(data));
 					$scope.gridOptions.data = data;
 				});
 			});
@@ -146,7 +149,7 @@
 			$("#idx").val(item.idx);
 			$("#depthorder").val('string:' + item.depthorder);
 			$("#uname").val(item.uname);
-			$("#company").val(item.company);
+			$("#firm").val(item.company);
 			$("#posi").val(item.posi);
 			$("#tel").val(item.tel);
 			$("#cellular").val(item.cellular);

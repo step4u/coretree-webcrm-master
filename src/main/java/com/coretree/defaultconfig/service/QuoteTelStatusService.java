@@ -3,7 +3,13 @@ package com.coretree.defaultconfig.service;
 import java.net.UnknownHostException;
 import java.nio.ByteOrder;
 import java.security.Principal;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Dictionary;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Hashtable;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -19,12 +25,15 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.messaging.simp.broker.BrokerAvailabilityEvent;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.coretree.defaultconfig.domain.QuoteTelStatus;
 import com.coretree.defaultconfig.domain.QuoteTelStatus.TelStatus;
+import com.coretree.defaultconfig.mapper.Call;
+import com.coretree.defaultconfig.mapper.CallMapper;
+import com.coretree.defaultconfig.mapper.Customer;
+import com.coretree.defaultconfig.mapper.CustomerMapper;
 import com.coretree.defaultconfig.mapper.Member;
 import com.coretree.defaultconfig.mapper.MemberMapper;
 import com.coretree.event.HaveGotUcMessageEventArgs;
@@ -46,6 +55,12 @@ public class QuoteTelStatusService implements ApplicationListener<BrokerAvailabi
 
 	@Autowired
 	private MemberMapper memberMapper;
+	@Autowired
+	private CustomerMapper custMapper;
+	@Autowired
+	private CallMapper callMapper;
+	
+	private Dictionary<String, Call> curcalls = new Hashtable();
 
 	@Autowired
 	public QuoteTelStatusService(MessageSendingOperations<String> messagingTemplate, SimpMessagingTemplate msgTemplate) {
@@ -92,7 +107,7 @@ public class QuoteTelStatusService implements ApplicationListener<BrokerAvailabi
 	}
 	
 	// subscribe extension status, refresh on every 2 seconds.
-	@Scheduled(fixedDelay=5000)
+	// @Scheduled(fixedDelay=5000)
 	public void sendExtensionStatus() {
 		UcMessage msg = new UcMessage();
 		msg.cmd = Const4pbx.UC_BUSY_EXT_REQ;
@@ -172,8 +187,9 @@ public class QuoteTelStatusService implements ApplicationListener<BrokerAvailabi
 		// when a message have been arrived from the groupware socket 31001, a event raise.
 		// DB
 		GroupWareData data = e.getItem();
-		System.err.println(String.format("Has received %s", data.toString()));
-		System.out.println("");
+		System.out.println(">>>>> : " + data.toString());
+		// System.err.println(String.format("Has received %s", data.toString()));
+		// System.out.println("");
 		//
 
 		if (!this.brokerAvailable.get()) return;
@@ -182,7 +198,7 @@ public class QuoteTelStatusService implements ApplicationListener<BrokerAvailabi
 		
 		switch (data.getCmd()) {
 			case Const4pbx.UC_REGISTER_RES:
-			case Const4pbx.UC_UNREGISTER_RES:	
+			case Const4pbx.UC_UNREGISTER_RES:
 			case Const4pbx.UC_BUSY_EXT_RES:
 				break;
 			case Const4pbx.UC_REPORT_EXT_STATE:
@@ -193,7 +209,66 @@ public class QuoteTelStatusService implements ApplicationListener<BrokerAvailabi
 				payload.callee = data.getCallee();
 				payload.unconditional = data.getUnconditional();
 				payload.status = data.getStatus();
-				this.messagingTemplate.convertAndSend("/topic/ext.status." + data.getExtension(), payload);
+				if (data.getDirect() == Const4pbx.UC_DIRECT_NONE) {
+					this.messagingTemplate.convertAndSend("/topic/ext.status." + data.getExtension(), payload);					
+				} else if (data.getDirect() == Const4pbx.UC_DIRECT_INCOMING) {
+					Call call = curcalls.get(data.getCaller());
+					if (call == null) {
+						call = new Call();
+						call.setCust_tel(data.getCaller());
+						call.setStatus(data.getStatus());
+						callMapper.add(call);
+						curcalls.put(call.getCust_tel(), call);
+					} else {
+						if (call.getStatus() == Const4pbx.UC_CALL_STATE_INVITING
+								|| call.getStatus() == Const4pbx.UC_CALL_STATE_RINGING) {
+
+							if (data.getStatus() == Const4pbx.UC_CALL_STATE_IDLE) {
+								call.addCount();
+								if (call.getCount() > 3) {
+									// call.setStatus(data.getStatus());
+									call.resetCount();
+									call.setEnddate(new Timestamp(System.currentTimeMillis()));
+									callMapper.modiStatus(call);
+									curcalls.remove(data.getCaller());
+								}
+							} else {
+								call.setStatus(data.getStatus());
+								callMapper.modiStatus(call);
+							}
+						} else if (call.getStatus() == Const4pbx.UC_CALL_STATE_BUSY) {
+							if (data.getStatus() == Const4pbx.UC_CALL_STATE_IDLE) {
+								call.addCount();
+								if (call.getCount() > 1) {
+									call.setStatus(data.getStatus());
+									call.resetCount();
+									call.setEnddate(new Timestamp(System.currentTimeMillis()));
+									callMapper.modiStatus(call);
+									curcalls.remove(data.getCaller());
+								}
+							} else {
+								call.setStatus(data.getStatus());
+								callMapper.modiStatus(call);
+							}
+						}
+					}
+					
+					System.err.println("curcalls.size(): " + curcalls.size());
+					
+					Member member = memberMapper.selectByExt(data.getExtension());
+					if (data.getType() == Const4pbx.UC_DIRECT_INCOMING) {
+						Customer cust = custMapper.findByExt(data.getCaller());
+						
+						if (cust != null) {
+							payload.callername = cust.getUname();
+							payload.cust_idx = cust.getIdx();
+						}
+						if (member != null) {
+							payload.calleename = member.getUname();
+						}
+					}
+					this.msgTemplate.convertAndSendToUser(member.getUsername(), "/queue/groupware", payload);
+				}
 				break;
 			default:
 				System.err.println(String.format("Extension : %s", data.getExtension()));
@@ -201,9 +276,9 @@ public class QuoteTelStatusService implements ApplicationListener<BrokerAvailabi
 				if (data.getExtension() == null) return;
 				if (data.getExtension().isEmpty()) return;
 				
-				// Member mem = memberMapper.findIdByExt(data.getExtension());
-				Member mem = new Member();
-				mem.setUsername("test1");
+				Member mem = memberMapper.selectByExt(data.getExtension());
+/*				Member mem = new Member();
+				mem.setUsername("test1");*/
 				
 				if (mem.getUsername() == null) return;
 				if (mem.getUsername().isEmpty()) return;

@@ -11,6 +11,7 @@ public interface MemberMapper {
 	int count();
 	List<Member> selectAll(@Param("curpage") int curpage, @Param("rowsperpage") int rowsperpage);
 	Member selectByIdx(@Param("username") String username);
+	Member selectByExt(@Param("ext") String ext);
 	List<Member> selectByTxt(@Param("txt") String txt);
 	int chkById(String username);
 	void add(Member member);

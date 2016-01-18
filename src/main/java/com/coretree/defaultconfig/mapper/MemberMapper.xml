@@ -30,6 +30,13 @@
 			where a.username=#{username}
     </select>
     
+    <select id="selectByExt" resultMap="resMap">
+    	select first 1 a.username, a.uname, a.posi, a.tel, a.cellular, b.extension, a.role, a.status, a.enabled
+			from users a join users_exts b
+				on a.username=b.username
+			where b.extension=#{ext}
+    </select>
+    
     <select id="selectByTxt" resultMap="resMap">
     	select username, uname, posi, tel, extension, role, status, enabled
 			from users

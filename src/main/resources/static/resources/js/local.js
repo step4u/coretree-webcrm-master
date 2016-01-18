@@ -4,7 +4,7 @@
 		caller: '',
 		callee: '',
 		unconditional: '',
-		status: -1
+		status: UC_CALL_STATE_IDLE
 	}
 
 	var extstatecount = {
@@ -40,9 +40,18 @@
 		/*** call status renew ***/
 		setInterval(SetCallState, 5000);
 		
+		$("#addCustomer").draggable({
+		      handle: ".modal-header"
+		  });
+		
 	    /*** script for address book ***/
 		$("#btnSave").click(function(){
 			SaveCust();
+		});
+		
+		$("#btnClose").click(function(){
+			var custbhv = bhv.none;
+			$("#addCustomer").modal("hide");
 		});
 		/*** script for address book ***/
 
@@ -147,7 +156,7 @@
 				depthorder: $("#depthorder").val() == "" ? $("#depthorder").val() : $("#depthorder").val().replace("string:", ""),
 				username: crmidentity.username,
 				uname: $("#uname").val(),
-				company: $("#company").val(),
+				firm: $("#firm").val(),
 				posi: $("#posi").val(),
 				tel: $("#tel").val(),
 				cellular: $("#cellular").val(),
@@ -206,7 +215,7 @@
 		$("#idx").val('-1');
 		group.length == 2 ? $("#depthorder").val('string:' + group) : $("#depthorder option:eq(0)").prop("selected", true);
 		$("#uname").val('');
-		$("#company").val('');
+		$("#firm").val('');
 		$("#posi").val('');
 		$("#tel").val('');
 		$("#cellular").val('');
@@ -315,20 +324,97 @@
 	function TreatMySelf(item) {
 		// Button Call 요청에 대한 결과
 		switch (item.cmd) {
-		case UC_MAKE_CALL_RES:
-			if (item.status == UC_STATUS_SUCCESS) {
-				$("#btnCall").val("전화끊기");
-			} else {
-				
-			}
-			break;
-		case UC_DROP_CALL_RES:
-			break;
-		case UC_PICKUP_CALL_REQ:
-			break;
-		case UC_HOLD_CALL_RES:
-			break;
-		case UC_ACTIVE_CALL_RES:
-			break;
+			case UC_MAKE_CALL_RES:
+				if (item.status == UC_STATUS_SUCCESS) {
+					$("#btnCall").val("전화끊기");
+				} else {
+					
+				}
+				break;
+			case UC_DROP_CALL_RES:
+				break;
+			case UC_PICKUP_CALL_REQ:
+				break;
+			case UC_HOLD_CALL_RES:
+				break;
+			case UC_ACTIVE_CALL_RES:
+				break;
+			case UC_REPORT_EXT_STATE:
+				if (currentCallInfo.cmd == 0) {
+	                currentCallInfo.cmd = item.cmd;
+	                currentCallInfo.ext = item.extension;
+	                currentCallInfo.caller = item.caller;
+	                currentCallInfo.callee = item.callee;
+	                currentCallInfo.unconditional = item.unconditional;
+	                currentCallInfo.status = item.status;
+				} else {
+					//console.log("UC_REPORT_EXT_STATE: " + item.status);
+					switch (currentCallInfo.status) {
+						case UC_CALL_STATE_IDLE:
+						case UC_CALL_STATE_INVITING:
+							if (item.status == UC_CALL_STATE_RINGING) {
+								//console.log("/customer/get/idx/ ringing0: " + item.cust_idx + "//" + item.status);
+								//console.log("/customer/get/idx/ ringing1: " + item.cust_idx);
+								
+								var msg = "전화 왔습니다.<br/>" + item.callername + " (" + item.caller + ")";
+								$("#mainalert").html(msg);
+								
+								if (item.callername == '') {
+									custbhv = bhv.add;
+									$("#addCustomer .modal-title").html("고객 등록");
+									$("#tel").val(item.caller);
+								} else {
+									// console.log("/customer/get/idx/0: " + item.cust_idx);
+									$.get("/customer/get/idx/" + item.cust_idx, function(response){
+										console.log("/customer/get/idx/: " + JSON.stringify(response));
+										
+										custbhv = bhv.modi;
+										$("#addCustomer .modal-title").html("고객 정보");
+										
+										var item = response;
+
+										$("#addCustomer #idx").val(item.idx);
+										$("#addCustomer #depthorder").val('string:' + item.depthorder);
+										$("#addCustomer #uname").val(item.uname);
+										$("#addCustomer #firm").val(item.firm);
+										$("#addCustomer #posi").val(item.posi);
+										$("#addCustomer #tel").val(item.tel);
+										$("#addCustomer #cellular").val(item.cellular);
+										$("#addCustomer #extension").val(item.extension);
+										$("#addCustomer #email").val(item.email);
+									});
+								}
+								
+								$("#addCustomer").modal("show");
+								
+								if ($("#ctrlcalls").length) {
+							    	var scope = angular.element($("#ctrlcalls")).scope();
+								    scope.$apply(function () {
+								        scope.getPage('');
+								    });
+								}
+								
+								currentCallInfo.status = UC_CALL_STATE_RINGING;
+							}
+							break;
+						case UC_CALL_STATE_RINGING:
+						case UC_CALL_STATE_BUSY:
+							if (item.status == UC_CALL_STATE_BUSY) {
+								var msg = "통화중...<br/>" + item.callername + " (" + item.caller + ")";
+								$("#mainalert").html(msg);
+								
+								currentCallInfo.status = UC_CALL_STATE_BUSY;
+							}
+							
+							if (item.status == UC_CALL_STATE_IDLE) {
+								var msg = "대기중...<br/><br/>";
+								$("#mainalert").html(msg);
+								
+								currentCallInfo.status = UC_CALL_STATE_IDLE;
+							}
+							break;
+					}
+				}
+				break;
 		}
 	}
