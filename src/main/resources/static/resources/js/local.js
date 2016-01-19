@@ -1,8 +1,14 @@
+	var crmidentity;
+
 	var currentCallInfo = {
 		cmd: 0,
-		ext: '',
+		call_idx: 0,
+		extension: '',
+		cust_idx: 0,
 		caller: '',
+		callername: '',
 		callee: '',
+		calleename: '',
 		unconditional: '',
 		status: UC_CALL_STATE_IDLE
 	}
@@ -36,13 +42,42 @@
 	// crm 상태 구분할 때 사용
 	var MyState = crmstate.idle; 
 	
-	$(function(){
+	$(document).ready(function(){
+		$('[data-toggle="tooltip"]').tooltip();
+		
+		$('a').click(function(event){
+			var str = this.toString();
+			str = str.split('/#/');
+			// alert(str.length);
+			if (str.length < 2)
+				event.preventDefault();
+		});
+		
+	    $("#menu-toggle").click(function(e) {
+	        e.preventDefault();
+	        $("#wrapper").toggleClass("toggled");
+	    });
+	    
+	    var tmpidentity = $.cookie("crm.identity");
+	    crmidentity = JSON.parse(tmpidentity);
+	    
+	    
+	    
+	    
+	    
+		/*** set systeminfo ***/
+		$("#systeminfo").html("시스템 정상 (" + crmidentity.ext + ")");
+		
 		/*** call status renew ***/
 		setInterval(SetCallState, 5000);
 		
 		$("#addCustomer").draggable({
 		      handle: ".modal-header"
-		  });
+		});
+		
+		$("#Memo").draggable({
+		      handle: ".modal-header"
+		});
 		
 	    /*** script for address book ***/
 		$("#btnSave").click(function(){
@@ -55,7 +90,42 @@
 		});
 		
 		$("#btnMemo").click(function(){
+			var memotitle;
+			if (currentCallInfo.callername == '') {
+				memotitle = "메모 (" + currentCallInfo.caller + ")";
+			} else {
+				memotitle = "메모 (" + currentCallInfo.callername + ")";
+			}
 			
+			$("#call_idx").val(currentCallInfo.call_idx);
+			
+			$("#Memo .modal-title").html(memotitle);
+			$("#Memo").modal({backdrop: false});
+		});
+		
+		$("#btnMemoSave").click(function(){
+			var callcontent = {
+				idx: $("#call_idx").val(),
+				memo: $("#memotxt").val()
+			}
+			$.post("/call/memo", callcontent, function(response){
+				$("#memotxt").val("");
+				$("#call_idx").val("");
+				$("#Memo").modal("hide");
+				
+				if ($("#ctrlcalls").length) {
+			    	var scope = angular.element($("#ctrlcalls")).scope();
+				    scope.$apply(function () {
+				        scope.getPage();
+				    });
+				}
+			});
+		});
+		
+		$("#btnMemoClose").click(function(){
+			$("#memotxt").val("");
+			$("#call_idx").val("");
+			$("#Memo").modal("hide");
 		});
 		/*** script for address book ***/
 
@@ -345,12 +415,16 @@
 				break;
 			case UC_REPORT_EXT_STATE:
 				if (currentCallInfo.cmd == 0) {
-	                currentCallInfo.cmd = item.cmd;
-	                currentCallInfo.ext = item.extension;
+/*	                currentCallInfo.cmd = item.cmd;
+	                currentCallInfo.extension = item.extension;
+	                currentCallInfo.call_idx = item.call_idx;
 	                currentCallInfo.caller = item.caller;
+	                currentCallInfo.callername = item.callername;
 	                currentCallInfo.callee = item.callee;
+	                currentCallInfo.calleename = item.calleename;
 	                currentCallInfo.unconditional = item.unconditional;
-	                currentCallInfo.status = item.status;
+	                currentCallInfo.status = item.status;*/
+					currentCallInfo = item;
 				} else {
 					//console.log("UC_REPORT_EXT_STATE: " + item.status);
 					switch (currentCallInfo.status) {
@@ -370,22 +444,23 @@
 								} else {
 									// console.log("/customer/get/idx/0: " + item.cust_idx);
 									$.get("/customer/get/idx/" + item.cust_idx, function(response){
-										console.log("/customer/get/idx/: " + JSON.stringify(response));
+										// console.log("/customer/get/idx/: " + JSON.stringify(response));
+										// console.log("/customer/get/idx/: " + JSON.stringify(currentCallInfo));
 										
 										custbhv = bhv.modi;
 										$("#addCustomer .modal-title").html("고객 정보");
 										
-										var item = response;
+										var itm = response;
 
-										$("#addCustomer #idx").val(item.idx);
-										$("#addCustomer #depthorder").val('string:' + item.depthorder);
-										$("#addCustomer #uname").val(item.uname);
-										$("#addCustomer #firm").val(item.firm);
-										$("#addCustomer #posi").val(item.posi);
-										$("#addCustomer #tel").val(item.tel);
-										$("#addCustomer #cellular").val(item.cellular);
-										$("#addCustomer #extension").val(item.extension);
-										$("#addCustomer #email").val(item.email);
+										$("#addCustomer #idx").val(itm.idx);
+										$("#addCustomer #depthorder").val('string:' + itm.depthorder);
+										$("#addCustomer #uname").val(itm.uname);
+										$("#addCustomer #firm").val(itm.firm);
+										$("#addCustomer #posi").val(itm.posi);
+										$("#addCustomer #tel").val(itm.tel);
+										$("#addCustomer #cellular").val(itm.cellular);
+										$("#addCustomer #extension").val(itm.extension);
+										$("#addCustomer #email").val(itm.email);
 									});
 								}
 								
@@ -394,7 +469,7 @@
 								if ($("#ctrlcalls").length) {
 							    	var scope = angular.element($("#ctrlcalls")).scope();
 								    scope.$apply(function () {
-								        scope.getPage('');
+								        scope.getPage();
 								    });
 								}
 								
@@ -415,6 +490,8 @@
 								$("#mainalert").html(msg);
 								
 								currentCallInfo.status = UC_CALL_STATE_IDLE;
+								currentCallInfo.cmd = 0;
+								currentCallInfo.call_idx = 0;
 							}
 							break;
 					}

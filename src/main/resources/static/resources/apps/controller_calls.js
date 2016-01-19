@@ -1,8 +1,7 @@
 	/* 통화내역 */
 	angular.module('app')
 	.controller('CtrlCall', ['$scope', '$http', '$log', '$timeout', 'uiGridConstants', function ($scope, $http, $log, $timeout, uiGridConstants) {
-		console.log("calls entered");
-		
+
 		var paginationOptions = {
 			    pageNumber: 1,
 			    pageSize: 20,
@@ -28,18 +27,17 @@
 			    		      { displayName: '이름', field: 'cust_name', headerCellClass: 'white', cellClass: 'grid-cell', width: 120 },
 			    		      { displayName: '전화번호', field: 'cust_tel', headerCellClass:'white', cellClass: 'grid-cell', width: 120 },
 			    		      { displayName: '날짜', field: 'startdate', headerCellClass: 'white', cellClass: 'grid-cell', width: 120
-			    		    	, type: 'date'
-			    		    	, cellFilter: 'date:\'yyyy-MM-dd\'' },
+			    		    	, type: 'date', cellFilter: 'date:\'yyyy-MM-dd\'' },
 			    		      { displayName: '시각', field: 'startdate', headerCellClass: 'white', cellClass: 'grid-cell', width: 100
-			    		    	, type: 'date'
-			    		    	, cellFilter: 'date:\'HH:mm:ss\'' },
+			    		    	, type: 'date', cellFilter: 'date:\'HH:mm:ss\'' },
 			    		      { displayName: '통화시간', field: 'diff', headerCellClass: 'white', cellClass: 'grid-cell', width: 100 },
 			    		      { displayName: '상담내용', field: 'memo', headerCellClass: 'white', cellClass: 'grid-cell' },
+			    		      { displayName: '상태', field: 'statustxt', headerCellClass: 'white', cellClass: 'grid-cell', width: 100 },
 			    		      { displayName: '기타', field: 'etc',
 			    		    	  headerCellClass: 'white',
 			    		    	  cellClass: 'grid-cell-align',
-			    		    	  width: 120,
-			    		    	  cellTemplate: '<button class="btn btn-primary btn-xs" ng-click="grid.appScope.viewRow(row)">보기</button>'
+			    		    	  width: 180,
+			    		    	  cellTemplate: '<button class="btn btn-primary btn-xs" ng-click="grid.appScope.callRow(row)">전화하기</button> <button class="btn btn-primary btn-xs" ng-click="grid.appScope.viewRow(row)">메모보기</button> <button class="btn btn-warning btn-xs" ng-click="grid.appScope.deleteRow(row)">삭제</button>'
 							  }
 			    		    ],
 			    groupHeaders: false,
@@ -82,51 +80,109 @@
 			    }
 		};
 		
-		$scope.getPage = function(txt) {
-			// console.log("calls getPage");
-			
-			var url;
-			
-			if (txt == ''){
-				url = '/call/get/all/' + paginationOptions.pageNumber + '/' + paginationOptions.pageSize;
-			} else {
-				url = '/call/get/search/' + txt;
+		$scope.getPage = function(val) {
+
+			if (typeof(val) == 'undefined') {
+		    	val = {
+		    		idx: 0,
+		    		sdate: '',
+		    		edate: '',
+	    			txt: '',
+	    			curpage: paginationOptions.pageNumber,
+	    			rowsperpage: paginationOptions.pageSize
+	    		}
 			}
-			
-			if (typeof(txt) == 'undefined'){
-				url = '/call/get/all/' + paginationOptions.pageNumber + '/' + paginationOptions.pageSize;
-			}
-			
-			console.log("calls getPage url: " + url);
-			
+
+			/*
 			var counturl = '/call/get/count';
 			$http.get(counturl)
 			.success(function(data) {
-				console.log("calls getPage data: " + data);
+				//console.log("calls getPage data: " + data);
 				if ($scope.gridOptions.totalItems != data) {
 					paginationOptions.pageNumber = 1;
 				}
 				
 				$scope.gridOptions.totalItems = data;
 				
-				$http.get(url)
+				val.curpage = paginationOptions.pageNumber;
+				val.rowsperpage = paginationOptions.pageSize;
+				
+				console.log("angular.toJson(val): " + angular.toJson(val));
+				
+				$http.get('/call/get/all', val)
 				.success(function(data) {
 					console.log("calls list:" + JSON.stringify(data));
 					$scope.gridOptions.data = data;
 				});
+				
+				$.post('/call/get/all', val, function(data){
+					console.log("calls list:" + JSON.stringify(data));
+					$scope.gridOptions.data = data;
+				});
 			});
+			*/
+			
+			$.post('/call/get/count', val, function(data){
+				
+				if ($scope.gridOptions.totalItems != data) {
+					paginationOptions.pageNumber = 1;
+				}
+				
+				$scope.gridOptions.totalItems = data;
+				
+				val.curpage = paginationOptions.pageNumber;
+				val.rowsperpage = paginationOptions.pageSize;
+				
+				$.post('/call/get/all', val, function(datum){
+					console.log("calls list:" + JSON.stringify(datum));
+					$scope.gridOptions.data = datum;
+				});
+			});
+			
+/*			
+			var jsonVal = angular.toJson(val);
+			$http.post('/call/get/count', val)
+				.success(function(data, status){
+					if ($scope.gridOptions.totalItems != data) {
+						paginationOptions.pageNumber = 1;
+					}
+					
+					$scope.gridOptions.totalItems = data;
+					
+					val.curpage = paginationOptions.pageNumber;
+					val.rowsperpage = paginationOptions.pageSize;
+					
+					$http.post('/call/get/all', val)
+						.success(function(data, status){
+							$scope.gridOptions.data = data;
+						});
+				});
+			*/
 		}
 		
 		$scope.getPage();
 		
+		$scope.callRow = function(row) {
+			var item = row.entity;
+
+			trade = {
+	                cmd: 74,
+	                extension: crmidentity.ext,
+	                caller: crmidentity.ext,
+	                callee: item.cust_tel,
+	                unconditional: '',
+	                status: -1
+	              };
+			
+	     	stompClient.send("/app/traders", {}, JSON.stringify(trade));
+		};
+		
 		$scope.viewRow = function(row) {
 			var item = row.entity;
 			
-			$http.get('/call/get/' + item.idx)
-			.success(function(data) {
-				$scope.getPage();
-				custbhv = bhv.none;
-			});
+			$("#call_idx").val(item.idx);
+			$("#memotxt").val(item.memo);
+			$("#Memo").modal({backdrop: false});
 		};
 		
 		$scope.deleteRow = function(row) {
@@ -136,7 +192,6 @@
 			$http.get('/call/del/' + item.idx)
 			.success(function(data) {
 				$scope.getPage();
-				custbhv = bhv.none;
 			});
 		};
 		

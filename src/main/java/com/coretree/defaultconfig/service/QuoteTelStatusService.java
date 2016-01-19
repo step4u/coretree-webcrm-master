@@ -25,6 +25,7 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.messaging.simp.broker.BrokerAvailabilityEvent;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -211,7 +212,8 @@ public class QuoteTelStatusService implements ApplicationListener<BrokerAvailabi
 				payload.status = data.getStatus();
 				if (data.getDirect() == Const4pbx.UC_DIRECT_NONE) {
 					this.messagingTemplate.convertAndSend("/topic/ext.status." + data.getExtension(), payload);					
-				} else if (data.getDirect() == Const4pbx.UC_DIRECT_INCOMING) {
+				//} else if (data.getDirect() == Const4pbx.UC_DIRECT_INCOMING) {
+				} else {
 					Call call = curcalls.get(data.getCaller());
 					if (call == null) {
 						call = new Call();

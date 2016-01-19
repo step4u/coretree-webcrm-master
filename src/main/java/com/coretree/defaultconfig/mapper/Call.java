@@ -12,6 +12,7 @@ public class Call {
 	private int diff;
 	private String memo;
 	private byte status;
+	private String statustxt;
 	private int count = 0;
 	
 	public long getIdx() { return this.idx; }
@@ -35,11 +36,18 @@ public class Call {
 	public int getDiff() { return this.diff; }
 	public void setDiff(int diff) { this.diff = diff; }
 	
-	public String getMemo() { return this.memo; }
-	public void setMemo(String memo) { this.memo = memo; }
+	public String getMemo() {
+		return this.memo;
+	}
+	public void setMemo(String memo) {
+		this.memo = memo;
+	}
 	
-	public long getStatus() { return this.status; }
+	public byte getStatus() { return this.status; }
 	public void setStatus(byte status) { this.status = status; }
+	
+	public String getStatustxt() { return this.statustxt; }
+	public void setStatustxt(String statustxt) { this.statustxt = statustxt; }
 	
 	public long getCount() { return this.count; }
 	public void setCount(int count) { this.count = count; }

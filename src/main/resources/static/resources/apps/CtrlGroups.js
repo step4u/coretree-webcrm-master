@@ -12,10 +12,10 @@
 			
 			if (typeof(item) == 'undefined') {
 				$scope.modeloption = "";
-				console.log("response[0] : " + response[0]);
+				// console.log("response[0] : " + response[0]);
 			} else {
 				$scope.modeloption = item;
-				console.log("item : " + item.depthorder);
+				// console.log("item : " + item.depthorder);
 			}
 		});
 	}]);

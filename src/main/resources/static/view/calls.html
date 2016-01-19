@@ -3,14 +3,14 @@
 					</div>
 					<div class="form-group form-inline" style='margin-top: 10px;'>
 						<div class='input-group date' id='datetimepicker1'>
-						    <input type='text' class="form-control" id="sdate" />
+						    <input type='text' class="form-control" id="txtsdate" />
 						    <span class="input-group-addon">
 						        <span class="glyphicon glyphicon-calendar"></span>
 						    </span>
 						</div>
 						 -
 						<div class='input-group date' id='datetimepicker2'>
-						    <input type='text' class="form-control" id="edate" />
+						    <input type='text' class="form-control" id="txtedate" />
 						    <span class="input-group-addon">
 						        <span class="glyphicon glyphicon-calendar"></span>
 						    </span>
@@ -90,7 +90,16 @@
 	$("#btnSearch").click(function(){
     	var scope = angular.element($("#ctrlcalls")).scope();
 	    scope.$apply(function () {
-	        scope.getPage($("#txtsearch").val().trim());
+	    	var searchval = {
+		    		idx: 0,
+		    		sdate: $("#txtsdate").val(),
+		    		edate: $("#txtedate").val(),
+	    			txt: $("#txtsearch").val().trim(),
+	    			curpage: 1,
+	    			rowsperpage: 20
+	    		}
+	    	
+	        scope.getPage(searchval);
 	    });
 	});
 	
@@ -194,11 +203,13 @@
 	$(document).ready(function(){
 	    $('#datetimepicker1').datetimepicker({
 	    	locale: 'ko',
-	    	format: 'YYYY-MM-DD HH:mm:ss'
+	    	//format: 'YYYY-MM-DD HH:mm:ss'
+	    	format: 'YYYY-MM-DD'
 	    });
 	    $('#datetimepicker2').datetimepicker({
 	    	locale: 'ko',
-	    	format: 'YYYY-MM-DD HH:mm:ss',
+	    	//format: 'YYYY-MM-DD HH:mm:ss',
+	    	format: 'YYYY-MM-DD',
 	    	useCurrent: false
 	    });
 	    $("#datetimepicker1").on("dp.change", function (e) {

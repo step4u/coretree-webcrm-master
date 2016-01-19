@@ -9,25 +9,54 @@
         <result property="enddate"    	column="enddate" />
         <result property="memo"      	column="memo" />
         <result property="status"      	column="status" />
+        <result property="statustxt"    column="statustxt" />
     </resultMap>
     
     <select id="count" resultType="java.lang.Integer">
-    	select count(idx) from calls where cast(regdate as date)=cast(current_timestamp as date)
+    	select count(a.idx)
+			from calls a join customers b
+				on a.custs_idx=b.idx
+			where 1=1
+			<if test="sdate != null and edate != null">
+				and cast(a.regdate as date) between cast(#{sdate} as date) and cast(#{edate} as date)
+			</if>
+			<if test="sdate == null and edate == null">
+				and cast(a.regdate as date)=cast(current_timestamp as date)
+			</if>
+			<if test="txt != null">
+				and (b.uname like #{txt} or b.cellular like #{txt} or b.tel like #{txt})
+			</if>
     </select>
     
-    <select id="selectAll" parameterType="map" resultMap="callMap">
+    <select id="selectAll" resultMap="callMap">
     	select first #{rowsperpage} skip ((#{curpage} - 1) * #{rowsperpage})
+			a.idx
+			, b.uname as cust_name
+			, a.custs_idx, a.direction, a.cust_tel, a.startdate, a.enddate, a.memo, a.regdate
+			, iif(datediff(second from a.startdate to a.enddate) is null, 0, datediff(second from a.startdate to a.enddate)) diff
+			, case when a.status=113 then '부재중' else '완료' end statustxt
+			from calls a join customers b
+				on a.custs_idx=b.idx
+			where 1=1
+			<if test="sdate != null and edate != null">
+				and cast(a.regdate as date) between cast(#{sdate} as date) and cast(#{edate} as date)
+			</if>
+			<if test="sdate == null and edate == null">
+				and cast(a.regdate as date)=cast(current_timestamp as date)
+			</if>
+			<if test="txt != null">
+				and (b.uname like #{txt} or b.cellular like #{txt} or b.tel like #{txt})
+			</if>
+			order by a.regdate desc
+    </select>
+    
+    <select id="selectByIdx" resultMap="callMap">
+    	select
 			idx
 			, (select uname from customers where idx=a.custs_idx) as cust_name
 			, custs_idx, direction, cust_tel, startdate, enddate, memo, regdate
 			, iif(datediff(second from startdate to enddate) is null, 0, datediff(second from startdate to enddate)) diff
-			from calls a
-			where cast(regdate as date)=cast(current_timestamp as date)
-			order by regdate desc
-    </select>
-    
-    <select id="selectByIdx" resultMap="callMap">
-    	select idx, custs_idx, direction, cust_tel, startdate, enddate, memo, regdate
+			, status
 			from calls
 			where idx=#{idx}
 			order by regdate desc
@@ -35,6 +64,8 @@
     
     <select id="selectByTxt" resultMap="callMap">
     	select first a.idx, b.uname, a.direction, a.cust_tel, a.startdate, a.enddate, a.memo, a.regdate
+    		, iif(datediff(second from a.startdate to a.enddate) is null, 0, datediff(second from a.startdate to a.enddate)) diff
+    		, a.status 
 			from calls a join customers b
 				on a.idx=b.customers_idx
 			where a.title like #{txt} or b.uname like #{txt}
@@ -63,5 +94,9 @@
 		<foreach collection="list" item="item" separator=",">
 			 idx=#{item.idx}
 		</foreach>
-    </delete>    
+    </delete>
+    
+    <update id="memo">
+    	update calls set memo=#{memo} where idx=#{idx}
+    </update>
 </mapper>

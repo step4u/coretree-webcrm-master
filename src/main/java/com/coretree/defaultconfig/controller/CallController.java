@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.coretree.defaultconfig.mapper.Call;
 import com.coretree.defaultconfig.mapper.CallMapper;
+import com.coretree.defaultconfig.mapper.SearchConditions;
 
 @RestController
 public class CallController {
@@ -19,16 +20,21 @@ public class CallController {
 	@Autowired
 	CallMapper mapper;
 	
-	@RequestMapping(path="/call/get/count", method=RequestMethod.GET)
+	@RequestMapping(path="/call/get/count", method=RequestMethod.POST)
 	public int getCount(Principal principal) {
 		return mapper.count();
 	}
 	
-	@RequestMapping(path="/call/get/all/{curpage}/{rowsperpage}", method=RequestMethod.GET)
+/*	@RequestMapping(path="/call/get/all/{curpage}/{rowsperpage}", method=RequestMethod.GET)
 	public List<Call> getAll(@PathVariable("curpage") int curpage
 			, @PathVariable("rowsperpage") int rowsperpage
 			, Principal principal) {
 		return mapper.selectAll(curpage, rowsperpage);
+	}*/
+	
+	@RequestMapping(path="/call/get/all", method=RequestMethod.POST)
+	public List<Call> getAll(SearchConditions condition, Principal principal) {
+		return mapper.selectAll(condition);
 	}
 	
 	@RequestMapping(path="/call/get/search/{txt}", method=RequestMethod.GET)
@@ -49,5 +55,10 @@ public class CallController {
 	@RequestMapping(path="/call/del/all", method=RequestMethod.POST)
 	public void removeAll(ArrayList<Call> calls, Principal principal) {
 		mapper.delAll(calls);
+	}
+	
+	@RequestMapping(path="/call/memo", method=RequestMethod.POST)
+	public void memo(Call call, Principal principal) {
+		mapper.memo(call);
 	}
 }

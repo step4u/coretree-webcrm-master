@@ -181,7 +181,7 @@
 					<div ng-controller="CtrlTelStatus" style="margin-top: 15px;" id="ctrlextstatus">
 						<div ui-grid="gridOptions" class="grid_tels"></div>
 					</div>
-					<!-- 
+					
 					<button type="button" class="btn btn-primary btn-sm" id='btn_connect'>Connect</button>
 					<button type="button" class="btn btn-primary btn-sm" id='btn_disconnect'>Disconnect</button>
 					<button type="button" class="btn btn-primary btn-sm" id='btn_makecall'>MakeCall</button>
@@ -191,7 +191,7 @@
 					<button type="button" class="btn btn-primary btn-sm" id='btn_transfer'>Transfer</button>
 					<button type="button" class="btn btn-primary btn-sm" id='btn_pickup'>PickUp</button>
 					<button type="button" class="btn btn-primary btn-sm" id='btn_reqextstatus'>Requset Extension Status</button>
-					 -->
+					
 		        </div>
 			</div>
 		</div>
@@ -281,11 +281,14 @@
 				<h4 class="modal-title">메모</h4>
 			</div>
 			<div class="modal-body">
-				<textarea class=".form-control"></textarea>
+				<div class="form-group">
+					<input type="hidden" id="call_idx">
+					<textarea class="form-control" style="height: 275px;" id="memotxt"></textarea>
+				</div>
       		</div>
       		<div class="modal-footer">
-        		<button type="button" class="btn btn-primary" id="btnSave">저장</button>
-        		<button type="button" class="btn btn-default" id="btnClose">닫기</button>
+        		<button type="button" class="btn btn-primary" id="btnMemoSave">저장</button>
+        		<button type="button" class="btn btn-default" id="btnMemoClose">닫기</button>
       		</div>
     	</div>
   	</div>
@@ -336,7 +339,6 @@
 	        worker.postMessage(JSON.stringify(command));
 		}
 	
-		var crmidentity;
 		var whoami;
 		var stompClient;
 		var group;
@@ -356,7 +358,7 @@
 	            });
 	            
 	            stompClient.subscribe("/user/queue/groupware", function(message) {
-	            	console.log("/user/queue/groupware: " + message.body);
+	            	// console.log("/user/queue/groupware: " + message.body);
 	            	TreatMySelf(JSON.parse(message.body));
 				});
 	            
@@ -378,37 +380,6 @@
 	        var name = document.getElementById('name').value;
 	        stompClient.send("/user/hello", {}, JSON.stringify({ 'name': name }));
 	    }
-	    
-		$(document).ready(function(){
-			$('[data-toggle="tooltip"]').tooltip();
-			
-			$('a').click(function(event){
-				var str = this.toString();
-				str = str.split('/#/');
-				// alert(str.length);
-				if (str.length < 2)
-					event.preventDefault();
-			});
-			
-		    $("#menu-toggle").click(function(e) {
-		        e.preventDefault();
-		        $("#wrapper").toggleClass("toggled");
-		    });
-		    
-/* 		    $("#publicaddr").click(function(e){
-		    	e.preventDefault();
-		    	location.href="/#/addr/1/0";
-		    });
-		    $("#personaladdr").click(function(e){
-		    	e.preventDefault();
-		    	location.href="/#/addr/2/0";
-		    }); */
-		    
-		    var tmpidentity = $.cookie("crm.identity");
-		    crmidentity = JSON.parse(tmpidentity);
-		    //console.log(crmidentity.role);
-		    // connect();
-		});
 	</script>
 	
 	<script>
@@ -450,8 +421,8 @@
 	
 		$(document).ready(function(){
 		    $("#btn_connect").click(function(){
-		    	connect();
-		    	//connect2();
+		    	//connect();
+		    	connect2();
 		    });
 			
 		    $("#btn_disconnect").click(function(){
@@ -550,12 +521,21 @@
 		    
 		    $("#btn_reqextstatus").click(function(){
 		    	// Requset Extension Status
-		        trade = {
+/* 		        trade = {
 		                cmd: 64,
 		                extension: '3001',
 		                caller: '3001',
 		                callee: '3001',
 		                unconditional: '3001',
+		                status: -1
+		              }; */
+		    	
+		        trade = {
+		                cmd: 64,
+		                extension: '',
+		                caller: '',
+		                callee: '',
+		                unconditional: '',
 		                status: -1
 		              };
 		        
@@ -572,7 +552,7 @@
 		    	location.href = "/logout.html";
 		    });
 		    
-		    connect2();
+		    //connect2();
 		});
 	</script>
 	<style>
