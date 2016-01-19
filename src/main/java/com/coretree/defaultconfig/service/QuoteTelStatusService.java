@@ -79,6 +79,15 @@ public class QuoteTelStatusService implements ApplicationListener<BrokerAvailabi
 		uc = new UcServer("14.63.166.98", 31001, 1, ByteOrder.BIG_ENDIAN);
 		uc.HaveGotUcMessageEventHandler.addEventHandler(this);
 		uc.regist();
+		
+		try {
+			Thread.sleep(500);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		this.sendExtensionStatus();
 	}
 	
 	// sample
@@ -109,7 +118,7 @@ public class QuoteTelStatusService implements ApplicationListener<BrokerAvailabi
 	
 	// subscribe extension status, refresh on every 2 seconds.
 	// @Scheduled(fixedDelay=5000)
-	public void sendExtensionStatus() {
+	private void sendExtensionStatus() {
 		UcMessage msg = new UcMessage();
 		msg.cmd = Const4pbx.UC_BUSY_EXT_REQ;
 		
@@ -273,7 +282,8 @@ public class QuoteTelStatusService implements ApplicationListener<BrokerAvailabi
 					}
 					
 					payload.call_idx = call.getIdx();
-					this.msgTemplate.convertAndSendToUser(member.getUsername(), "/queue/groupware", payload);
+					// this.msgTemplate.convertAndSendToUser(member.getUsername(), "/queue/groupware", payload);
+					this.messagingTemplate.convertAndSend("/topic/ext.status." + data.getExtension(), payload);
 				}
 				break;
 			default:
