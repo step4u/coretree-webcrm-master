@@ -26,9 +26,9 @@
 				columnDefs: [
 			    		      { displayName: '이름', field: 'cust_name', headerCellClass: 'white', cellClass: 'grid-cell', width: 120 },
 			    		      { displayName: '전화번호', field: 'cust_tel', headerCellClass:'white', cellClass: 'grid-cell', width: 120 },
-			    		      { displayName: '날짜', field: 'startdate', headerCellClass: 'white', cellClass: 'grid-cell', width: 120
+			    		      { displayName: '날짜', field: 'regdate', headerCellClass: 'white', cellClass: 'grid-cell', width: 120
 			    		    	, type: 'date', cellFilter: 'date:\'yyyy-MM-dd\'' },
-			    		      { displayName: '시각', field: 'startdate', headerCellClass: 'white', cellClass: 'grid-cell', width: 100
+			    		      { displayName: '시각', field: 'regdate', headerCellClass: 'white', cellClass: 'grid-cell', width: 100
 			    		    	, type: 'date', cellFilter: 'date:\'HH:mm:ss\'' },
 			    		      { displayName: '통화시간', field: 'diff', headerCellClass: 'white', cellClass: 'grid-cell', width: 100 },
 			    		      { displayName: '상담내용', field: 'memo', headerCellClass: 'white', cellClass: 'grid-cell' },
@@ -93,36 +93,14 @@
 	    		}
 			}
 
-			/*
-			var counturl = '/call/get/count';
-			$http.get(counturl)
-			.success(function(data) {
-				//console.log("calls getPage data: " + data);
-				if ($scope.gridOptions.totalItems != data) {
-					paginationOptions.pageNumber = 1;
-				}
+			$http({
+				method: "POST",
+				url: "/call/get/count",
+				data: val
+			}).then(function(response){
+				var data = response.data;
 				
-				$scope.gridOptions.totalItems = data;
-				
-				val.curpage = paginationOptions.pageNumber;
-				val.rowsperpage = paginationOptions.pageSize;
-				
-				console.log("angular.toJson(val): " + angular.toJson(val));
-				
-				$http.get('/call/get/all', val)
-				.success(function(data) {
-					console.log("calls list:" + JSON.stringify(data));
-					$scope.gridOptions.data = data;
-				});
-				
-				$.post('/call/get/all', val, function(data){
-					console.log("calls list:" + JSON.stringify(data));
-					$scope.gridOptions.data = data;
-				});
-			});
-			*/
-			
-			$.post('/call/get/count', val, function(data){
+				// console.log("calls count: " + data);
 				
 				if ($scope.gridOptions.totalItems != data) {
 					paginationOptions.pageNumber = 1;
@@ -133,31 +111,22 @@
 				val.curpage = paginationOptions.pageNumber;
 				val.rowsperpage = paginationOptions.pageSize;
 				
-				$.post('/call/get/all', val, function(datum){
-					console.log("calls list:" + JSON.stringify(datum));
-					$scope.gridOptions.data = datum;
+				// console.log("calls get all before: " + angular.toJson(val));
+				
+				$http({
+					method: "POST",
+					url: "/call/get/all",
+					data: val
+				}).then(function(response){
+					// console.log("calls get all: " + angular.toJson(response.data));
+					
+					$scope.gridOptions.data = response.data;
+				}, function(response){
+					
 				});
+			}, function(){
+				
 			});
-			
-/*			
-			var jsonVal = angular.toJson(val);
-			$http.post('/call/get/count', val)
-				.success(function(data, status){
-					if ($scope.gridOptions.totalItems != data) {
-						paginationOptions.pageNumber = 1;
-					}
-					
-					$scope.gridOptions.totalItems = data;
-					
-					val.curpage = paginationOptions.pageNumber;
-					val.rowsperpage = paginationOptions.pageSize;
-					
-					$http.post('/call/get/all', val)
-						.success(function(data, status){
-							$scope.gridOptions.data = data;
-						});
-				});
-			*/
 		}
 		
 		$scope.getPage();

@@ -10,6 +10,7 @@
         <result property="memo"      	column="memo" />
         <result property="status"      	column="status" />
         <result property="statustxt"    column="statustxt" />
+        <result property="direct"      	column="direct" />
     </resultMap>
     
     <select id="count" resultType="java.lang.Integer">
@@ -74,14 +75,18 @@
     
     <insert id="add" useGeneratedKeys="true" keyProperty="idx" keyColumn="idx">
     	insert into calls
-    		(cust_tel, startdate)
+    		(direction, cust_tel, status, startdate)
     		values
-    		(#{cust_tel}, #{startdate})
+    		(#{direct}, #{cust_tel}, #{status}, #{startdate})
     </insert>
     
     <update id="modiStatus">
-    	update calls
-    		set status=#{status}, enddate=#{enddate}
+    	update calls set status=#{status}, startdate=#{startdate}, enddate=#{enddate}
+    	where idx=#{idx}
+    </update>
+    
+    <update id="modiEnd">
+    	update calls set enddate=#{enddate}
     	where idx=#{idx}
     </update>
     

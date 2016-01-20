@@ -12,6 +12,7 @@ public interface ExtensionMapper {
 	List<Extension> selectAll(@Param("curpage") int curpage, @Param("rowsperpage") int rowsperpage);
 	Extension selectByIdx(@Param("ext") String ext);
 	List<Extension> selectByTxt(@Param("txt") String txt);
+	List<Extension> selectEmptyExt();
 	int chkById(String ext);
 	void add(Extension obj);
     void del(String ext);

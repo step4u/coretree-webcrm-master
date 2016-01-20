@@ -7,13 +7,17 @@ public class Call {
 	private long custs_idx;
 	private String cust_name;
 	private String cust_tel;
-	private Timestamp startdate = new Timestamp(System.currentTimeMillis());
+	//private Timestamp startdate = new Timestamp(System.currentTimeMillis());
+	private Timestamp startdate;
 	private Timestamp enddate;
 	private int diff;
 	private String memo;
+	private Timestamp regdate;
 	private byte status;
 	private String statustxt;
 	private int count = 0;
+	private String extension;
+	private byte direct;
 	
 	public long getIdx() { return this.idx; }
 	public void setIdx(long idx) { this.idx = idx; }
@@ -36,12 +40,11 @@ public class Call {
 	public int getDiff() { return this.diff; }
 	public void setDiff(int diff) { this.diff = diff; }
 	
-	public String getMemo() {
-		return this.memo;
-	}
-	public void setMemo(String memo) {
-		this.memo = memo;
-	}
+	public String getMemo() { return this.memo; }
+	public void setMemo(String memo) { this.memo = memo; }
+	
+	public Timestamp getRegdate() { return this.regdate; }
+	public void setRegdate(Timestamp regdate) { this.regdate = regdate; }
 	
 	public byte getStatus() { return this.status; }
 	public void setStatus(byte status) { this.status = status; }
@@ -54,8 +57,12 @@ public class Call {
 	public void addCount() { this.count++; }
 	public void resetCount() { this.count = 0; }
 	
-/*	public Date getRegdate() { return this.regdate; }
-	public void setRegdate(Date regdate) { this.regdate = regdate; }*/
+	public String getExtension() { return this.extension; }
+	public void setExtension(String extension) { this.extension = extension; }
+	
+	public byte getDirect() { return this.direct; }
+	public void setDirect(byte direct) { this.direct = direct; }
+	
 	
 	@Override
 	public String toString() {

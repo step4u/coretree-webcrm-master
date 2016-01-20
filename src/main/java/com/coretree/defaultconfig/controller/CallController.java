@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,7 +34,7 @@ public class CallController {
 	}*/
 	
 	@RequestMapping(path="/call/get/all", method=RequestMethod.POST)
-	public List<Call> getAll(SearchConditions condition, Principal principal) {
+	public List<Call> getAll(@RequestBody SearchConditions condition, Principal principal) {
 		return mapper.selectAll(condition);
 	}
 	

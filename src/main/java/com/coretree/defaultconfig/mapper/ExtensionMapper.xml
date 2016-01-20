@@ -36,6 +36,10 @@
 			where a.extension like #{txt} or b.username like #{txt}
     </select>
     
+    <select id="selectEmptyExt" resultMap="extensionMap">
+    	select extension from extensions a where (select count(extension) from users_exts where extension=a.extension)=0
+    </select>
+    
     <insert id="add">
     	insert into extensions (extension) values (#{extension})
     </insert>

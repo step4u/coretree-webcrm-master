@@ -143,6 +143,17 @@
 		$scope.makeCall = function(row) {
 			custbhv = bhv.del;
 			var item = row.entity;
+			
+			trade = {
+	                cmd: 74,
+	                extension: crmidentity.ext,
+	                caller: crmidentity.ext,
+	                callee: item.cellular,
+	                unconditional: '',
+	                status: -1
+				};
+			
+			stompClient.send("/app/traders", {}, JSON.stringify(trade));
 		};
 		
 		$scope.deleteRow = function(row) {

@@ -5,15 +5,16 @@ import java.nio.ByteOrder;
 import java.security.Principal;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Dictionary;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Set;
+import java.util.TimerTask;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -25,7 +26,6 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.messaging.simp.broker.BrokerAvailabilityEvent;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -61,7 +61,7 @@ public class QuoteTelStatusService implements ApplicationListener<BrokerAvailabi
 	@Autowired
 	private CallMapper callMapper;
 	
-	private Dictionary<String, Call> curcalls = new Hashtable();
+	private List<Call> curcalls = new ArrayList<Call>();
 
 	@Autowired
 	public QuoteTelStatusService(MessageSendingOperations<String> messagingTemplate, SimpMessagingTemplate msgTemplate) {
@@ -173,15 +173,7 @@ public class QuoteTelStatusService implements ApplicationListener<BrokerAvailabi
 			case Const4pbx.UC_BUSY_EXT_RES:
 				break;
 			case Const4pbx.UC_REPORT_EXT_STATE:
-				
-				this.TreatReportExtState(data);
-				
-				
-				
-				
-				
-				
-
+				this.PassReportExtState(data);
 				break;
 			default:
 				System.err.println(String.format("Extension : %s", data.getExtension()));
@@ -205,168 +197,204 @@ public class QuoteTelStatusService implements ApplicationListener<BrokerAvailabi
 		}
 	}
 	
-	private void TreatReportExtState(GroupWareData data) {
-		
+	private final ReentrantReadWriteLock rwl = new ReentrantReadWriteLock();
+    private final Lock r = rwl.readLock();
+    private final Lock w = rwl.writeLock();
+    
+	private void PassReportExtState(GroupWareData data) {
 		UcMessage payload = new UcMessage();
 		payload.cmd = data.getCmd();
+		payload.direct = data.getDirect();
 		payload.extension = data.getExtension();
 		payload.caller = data.getCaller();
 		payload.callee = data.getCallee();
 		payload.unconditional = data.getUnconditional();
 		payload.status = data.getStatus();
 		
+		Call call = null;
+		
 		switch (data.getDirect()) {
 			case Const4pbx.UC_DIRECT_INCOMING:
-				Call call = curcalls.get(data.getCaller());
+
+				r.lock();
+				try {
+					call = curcalls.stream().filter(x -> x.getExtension().equals(data.getCallee())
+							&& x.getCust_tel().equals(data.getCaller())).findFirst().get();
+				} catch (NullPointerException | NoSuchElementException e) {
+					call = null;
+				} finally {
+					r.unlock();
+				}
 				
 				switch (data.getStatus()) {
-					case Const4pbx.UC_CALL_STATE_INVITING:
-						
+					case Const4pbx.UC_CALL_STATE_IDLE:
+						if (call != null) {
+							if (call.getStatus() == Const4pbx.UC_CALL_STATE_RINGING) {
+								callMapper.modiEnd(call);
+								
+								w.lock();
+								try {
+									curcalls.removeIf(x -> x.getCust_tel().equals(data.getCaller()) && x.getExtension().equals(data.getCallee()));
+								} finally {
+									w.unlock();
+								}
+							} else if (call.getStatus() == Const4pbx.UC_CALL_STATE_BUSY) {
+								call.setStatus(data.getStatus());
+								call.setEnddate(new Timestamp(System.currentTimeMillis()));
+								callMapper.modiStatus(call);
+								
+								w.lock();
+								try {
+									curcalls.removeIf(x -> x.getCust_tel().equals(data.getCaller()) && x.getExtension().equals(data.getCallee()));
+								} finally {
+									w.unlock();
+								}
+							}
+							this.messagingTemplate.convertAndSend("/topic/ext.state." + data.getExtension(), payload);
+							System.err.println("IDLE curcalls.size(): " + curcalls.size());
+						}
 						break;
 					case Const4pbx.UC_CALL_STATE_RINGING:
-						
+						if (call == null) {
+							call = new Call();
+							call.setExtension(data.getExtension());
+							call.setCust_tel(data.getCaller());
+							call.setStatus(data.getStatus());
+							call.setDirect(data.getDirect());
+							
+							w.lock();
+							try {
+								curcalls.add(call);
+							} finally {
+								w.unlock();
+							}
+							
+							callMapper.add(call);
+							this.messagingTemplate.convertAndSend("/topic/ext.state." + data.getExtension(), payload);
+							//System.err.println("RINGING curcalls.size(): " + curcalls.size());
+						}
+						break;
+					case Const4pbx.UC_CALL_STATE_BUSY:
+						if (call != null) {
+							call.setStartdate(new Timestamp(System.currentTimeMillis()));
+							call.setStatus(data.getStatus());
+							callMapper.modiStatus(call);
+							this.messagingTemplate.convertAndSend("/topic/ext.state." + data.getExtension(), payload);
+							System.err.println("BUSY curcalls.size(): " + curcalls.size());
+						}
 						break;
 				}
 				
-				if (data.getStatus() == Const4pbx.UC_CALL_STATE_RINGING) {
-					
-					if (call == null) {
-						call = new Call();
-						call.setCust_tel(data.getCaller());
-						call.setStatus(data.getStatus());
-						callMapper.add(call);
-						curcalls.put(call.getCust_tel(), call);
+				if (call != null) {
+					Member member = memberMapper.selectByExt(data.getExtension());
+					if (member != null) {
+						Customer cust = custMapper.findByExt(data.getCaller());
+						
+						if (cust != null) {
+							payload.callername = cust.getUname();
+							payload.cust_idx = cust.getIdx();
+						}
+						if (member != null) {
+							payload.calleename = member.getUname();
+						}
 						
 						payload.call_idx = call.getIdx();
-					} else {
-						if (call.getStatus() == Const4pbx.UC_CALL_STATE_INVITING
-								|| call.getStatus() == Const4pbx.UC_CALL_STATE_RINGING) {
-
-							if (data.getStatus() == Const4pbx.UC_CALL_STATE_IDLE) {
-								call.addCount();
-								if (call.getCount() > 3) {
-									// call.setStatus(data.getStatus());
-									call.resetCount();
-									call.setEnddate(new Timestamp(System.currentTimeMillis()));
-									callMapper.modiStatus(call);
-									curcalls.remove(data.getCaller());
-								}
-							} else {
-								call.setStatus(data.getStatus());
-								callMapper.modiStatus(call);
-							}
-						} else if (call.getStatus() == Const4pbx.UC_CALL_STATE_BUSY) {
-							if (data.getStatus() == Const4pbx.UC_CALL_STATE_IDLE) {
-								call.addCount();
-								if (call.getCount() > 1) {
-									call.setStatus(data.getStatus());
-									call.resetCount();
-									call.setEnddate(new Timestamp(System.currentTimeMillis()));
-									callMapper.modiStatus(call);
-									curcalls.remove(data.getCaller());
-								}
-							} else {
-								call.setStatus(data.getStatus());
-								callMapper.modiStatus(call);
-							}
-						}
+						this.msgTemplate.convertAndSendToUser(member.getUsername(), "/queue/groupware", payload);
 					}
-					
+				}
+				// this.messagingTemplate.convertAndSend("/topic/ext.state." + data.getExtension(), payload);
+				break;
+			case Const4pbx.UC_DIRECT_OUTGOING:
+				r.lock();
+				try {
+					call = curcalls.stream().filter(x -> x.getExtension().equals(data.getExtension())
+							&& x.getCust_tel().equals(data.getCallee())).findFirst().get();
+				} catch (NullPointerException | NoSuchElementException e) {
+					call = null;
+				} finally {
+					r.unlock();
+				}
+				
+				switch (data.getStatus()) {
+					case Const4pbx.UC_CALL_STATE_IDLE:
+						if (call != null) {
+							if (call.getStatus() == Const4pbx.UC_CALL_STATE_RINGING) {
+								callMapper.modiEnd(call);
+								
+								w.lock();
+								try {
+									curcalls.removeIf(x -> x.getCust_tel().equals(data.getCaller()) && x.getExtension().equals(data.getCallee()));
+								} finally {
+									w.unlock();
+								}
+							} else if (call.getStatus() == Const4pbx.UC_CALL_STATE_BUSY) {
+								call.setStatus(data.getStatus());
+								call.setEnddate(new Timestamp(System.currentTimeMillis()));
+								callMapper.modiStatus(call);
+								
+								w.lock();
+								try {
+									curcalls.removeIf(x -> x.getCust_tel().equals(data.getCallee()) && x.getExtension().equals(data.getExtension()));
+								} finally {
+									w.unlock();
+								}
+							}
+							this.messagingTemplate.convertAndSend("/topic/ext.state." + data.getExtension(), payload);
+							System.err.println("IDLE curcalls.size(): " + curcalls.size());
+						}
+						break;
+					case Const4pbx.UC_CALL_STATE_BUSY:
+						if (call == null) {
+							call = new Call();
+							call.setExtension(data.getExtension());
+							call.setCust_tel(data.getCallee());
+							call.setStartdate(new Timestamp(System.currentTimeMillis()));
+							call.setStatus(data.getStatus());
+							call.setDirect(data.getDirect());
+							
+							w.lock();
+							try {
+								curcalls.add(call);
+							} finally {
+								w.unlock();
+							}
+							
+							callMapper.add(call);
+							this.messagingTemplate.convertAndSend("/topic/ext.state." + data.getExtension(), payload);
+						}
+						break;
 				}
 
+				if (call != null) {
+					Member member = memberMapper.selectByExt(data.getExtension());
+					if (member != null) {
+						Customer cust = custMapper.findByExt(data.getCaller());
+						
+						if (cust != null) {
+							payload.callername = cust.getUname();
+							payload.cust_idx = cust.getIdx();
+						}
+						if (member != null) {
+							payload.calleename = member.getUname();
+						}
+						
+						payload.call_idx = call.getIdx();
+						this.msgTemplate.convertAndSendToUser(member.getUsername(), "/queue/groupware", payload);
+					}
+				}
 				
-//				this.messagingTemplate.convertAndSend("/topic/ext.status." + data.getExtension(), payload);
-//				break;
-			case Const4pbx.UC_DIRECT_OUTGOING:
-				this.messagingTemplate.convertAndSend("/topic/ext.status." + data.getExtension(), payload);
+				// this.messagingTemplate.convertAndSend("/topic/ext.state." + data.getExtension(), payload);
 				break;
 			default:
 				// 전체 내선 상태 갱신 (최초한번)
-				Member member = memberMapper.selectByExt(data.getExtension());
-				this.msgTemplate.convertAndSendToUser(member.getUsername(), "/queue/ext.status", payload);
+				//Member member = memberMapper.selectByExt(data.getExtension());
+				//this.msgTemplate.convertAndSendToUser(member.getUsername(), "/queue/ext.status", payload);
+				this.messagingTemplate.convertAndSend("/topic/ext.state." + data.getExtension(), payload);
 				break;
 		}
-
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-
-		if (data.getDirect() == Const4pbx.UC_DIRECT_NONE) {
-			this.messagingTemplate.convertAndSend("/topic/ext.status." + data.getExtension(), payload);					
-		//} else if (data.getDirect() == Const4pbx.UC_DIRECT_INCOMING) {
-		} else {
-			Call call = curcalls.get(data.getCaller());
-			if (call == null) {
-				call = new Call();
-				call.setCust_tel(data.getCaller());
-				call.setStatus(data.getStatus());
-				callMapper.add(call);
-				curcalls.put(call.getCust_tel(), call);
-				
-				payload.call_idx = call.getIdx();
-			} else {
-				if (call.getStatus() == Const4pbx.UC_CALL_STATE_INVITING
-						|| call.getStatus() == Const4pbx.UC_CALL_STATE_RINGING) {
-
-					if (data.getStatus() == Const4pbx.UC_CALL_STATE_IDLE) {
-						call.addCount();
-						if (call.getCount() > 3) {
-							// call.setStatus(data.getStatus());
-							call.resetCount();
-							call.setEnddate(new Timestamp(System.currentTimeMillis()));
-							callMapper.modiStatus(call);
-							curcalls.remove(data.getCaller());
-						}
-					} else {
-						call.setStatus(data.getStatus());
-						callMapper.modiStatus(call);
-					}
-				} else if (call.getStatus() == Const4pbx.UC_CALL_STATE_BUSY) {
-					if (data.getStatus() == Const4pbx.UC_CALL_STATE_IDLE) {
-						call.addCount();
-						if (call.getCount() > 1) {
-							call.setStatus(data.getStatus());
-							call.resetCount();
-							call.setEnddate(new Timestamp(System.currentTimeMillis()));
-							callMapper.modiStatus(call);
-							curcalls.remove(data.getCaller());
-						}
-					} else {
-						call.setStatus(data.getStatus());
-						callMapper.modiStatus(call);
-					}
-				}
-			}
-			
-			System.err.println("curcalls.size(): " + curcalls.size());
-			
-			Member member = memberMapper.selectByExt(data.getExtension());
-			if (data.getType() == Const4pbx.UC_DIRECT_INCOMING) {
-				Customer cust = custMapper.findByExt(data.getCaller());
-				
-				if (cust != null) {
-					payload.callername = cust.getUname();
-					payload.cust_idx = cust.getIdx();
-				}
-				if (member != null) {
-					payload.calleename = member.getUname();
-				}
-			}
-			
-			payload.call_idx = call.getIdx();
-			// this.msgTemplate.convertAndSendToUser(member.getUsername(), "/queue/groupware", payload);
-			this.messagingTemplate.convertAndSend("/topic/ext.status." + data.getExtension(), payload);
-		}
 	}
-	
+
+		
 	@Override
 	public void RequestToPbx(UcMessage msg) {
 		try {
@@ -377,4 +405,15 @@ public class QuoteTelStatusService implements ApplicationListener<BrokerAvailabi
 		}
 	}
 
+	class Timer_Elapsed extends TimerTask {
+		public QuoteTelStatusService parent = null;
+		public Timer_Elapsed(QuoteTelStatusService obj) {
+			this.parent = obj;
+		}
+		
+		@Override
+		public void run() {
+			
+		}
+	}
 }

@@ -181,7 +181,7 @@
 					<div ng-controller="CtrlTelStatus" style="margin-top: 15px;" id="ctrlextstatus">
 						<div ui-grid="gridOptions" class="grid_tels"></div>
 					</div>
-					
+<!-- 					
 					<button type="button" class="btn btn-primary btn-sm" id='btn_connect'>Connect</button>
 					<button type="button" class="btn btn-primary btn-sm" id='btn_disconnect'>Disconnect</button>
 					<button type="button" class="btn btn-primary btn-sm" id='btn_makecall'>MakeCall</button>
@@ -191,7 +191,7 @@
 					<button type="button" class="btn btn-primary btn-sm" id='btn_transfer'>Transfer</button>
 					<button type="button" class="btn btn-primary btn-sm" id='btn_pickup'>PickUp</button>
 					<button type="button" class="btn btn-primary btn-sm" id='btn_reqextstatus'>Requset Extension Status</button>
-					
+					 -->
 		        </div>
 			</div>
 		</div>
@@ -272,6 +272,7 @@
     	</div>
   	</div>
 </div>
+
 <!-- Memo Modal -->
 <div class="modal fade" id="Memo" role="dialog">
 	<div class="modal-dialog">
@@ -304,6 +305,7 @@
 	<script src="resources/apps/controller_exts.js"></script>
 	<script src="resources/apps/controller_counsellors.js"></script>
 	<script src="resources/apps/CtrlGroups.js"></script>
+	<script src="resources/apps/CtrlEmptyExtensions.js"></script>
 
 	<script>
 	/*
@@ -352,19 +354,20 @@
 	        stompClient.connect({}, function(frame) {
 	        	whoami = frame.headers['user-name'];
 
-	            stompClient.subscribe("/topic/ext.status.*", function(message) {
+	            stompClient.subscribe("/topic/ext.state.*", function(message) {
 	            	var data = JSON.parse(message.body);
 	                update_ext_status(data);
 	            });
 	            
 	            stompClient.subscribe("/user/queue/groupware", function(message) {
-	            	// console.log("/user/queue/groupware: " + message.body);
 	            	TreatMySelf(JSON.parse(message.body));
 				});
 	            
 	            stompClient.subscribe("/user/queue/errors", function(message) {
 	            	console.log('index.html /app/queue/errors: ' + JSON.parse(message.body));
 				});
+	            
+	            InitializeExts();
 	        });
 	    }
 	    
@@ -384,41 +387,12 @@
 	
 	<script>
 	    function update_ext_status(data){
-/*
-	    	if (crmidentity.ext == data.extension) {
-	            if (data.cmd == UC_CALL_STATE_IDLE || data.cmd == UC_CALL_STATE_UNREG) {
-	                currentCallInfo.cmd = 0;
-	                currentCallInfo.ext = '';
-	                currentCallInfo.caller = '';
-	                currentCallInfo.callee = '';
-	                currentCallInfo.unconditional = '';
-	                currentCallInfo.status = -1;
-	            } else {
-	                currentCallInfo.cmd = data.cmd;
-	                currentCallInfo.ext = data.extension;
-	                currentCallInfo.caller = data.caller;
-	                currentCallInfo.callee = data.callee;
-	                currentCallInfo.unconditional = data.unconditional;
-	                currentCallInfo.status = data.status;
-	            }
-	            // console.log("Transfer3: " + JSON.stringify(currentCallInfo));
-	    	}
- */
 	    	var scope = angular.element($("#ctrlextstatus")).scope();
 		    scope.$apply(function () {
 		        scope.updateExtStatus(data);
 		    });
 	    }
 	    
-	    var trade = {
-                cmd : 0,
-                extension : '3001',
-                caller : '',
-                callee : '',
-                unconditional : '',
-                status: -1
-              };
-	
 		$(document).ready(function(){
 		    $("#btn_connect").click(function(){
 		    	//connect();
@@ -543,16 +517,7 @@
 		        console.log("socktest sock sent");
 		    });
 		    
-		    if (crmidentity.role == "ROLE_ADMIN") {
-		    	$(".ADMIN").css("display", "inline");
-		    }
-		    
-		    $("#logout").click(function(){
-		    	disconnect();
-		    	location.href = "/logout.html";
-		    });
-		    
-		    //connect2();
+			connect2();
 		});
 	</script>
 	<style>

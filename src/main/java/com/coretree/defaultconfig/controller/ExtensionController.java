@@ -38,6 +38,11 @@ public class ExtensionController {
 		return mapper.selectByTxt("%" + txt + "%");
 	}
 	
+	@RequestMapping(path="/extension/get/emptyext", method=RequestMethod.GET)
+	public List<Extension> getEmptyExt(Principal principal) {
+		return mapper.selectEmptyExt();
+	}
+	
 	@RequestMapping(value = "/extension/chk/{ext}", method = RequestMethod.GET)
 	public String chkById(@PathVariable("ext") String ext, Principal principal) {
 		String result = String.format("{\"result\": %d}", mapper.chkById(ext));

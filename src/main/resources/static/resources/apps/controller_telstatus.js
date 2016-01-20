@@ -103,7 +103,6 @@
 			}
 
 			if (crmidentity.ext == extitem.extension) {
-				console.log("extstatecount->extitem.extension: " + extitem.extension + ", invite: " + extstatecount.invite + ", ring: " + extstatecount.ring);
 				SetMyState(extitem, extstatecount);
 			}
 		};
@@ -133,7 +132,6 @@
 	
 		$http.get('/extension/get/all/0/0')
 			.success(function(data) {
-				// console.log(JSON.stringify(data));
 				$scope.gridOptions.data = data;
 			}
 		);

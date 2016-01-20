@@ -1,5 +1,15 @@
 	var crmidentity;
 
+	// for websocket
+    var trade = {
+        cmd : 0,
+        extension : '3001',
+        caller : '',
+        callee : '',
+        unconditional : '',
+        status: -1
+	};
+	
 	var currentCallInfo = {
 		cmd: 0,
 		call_idx: 0,
@@ -29,13 +39,13 @@
 	}
 	
 	var crmstate = {
-			unreg: 0,
-			idle: 1,
-			invite: 2,
-			ring: 3,
-			busy: 4,
-			hold: 5
-		}
+		unreg: 0,
+		idle: 1,
+		invite: 2,
+		ring: 3,
+		busy: 4,
+		hold: 5
+	}
 	
 	// 고객 등록, 수정, 삭제 시 사용
 	var custbhv = bhv.none;
@@ -48,7 +58,7 @@
 		$('a').click(function(event){
 			var str = this.toString();
 			str = str.split('/#/');
-			// alert(str.length);
+
 			if (str.length < 2)
 				event.preventDefault();
 		});
@@ -67,9 +77,6 @@
 	    
 		/*** set systeminfo ***/
 		$("#systeminfo").html("시스템 정상 (" + crmidentity.ext + ")");
-		
-		/*** call status renew ***/
-		setInterval(SetCallState, 5000);
 		
 		$("#addCustomer").draggable({
 		      handle: ".modal-header"
@@ -97,7 +104,7 @@
 				memotitle = "메모 (" + currentCallInfo.callername + ")";
 			}
 			
-			$("#call_idx").val(currentCallInfo.call_idx);
+			// $("#call_idx").val(currentCallInfo.call_idx);
 			
 			$("#Memo .modal-title").html(memotitle);
 			$("#Memo").modal({backdrop: false});
@@ -135,13 +142,13 @@
 		$("#btnCall").click(function(){
 			var btnval = $(this).val();
 			trade = {
-	                cmd: 74,
-	                extension: crmidentity.ext,
-	                caller: crmidentity.ext,
-	                callee: $("#callnumber").val(),
-	                unconditional: '',
-	                status: -1
-	              };
+                cmd: 74,
+                extension: crmidentity.ext,
+                caller: crmidentity.ext,
+                callee: $("#callnumber").val(),
+                unconditional: '',
+                status: -1
+			};
 			
 			switch (btnval) {
 				case '전화하기':
@@ -151,30 +158,32 @@
 					break;
 			}
 	        
-			console.log("makecall: " + JSON.stringify(trade));
+			// console.log("makecall: " + JSON.stringify(trade));
 	     	stompClient.send("/app/traders", {}, JSON.stringify(trade));
+	     	
+			makecall = true;
 		});
 		
 		$("#btnPickup").click(function(){
 			var numval = $("#callnumber").val();
 			if (numval == '') {
 		        trade = {
-			            cmd: 80,
-			            extension: crmidentity.ext,
-			            caller: '',
-			            callee: '*98',
-			            unconditional: '',
-			            status: -1
-			          };
+		            cmd: 80,
+		            extension: crmidentity.ext,
+		            caller: '',
+		            callee: '*98',
+		            unconditional: '',
+		            status: -1
+		        };
 			} else {
 		        trade = {
-			            cmd: 80,
-			            extension: crmidentity.ext,
-			            caller: '',
-			            callee: numval,
-			            unconditional: '',
-			            status: -1
-			          };
+		            cmd: 80,
+		            extension: crmidentity.ext,
+		            caller: '',
+		            callee: numval,
+		            unconditional: '',
+		            status: -1
+		        };
 			}
 			
 			stompClient.send("/app/traders", {}, JSON.stringify(trade));
@@ -182,16 +191,14 @@
 		
 		$("#btnTransfer").click(function(){
 	        trade = {
-	                cmd: 86,
-	                extension: crmidentity.ext,
-	                caller: currentCallInfo.caller,
-	                callee: currentCallInfo.callee,
-	                unconditional: $("#callnumber").val(),
-	                status: -1
-	              };
+                cmd: 86,
+                extension: crmidentity.ext,
+                caller: currentCallInfo.caller,
+                callee: currentCallInfo.callee,
+                unconditional: $("#callnumber").val(),
+                status: -1
+	        };
 	        
-//	        console.log("Transfer0: " + JSON.stringify(currentCallInfo));
-//	        console.log("Transfer1: " + JSON.stringify(trade));
 	     	stompClient.send("/app/traders", {}, JSON.stringify(trade));
 		});
 		
@@ -221,21 +228,30 @@
 		});
 		
         /*** script for my call button ***/
+		
+	    if (crmidentity.role == "ROLE_ADMIN") {
+	    	$(".ADMIN").css("display", "inline");
+	    }
+	    
+	    $("#logout").click(function(){
+	    	disconnect();
+	    	location.href = "/logout.html";
+	    });
 	});
 	
 	/*** script for address book ***/
 	function SaveCust() {
 		var obj = {
-				idx: $("#idx").val(),
-				depthorder: $("#depthorder").val() == "" ? $("#depthorder").val() : $("#depthorder").val().replace("string:", ""),
-				username: crmidentity.username,
-				uname: $("#uname").val(),
-				firm: $("#firm").val(),
-				posi: $("#posi").val(),
-				tel: $("#tel").val(),
-				cellular: $("#cellular").val(),
-				extension: $("#extension").val(),
-				email: $("#email").val()
+			idx: $("#idx").val(),
+			depthorder: $("#depthorder").val() == "" ? $("#depthorder").val() : $("#depthorder").val().replace("string:", ""),
+			username: crmidentity.username,
+			uname: $("#uname").val(),
+			firm: $("#firm").val(),
+			posi: $("#posi").val(),
+			tel: $("#tel").val(),
+			cellular: $("#cellular").val(),
+			extension: $("#extension").val(),
+			email: $("#email").val()
 		};
 			
 		//console.log("obj.depthorder: " + obj.depthorder);
@@ -305,7 +321,7 @@
 	/*** script for set main message ***/
 	
 	function SetMyState(extitem, statecount) {
-		console.log("set my state: " + extitem.status + ", statecount.ring: " + statecount.ring);
+		// console.log("set my state: " + extitem.status + ", statecount.ring: " + statecount.ring);
 		
 		switch (extitem.status) {
 			case UC_CALL_STATE_UNREG:
@@ -368,35 +384,31 @@
 	
 	function SetCallState() {
     	var scope0 = angular.element($("#ctrlcallstatus")).scope();
-    	//console.log("SetCallState scope1: " + JSON.stringify(scope0.gridOptions.data));
 
 		var scope1 = angular.element($("#ctrlextstatus")).scope();
 		scope1.$apply(function () {
 	    	var data = scope1.gridOptions.data.filter(function(element, index){
-	    		// console.log("SetCallState element.status: " + element.status);
 	    		return element.status == '통화중';
 	    	});
 	    	scope0.gridOptions.data[0].count = data.length;
-	    	// console.log("SetCallState data0length: " + data.length);
 	    	
 	    	data = scope1.gridOptions.data.filter(function(element, index){
-	    		// console.log("SetCallState element.status: " + element.status);
 	    		return element.status == '대기중';
 	    	});
 	    	scope0.gridOptions.data[1].count = data.length;
-	    	// console.log("SetCallState data1.length: " + data.length);
 	    	
 	    	data = scope1.gridOptions.data.filter(function(element, index){
-	    		// console.log("SetCallState element.status: " + element.status);
 	    		return element.status == '연결중';
 	    	});
 	    	scope0.gridOptions.data[2].count = data.length;
-	    	// console.log("SetCallState data2.length: " + data.length);
 	    });
 	}
 	
+	var makecall = false;
 	function TreatMySelf(item) {
 		// Button Call 요청에 대한 결과
+		console.log("TreatMySelf: " + item.cmd + " // " + item.direct + " // " + item.status);
+		
 		switch (item.cmd) {
 			case UC_MAKE_CALL_RES:
 				if (item.status == UC_STATUS_SUCCESS) {
@@ -415,43 +427,39 @@
 				break;
 			case UC_REPORT_EXT_STATE:
 				if (currentCallInfo.cmd == 0) {
-/*	                currentCallInfo.cmd = item.cmd;
-	                currentCallInfo.extension = item.extension;
-	                currentCallInfo.call_idx = item.call_idx;
-	                currentCallInfo.caller = item.caller;
-	                currentCallInfo.callername = item.callername;
-	                currentCallInfo.callee = item.callee;
-	                currentCallInfo.calleename = item.calleename;
-	                currentCallInfo.unconditional = item.unconditional;
-	                currentCallInfo.status = item.status;*/
 					currentCallInfo = item;
-				} else {
-					//console.log("UC_REPORT_EXT_STATE: " + item.status);
-					switch (currentCallInfo.status) {
-						case UC_CALL_STATE_IDLE:
-						case UC_CALL_STATE_INVITING:
-							if (item.status == UC_CALL_STATE_RINGING) {
-								//console.log("/customer/get/idx/ ringing0: " + item.cust_idx + "//" + item.status);
-								//console.log("/customer/get/idx/ ringing1: " + item.cust_idx);
-								
-								var msg = "전화 왔습니다.<br/>" + item.callername + " (" + item.caller + ")";
+					$("#call_idx").val(currentCallInfo.call_idx);
+				}
+				
+				switch (item.direct) {
+					case UC_DIRECT_INCOMING:
+						
+						switch (item.status) {
+							case UC_CALL_STATE_IDLE:
+								if (currentCallInfo.status == UC_CALL_STATE_RINGING || currentCallInfo.status == UC_CALL_STATE_BUSY) {
+									var msg = "대기중...<br/><br/>";
+									$("#mainalert").html(msg);
+									
+									currentCallInfo.status = UC_CALL_STATE_IDLE;
+									currentCallInfo.cmd = 0;
+									currentCallInfo.call_idx = 0;
+								}
+								break;
+							case UC_CALL_STATE_RINGING:
+								var msg = "전화가 왔습니다.<br/>" + item.callername + " (" + item.caller + ")";
 								$("#mainalert").html(msg);
-								
 								if (item.callername == '') {
 									custbhv = bhv.add;
 									$("#addCustomer .modal-title").html("고객 등록");
 									$("#tel").val(item.caller);
 								} else {
-									// console.log("/customer/get/idx/0: " + item.cust_idx);
 									$.get("/customer/get/idx/" + item.cust_idx, function(response){
-										// console.log("/customer/get/idx/: " + JSON.stringify(response));
-										// console.log("/customer/get/idx/: " + JSON.stringify(currentCallInfo));
 										
 										custbhv = bhv.modi;
 										$("#addCustomer .modal-title").html("고객 정보");
 										
 										var itm = response;
-
+	
 										$("#addCustomer #idx").val(itm.idx);
 										$("#addCustomer #depthorder").val('string:' + itm.depthorder);
 										$("#addCustomer #uname").val(itm.uname);
@@ -474,28 +482,34 @@
 								}
 								
 								currentCallInfo.status = UC_CALL_STATE_RINGING;
-							}
-							break;
-						case UC_CALL_STATE_RINGING:
-						case UC_CALL_STATE_BUSY:
-							if (item.status == UC_CALL_STATE_BUSY) {
+								break;
+							case UC_CALL_STATE_BUSY:
 								var msg = "통화중...<br/>" + item.callername + " (" + item.caller + ")";
 								$("#mainalert").html(msg);
 								
 								currentCallInfo.status = UC_CALL_STATE_BUSY;
-							}
-							
-							if (item.status == UC_CALL_STATE_IDLE) {
-								var msg = "대기중...<br/><br/>";
-								$("#mainalert").html(msg);
-								
-								currentCallInfo.status = UC_CALL_STATE_IDLE;
-								currentCallInfo.cmd = 0;
-								currentCallInfo.call_idx = 0;
-							}
-							break;
-					}
+								break;
+						}
+						break;
+					case UC_DIRECT_OUTGOING:
+						break;
+					default:
+						break;
 				}
 				break;
 		}
+	}
+
+	// 내선 상태 초기화 최초 한번
+	function InitializeExts() {
+        trade = {
+                cmd: 64,
+                extension: '',
+                caller: '',
+                callee: '',
+                unconditional: '',
+                status: -1
+              };
+        
+     	stompClient.send("/app/traders", {}, JSON.stringify(trade));
 	}
