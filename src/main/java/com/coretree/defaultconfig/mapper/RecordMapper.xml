@@ -18,7 +18,7 @@
     	select first #{rowsperpage} skip ((#{curpage} - 1) * #{rowsperpage})
 			idx, ext, extension, peernum, filename, regdate
 			from recinfo
-			where regdate=current_timestamp
+			where cast(regdate as date)=cast(current_timestamp as date)
 			order by regdate desc
     </select>
     
