@@ -143,6 +143,7 @@ public class QuoteTelStatusService implements ApplicationListener<BrokerAvailabi
 
 	@MessageMapping("/traders")
 	public void executeTrade(UcMessage message, Principal principal) {
+		System.out.println("Before sendng: " + message.toString());
 		this.RequestToPbx(message);
 	}
 	
@@ -176,7 +177,7 @@ public class QuoteTelStatusService implements ApplicationListener<BrokerAvailabi
 				this.PassReportExtState(data);
 				break;
 			default:
-				System.err.println(String.format("Extension : %s", data.getExtension()));
+				// System.err.println(String.format("Extension : %s", data.getExtension()));
 				
 				if (data.getExtension() == null) return;
 				if (data.getExtension().isEmpty()) return;
@@ -386,7 +387,7 @@ public class QuoteTelStatusService implements ApplicationListener<BrokerAvailabi
 				// this.messagingTemplate.convertAndSend("/topic/ext.state." + data.getExtension(), payload);
 				break;
 			default:
-				// ÀüÃ¼ ³»¼± »óÅÂ °»½Å (ÃÖÃÊÇÑ¹ø)
+				// ï¿½ï¿½Ã¼ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ (ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¹ï¿½)
 				//Member member = memberMapper.selectByExt(data.getExtension());
 				//this.msgTemplate.convertAndSendToUser(member.getUsername(), "/queue/ext.status", payload);
 				this.messagingTemplate.convertAndSend("/topic/ext.state." + data.getExtension(), payload);

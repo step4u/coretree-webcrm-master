@@ -191,7 +191,10 @@
 					<button type="button" class="btn btn-primary btn-sm" id='btn_transfer'>Transfer</button>
 					<button type="button" class="btn btn-primary btn-sm" id='btn_pickup'>PickUp</button>
 					<button type="button" class="btn btn-primary btn-sm" id='btn_reqextstatus'>Requset Extension Status</button>
-
+					<button type="button" class="btn btn-primary btn-sm" id='btn_reqdnd'>Request DnD</button>
+					<button type="button" class="btn btn-primary btn-sm" id='btn_dismissdnd'>Dismiss DnD</button>
+					<button type="button" class="btn btn-primary btn-sm" id='btn_reqredirect'>Request Redirect</button>
+					<button type="button" class="btn btn-primary btn-sm" id='btn_dismissredirect'>Dismiss Redirect</button>
 		        </div>
 			</div>
 		</div>
@@ -367,7 +370,7 @@
 	            	console.log('index.html /app/queue/errors: ' + JSON.parse(message.body));
 				});
 	            
-	            InitializeExts();
+	            // InitializeExts();
 	            setInterval(SetCallState, 2000);
 	        });
 	    }
@@ -496,26 +499,96 @@
 		    
 		    $("#btn_reqextstatus").click(function(){
 		    	// Requset Extension Status
-/* 		        trade = {
-		                cmd: 64,
-		                extension: '3001',
-		                caller: '3001',
-		                callee: '3001',
-		                unconditional: '3001',
-		                status: -1
-		              }; */
+		        trade = {
+	                cmd: 64,
+	              };
+		    	
+		     	stompClient.send("/app/traders", {}, JSON.stringify(trade));
+		        console.log("socktest sock sent");
+		    });
+		    
+		    $("#btn_reqdnd").click(function(){
+		    	// Requset DnD
 		    	
 		        trade = {
-		                cmd: 64,
-		                extension: '',
+		                cmd: UC_SET_SRV_REQ,
+		                direct: 0,
+		                call_idx: 0,
+		                extension: '3001',
+		                cust_idx: 0,
 		                caller: '',
+		                callername: '',
 		                callee: '',
+		                calleename: '',
+		                responseCode: UC_SRV_DND,
 		                unconditional: '',
-		                status: -1
+		                status: 0
 		              };
 		        
 		     	stompClient.send("/app/traders", {}, JSON.stringify(trade));
-		        console.log("socktest sock sent");
+		    });
+		    
+		    $("#btn_dismissdnd").click(function(){
+		    	// Dismiss DnD
+		    	
+		        trade = {
+		                cmd: UC_CLEAR_SRV_REQ,
+		                direct: 0,
+		                call_idx: 0,
+		                extension: '3001',
+		                cust_idx: 0,
+		                caller: '',
+		                callername: '',
+		                callee: '',
+		                calleename: '',
+		                responseCode: UC_SRV_DND,
+		                unconditional: '',
+		                status: 0
+		              };
+		        
+		     	stompClient.send("/app/traders", {}, JSON.stringify(trade));
+		    });
+		    
+		    $("#btn_reqredirect").click(function(){
+		    	// Requset Redirect
+		    	
+		        trade = {
+		                cmd: UC_SET_SRV_REQ,
+		                direct: 0,
+		                call_idx: 0,
+		                extension: '3001',
+		                cust_idx: 0,
+		                caller: '',
+		                callername: '',
+		                callee: '',
+		                calleename: '',
+		                responseCode: UC_SRV_UNCONDITIONAL,
+		                unconditional: '3002',
+		                status: 0
+		              };
+		        
+		     	stompClient.send("/app/traders", {}, JSON.stringify(trade));
+		    });
+		    
+		    $("#btn_dismissredirect").click(function(){
+		    	// Requset Redirect
+		    	
+		        trade = {
+		                cmd: UC_CLEAR_SRV_REQ,
+		                direct: 0,
+		                call_idx: 0,
+		                extension: '3001',
+		                cust_idx: 0,
+		                caller: '',
+		                callername: '',
+		                callee: '',
+		                calleename: '',
+		                responseCode: UC_SRV_UNCONDITIONAL,
+		                unconditional: '',
+		                status: 0
+		              };
+		        
+		     	stompClient.send("/app/traders", {}, JSON.stringify(trade));
 		    });
 		    
 			connect2();
