@@ -9,7 +9,7 @@
         <result property="tel"			column="tel" />
         <result property="extension"	column="extension" />
 		<result property="role"			column="role" />
-		<result property="status"		column="status" />
+		<result property="state"		column="state" />
 		<result property="enabled"		column="enabled" />
     </resultMap>
     
@@ -19,26 +19,26 @@
     
     <select id="selectAll" resultMap="resMap">
     	select first #{rowsperpage} skip ((#{curpage} - 1) * #{rowsperpage})
-			username, uname, posi, tel, cellular, role, status, enabled
+			username, uname, posi, tel, cellular, role, state, enabled
 			from users order by uname asc
     </select>
     
     <select id="selectByIdx" resultMap="resMap">
-    	select a.username, a.uname, a.posi, a.tel, a.cellular, a.role, a.status, a.enabled, b.extension
+    	select a.username, a.uname, a.posi, a.tel, a.cellular, a.role, a.state, a.enabled, b.extension
 			from users a join users_exts b
 				on a.username=b.username
 			where a.username=#{username}
     </select>
     
     <select id="selectByExt" resultMap="resMap">
-    	select first 1 a.username, a.uname, a.posi, a.tel, a.cellular, b.extension, a.role, a.status, a.enabled
+    	select first 1 a.username, a.uname, a.posi, a.tel, a.cellular, b.extension, a.role, a.state, a.enabled
 			from users a join users_exts b
 				on a.username=b.username
 			where b.extension=#{ext}
     </select>
     
     <select id="selectByTxt" resultMap="resMap">
-    	select username, uname, posi, tel, extension, role, status, enabled
+    	select username, uname, posi, tel, extension, role, state, enabled
 			from users
 			where uname like #{txt}
     </select>

@@ -18,6 +18,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	private LoginHandler loginSuccessHandler;
+//	@Autowired
+//	private LogoutHandler logoutSuccessHandler;
 	@Autowired
 	private DataSource dataSrc;
 	// private LogoutHandler logoutSuccessHandler = new LogoutHandler();
@@ -44,9 +46,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.logoutUrl("/logout.html")
 				//.clearAuthentication(true)
 				.deleteCookies("crm.identity")
-				//.logoutSuccessHandler(logoutSuccessHandler)
+				// .logoutSuccessHandler(logoutSuccessHandler)
 				.permitAll()
 				.and()
+			.sessionManagement()
+                .maximumSessions(1)
+                .expiredUrl("/login.html?expired")
+                .maxSessionsPreventsLogin(true)
+                .and()
+                // .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+                .invalidSessionUrl("/")
+                .and()
             .authorizeRequests() //Authorize Request Configuration
 				.antMatchers("/resources/**").permitAll()
 				//.antMatchers("/customer/**").hasRole("ADMIN")

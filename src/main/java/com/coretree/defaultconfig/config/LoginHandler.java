@@ -16,7 +16,10 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.stereotype.Component;
 
 import com.coretree.defaultconfig.mapper.*;
+import com.coretree.defaultconfig.service.UcUsers;
 import com.coretree.models.CookieInfo;
+import com.coretree.models.UcUser;
+import com.coretree.models.UcUserState;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Component
@@ -30,7 +33,7 @@ public class LoginHandler implements AuthenticationSuccessHandler {
 			throws IOException, ServletException {
 		// TODO Auto-generated method stub
 		
-		System.err.println("Authentication success : " + request.getContextPath());
+		// System.err.println("Authentication success : " + request.getContextPath());
 		
 		// Collection auths = auth.getAuthorities();
 		// boolean authchk = auths.stream().anyMatch(x -> x.equals(new SimpleGrantedAuthority("ROLE_ADMIN")));
@@ -39,21 +42,28 @@ public class LoginHandler implements AuthenticationSuccessHandler {
 		Member info = memberMapper.selectByIdx(username);
 		
 		ObjectMapper mapper = new ObjectMapper();
-		CookieInfo user = new CookieInfo();
-		user.setUsername(username);
-		user.setExt(info.getExtension());
-		user.setRole(info.getRole());
+		CookieInfo usercookie = new CookieInfo();
+		usercookie.setUsername(username);
+		usercookie.setExt(info.getExtension());
+		usercookie.setRole(info.getRole());
 		
 		//Object to JSON in file
-		//mapper.writeValue(new File("c:\\user.json"), user);
+		//mapper.writeValue(new File("c:\\user.json"), usercookie);
 
 		//Object to JSON in String
-		String jsonInString = mapper.writeValueAsString(user);
+		String jsonInString = mapper.writeValueAsString(usercookie);
 		
 		//response.sendRedirect(request.getContextPath() + "/_admin/index.html");
 
 		Cookie cookie = new Cookie("crm.identity", jsonInString);
 		response.addCookie(cookie);
+		
+		UcUser user = new UcUser();
+		user.setUsername(username);
+		user.setExt(info.getExtension());
+		user.setRole(info.getRole());
+		user.setState(UcUserState.valueOf(info.getState()));
+		UcUsers.add(user);
 		
 		response.sendRedirect("/");
 	}

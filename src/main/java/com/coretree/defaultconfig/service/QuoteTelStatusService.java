@@ -53,6 +53,7 @@ public class QuoteTelStatusService implements ApplicationListener<BrokerAvailabi
 	private final SimpMessagingTemplate msgTemplate;
 	private AtomicBoolean brokerAvailable = new AtomicBoolean();
 	private final StockQuoteGenerator quoteGenerator = new StockQuoteGenerator();
+	
 
 	@Autowired
 	private MemberMapper memberMapper;
@@ -73,7 +74,6 @@ public class QuoteTelStatusService implements ApplicationListener<BrokerAvailabi
 	
 	@Override
 	public void onApplicationEvent(BrokerAvailabilityEvent event) {
-		// TODO Auto-generated method stub
 		this.brokerAvailable.set(event.isBrokerAvailable());
 		
 		uc = new UcServer("14.63.166.98", 31001, 1, ByteOrder.BIG_ENDIAN);
@@ -387,7 +387,7 @@ public class QuoteTelStatusService implements ApplicationListener<BrokerAvailabi
 				// this.messagingTemplate.convertAndSend("/topic/ext.state." + data.getExtension(), payload);
 				break;
 			default:
-				// ��ü ���� ���� ���� (�����ѹ�)
+				// 
 				//Member member = memberMapper.selectByExt(data.getExtension());
 				//this.msgTemplate.convertAndSendToUser(member.getUsername(), "/queue/ext.status", payload);
 				this.messagingTemplate.convertAndSend("/topic/ext.state." + data.getExtension(), payload);

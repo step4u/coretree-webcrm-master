@@ -9,7 +9,7 @@ public class Member {
 	private String cellular;
 	private String extension;
 	private String role;
-	private String status;
+	private String state;
 	private short enabled = 1;
 	
 	public String getUsername() { return username; }
@@ -36,8 +36,8 @@ public class Member {
 	public String getRole() { return role; }
 	public void getRole(String role) { this.role = role; }
 	
-	public String getStatus() { return status; }
-	public void getStatus(String status) { this.status = status; }
+	public String getState() { return state; }
+	public void getState(String state) { this.state = state; }
 	
 	public short getEnabled() { return enabled; }
 	public void getEnabled(short enabled) { this.enabled = enabled; }
