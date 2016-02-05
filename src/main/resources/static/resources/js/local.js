@@ -437,7 +437,7 @@
 						switch (item.status) {
 							case UC_CALL_STATE_IDLE:
 								if (currentCallInfo.status == UC_CALL_STATE_RINGING || currentCallInfo.status == UC_CALL_STATE_BUSY) {
-									var msg = "대기중...<br/><br/>";
+									var msg = "대기중...";
 									$("#mainalert").html(msg);
 									
 									currentCallInfo.status = UC_CALL_STATE_IDLE;
@@ -446,7 +446,7 @@
 								}
 								break;
 							case UC_CALL_STATE_RINGING:
-								var msg = "전화가 왔습니다.<br/>" + item.callername + " (" + item.caller + ")";
+								var msg = "전화가 왔습니다." + item.callername + " (" + item.caller + ")";
 								$("#mainalert").html(msg);
 								if (item.callername == '') {
 									custbhv = bhv.add;
@@ -484,7 +484,7 @@
 								currentCallInfo.status = UC_CALL_STATE_RINGING;
 								break;
 							case UC_CALL_STATE_BUSY:
-								var msg = "통화중...<br/>" + item.callername + " (" + item.caller + ")";
+								var msg = "통화중..." + item.callername + " (" + item.caller + ")";
 								$("#mainalert").html(msg);
 								
 								currentCallInfo.status = UC_CALL_STATE_BUSY;
