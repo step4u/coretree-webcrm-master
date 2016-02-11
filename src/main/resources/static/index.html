@@ -85,13 +85,13 @@
                         </a>
                         <ul class="hoe-sub-menu">
                             <li>
-                                <a href="javascript:void(0)">
+                                <a href="#/addr/0">
                                     <span class="menu-text">공용 주소록</span>
                                     <span class="selected"></span>
                                 </a>
                             </li>
                             <li>
-                                <a href="javascript:void(0)">
+                                <a href="#/addr/1">
                                     <span class="menu-text">개인 주소록</span>
                                     <span class="selected"></span>
                                 </a>
@@ -99,21 +99,21 @@
                         </ul>
                     </li>
                     <li>
-                        <a href="javascript:void(0)">
+                        <a href="#/calls">
                             <i class="fa fa-phone fa-fw"></i>
                             <span class="menu-text">통화 내역</span>
                             <span class="selected"></span>
                         </a>
                     </li>
                     <li>
-                        <a href="javascript:void(0)">
+                        <a href="#/smses">
                             <i class="fa fa-comment fa-fw"></i>
                             <span class="menu-text">SMS 내역</span>
                             <span class="selected"></span>
                         </a>
                     </li>
                     <li>
-                        <a href="javascript:void(0)">
+                        <a href="#/records">
                             <i class="fa fa-microphone fa-fw"></i>
                             <span class="menu-text">녹취 내역</span>
                             <span class="selected"></span>
@@ -121,14 +121,14 @@
                     </li>
                     <li class="nav-level">관리자</li>
                     <li>
-                        <a href="javascript:void(0)">
+                        <a href="#/extensions">
                         	<i class="fa fa-phone-square fa-fw"></i>
                             <span class="menu-text">내선 관리</span>
                             <span class="selected"></span>
                         </a>
                     </li>
                     <li>
-                        <a href="javascript:void(0)">
+                        <a href="#/counsellors">
                         	<i class="fa fa-headphones fa-fw"></i>
                             <span class="menu-text">상담원 관리</span>
                             <span class="selected"></span>
@@ -188,7 +188,7 @@
 					                        <br />
 					                    </div>
 					                    <div class="col-md-6">
-					                    	<input type="text" class="form-control" id="callnumber" placeholder="전화번호" style="margin-bottom: 5px;">
+					                    	<input type="text" class="form-control" id="callnumber" placeholder="전화번호" style="margin-bottom: 5px; width: 265px;">
 					                    	<button type="button" class="btn btn-primary disabled btn-sm" id="btnCall">전화걸기</button>
 					                    	<button type="button" class="btn btn-primary btn-sm" id="btnPickup">당겨받기</button>
 					                    	<button type="button" class="btn btn-primary disabled btn-sm" id="btnTransfer">돌려주기</button>
@@ -430,357 +430,357 @@
   	</div>
 </div>
 <audio controls id="audioplayer" style="display: none;"></audio>
+
+<script src="/resources/jquery/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+
+<link rel="stylesheet" href="/resources/jquery-ui-1.11.4.custom/jquery-ui.min.css" />
+<script src="/resources/jquery-ui-1.11.4.custom/jquery-ui.min.js"></script>
+   
+<link rel="stylesheet" href="/resources/bootstrap/css/bootstrap.min.css" />
+<link rel="stylesheet" href="resources/bootstrap/css/bootstrap-theme.min.css" />
+<script src="/resources/bootstrap/js/bootstrap.min.js"></script>
+<script src="/resources/hoe/js/hoe.js"></script>
+
+
+<script src="/resources/moment/moment-with-locales.min.js"></script>
+<link rel="stylesheet" href="/resources/eonasdan-bootstrap-datetimepicker/bootstrap-datetimepicker.min.css" />
+<script src="/resources/eonasdan-bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
+
+<script src="https://code.angularjs.org/1.4.8/angular.min.js"></script>
+<script src="https://code.angularjs.org/1.4.8/angular-touch.min.js"></script>
+<script src="https://code.angularjs.org/1.4.8/angular-animate.min.js"></script>
+<script src="https://code.angularjs.org/1.4.8/angular-route.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.8/angular-cookies.min.js"></script>
+   
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.14.3/ui-bootstrap-tpls.min.js"></script>
+<script src="http://angular-ui.github.io/ui-router/release/angular-ui-router.js"></script>
+
+<script src="/resources/angularjs/grid-ui/grunt-scripts/csv.js"></script>
+<script src="/resources/angularjs/grid-ui/grunt-scripts/pdfmake.js"></script>
+<script src="/resources/angularjs/grid-ui/grunt-scripts/vfs_fonts.js"></script>
+   
+<script src="/resources/angularjs/grid-ui/3.0.7/ui-grid.min.js"></script>
+<link rel="stylesheet" href="/resources/angularjs/grid-ui/3.0.7/ui-grid.min.css" />
+
+<link rel="stylesheet" href="/resources/css/simple-sidebar.css" />
+
+<script src="script1.js"></script>
+<script src="/resources/js/contextMenu.js"></script>
+
+<script src="/resources/js/sockjs-0.3.4.js"></script>
+<script src="/resources/js/stomp.js"></script>
+
+<link rel="stylesheet" href="resources/css/main.css" />    
+<script src="/resources/js/MessageValues.js"></script>
+<script src="/resources/js/local.js"></script>
+
+<script src="resources/apps/controller_callstatus.js"></script>
+<script src="resources/apps/controller_telstatus.js"></script>
+<script src="resources/apps/controller_customers.js"></script>
+<script src="resources/apps/controller_calls.js"></script>
+<script src="resources/apps/controller_smses.js"></script>
+<script src="resources/apps/controller_records.js"></script>
+<script src="resources/apps/controller_exts.js"></script>
+<script src="resources/apps/controller_counsellors.js"></script>
+<script src="resources/apps/CtrlGroups.js"></script>
+<script src="resources/apps/CtrlEmptyExtensions.js"></script>
+
+<script>
+/*
+    (function() {
+        var socket = new SockJS('/webcrm');
+        var stompClient = Stomp.over(socket);
+
+        var appModel = new ApplicationModel(stompClient);
+        ko.applyBindings(appModel);
+
+        appModel.connect();
+        appModel.pushNotification("Trade results take a 2-3 second simulated delay. Notifications will appear.");
+	})();
+*/
+
+	var worker;
+	function connect() {
+        worker = new Worker('resources/js/ExtStatus_multi-worker.js');
+
+        /* 	        worker.addEventListener('message', function(e) {
+        	// update_ext_status(e.data);
+        	console.log("worker front side got message...." + e.data);
+        }); */
+        
+        worker.onmessage = function (event) {
+        	// console.log("worker front side got message...." + event.data);
+        	update_ext_status(event.data);
+		};
+
+        var command = {
+        	cmd: 'connect'
+        }
+        worker.postMessage(JSON.stringify(command));
+	}
+
+	var whoami;
+	var stompClient;
+	var group;
+	
+    function connect2() {
+        var socket = new SockJS('/webcrm');
+        stompClient = Stomp.over(socket);
+        stompClient.outgoing = 20000;
+        stompClient.incoming = 20000;
+        
+        stompClient.connect({}, function(frame) {
+        	whoami = frame.headers['user-name'];
+
+            stompClient.subscribe("/topic/ext.state.*", function(message) {
+            	var data = JSON.parse(message.body);
+                update_ext_status(data);
+            });
+            
+            stompClient.subscribe("/user/queue/groupware", function(message) {
+            	TreatMySelf(JSON.parse(message.body));
+			});
+            
+            stompClient.subscribe("/user/queue/errors", function(message) {
+            	console.log('index.html /app/queue/errors: ' + JSON.parse(message.body));
+			});
+            
+            // InitializeExts();
+            setInterval(SetCallState, 2000);
+        });
+    }
+    
+    function disconnect() {
+        if (stompClient != null) {
+            stompClient.disconnect();
+        }
+        // setConnected(false);
+        console.log("Disconnected");
+    }
+    
+    function sendName() {
+        var name = document.getElementById('name').value;
+        stompClient.send("/user/hello", {}, JSON.stringify({ 'name': name }));
+    }
+</script>
+
+<script>
+    function update_ext_status(data){
+    	var scope = angular.element($("#ctrlextstatus")).scope();
+	    scope.$apply(function () {
+	        scope.updateExtStatus(data);
+	    });
+    }
+    
+	$(document).ready(function(){
+	    $("#btn_connect").click(function(){
+	    	//connect();
+	    	connect2();
+	    });
+		
+	    $("#btn_disconnect").click(function(){
+			disconnect();
+	    });
+	    
+	    $("#btn_makecall").click(function(){
+	    	// makecall
+	        trade = {
+	                cmd : 74,
+	                extension : '3001',
+	                caller : '3001',
+	                callee : '01045455962',
+	                unconditional : '',
+	                status: -1
+	              };
+	        
+	     	stompClient.send("/app/traders", {}, JSON.stringify(trade));
+	        console.log("socktest sock sent");
+	    });
+	    
+	    $("#btn_dropcall").click(function(){
+	    	// pickup
+	        trade = {
+	                cmd : 76,
+	                extension : '3001',
+	                caller : '3001',
+	                callee : '01045455962',
+	                unconditional : '',
+	                status: -1
+	              };
+	        
+	     	stompClient.send("/app/traders", {}, JSON.stringify(trade));
+	        console.log("socktest sock sent");
+	    });
+	    
+	    $("#btn_holdcall").click(function(){
+	    	// pickup
+	        trade = {
+	                cmd : 82,
+	                extension : '3001',
+	                caller : '01045455962',
+	                callee : '3001',
+	                unconditional : '',
+	                status: -1
+	              };
+	        
+	     	stompClient.send("/app/traders", {}, JSON.stringify(trade));
+	        console.log("socktest sock sent");
+	    });
+	    
+	    $("#btn_activecall").click(function(){
+	    	// pickup
+	        trade = {
+	                cmd : 84,
+	                extension : '3001',
+	                caller : '01045455962',
+	                callee : '3001',
+	                unconditional : '',
+	                status: -1
+	              };
+	        
+	     	stompClient.send("/app/traders", {}, JSON.stringify(trade));
+	        console.log("socktest sock sent");
+	    });
+	    
+	    $("#btn_transfer").click(function(){
+	    	// transfer
+	        trade = {
+	                cmd : 86,
+	                extension : '3001',
+	                caller : '01045455962',
+	                callee : '3001',
+	                unconditional : '3002',
+	                status: -1
+	              };
+	        
+	     	stompClient.send("/app/traders", {}, JSON.stringify(trade));
+	        console.log("socktest sock sent");
+	    });
+	    
+	    $("#btn_pickup").click(function(){
+	    	// pickup
+	        trade = {
+	                cmd : 80,
+	                extension : '3002',
+	                caller : '',
+	                callee : '3001',
+	                unconditional : '',
+	                status: -1
+	              };
+	        
+	     	stompClient.send("/app/traders", {}, JSON.stringify(trade));
+	        console.log("socktest sock sent");
+	    });
+	    
+	    $("#btn_reqextstatus").click(function(){
+	    	// Requset Extension Status
+	        trade = {
+                cmd: 64,
+              };
+	    	
+	     	stompClient.send("/app/traders", {}, JSON.stringify(trade));
+	        console.log("socktest sock sent");
+	    });
+	    
+	    $("#btn_reqdnd").click(function(){
+	    	// Requset DnD
+	    	
+	        trade = {
+	                cmd: UC_SET_SRV_REQ,
+	                direct: 0,
+	                call_idx: 0,
+	                extension: '3001',
+	                cust_idx: 0,
+	                caller: '',
+	                callername: '',
+	                callee: '',
+	                calleename: '',
+	                responseCode: UC_SRV_DND,
+	                unconditional: '',
+	                status: 0
+	              };
+	        
+	     	stompClient.send("/app/traders", {}, JSON.stringify(trade));
+	    });
+	    
+	    $("#btn_dismissdnd").click(function(){
+	    	// Dismiss DnD
+	    	
+	        trade = {
+	                cmd: UC_CLEAR_SRV_REQ,
+	                direct: 0,
+	                call_idx: 0,
+	                extension: '3001',
+	                cust_idx: 0,
+	                caller: '',
+	                callername: '',
+	                callee: '',
+	                calleename: '',
+	                responseCode: UC_SRV_DND,
+	                unconditional: '',
+	                status: 0
+	              };
+	        
+	     	stompClient.send("/app/traders", {}, JSON.stringify(trade));
+	    });
+	    
+	    $("#btn_reqredirect").click(function(){
+	    	// Requset Redirect
+	    	
+	        trade = {
+	                cmd: UC_SET_SRV_REQ,
+	                direct: 0,
+	                call_idx: 0,
+	                extension: '3001',
+	                cust_idx: 0,
+	                caller: '',
+	                callername: '',
+	                callee: '',
+	                calleename: '',
+	                responseCode: UC_SRV_UNCONDITIONAL,
+	                unconditional: '3002',
+	                status: 0
+	              };
+	        
+	     	stompClient.send("/app/traders", {}, JSON.stringify(trade));
+	    });
+	    
+	    $("#btn_dismissredirect").click(function(){
+	    	// Requset Redirect
+	    	
+	        trade = {
+	                cmd: UC_CLEAR_SRV_REQ,
+	                direct: 0,
+	                call_idx: 0,
+	                extension: '3001',
+	                cust_idx: 0,
+	                caller: '',
+	                callername: '',
+	                callee: '',
+	                calleename: '',
+	                responseCode: UC_SRV_UNCONDITIONAL,
+	                unconditional: '',
+	                status: 0
+	              };
+	        
+	     	stompClient.send("/app/traders", {}, JSON.stringify(trade));
+	    });
+	    
+		connect2();
+	});
+</script>
+<style>
+	.modal-header, h4, .close {
+	    background-color: #3175AF;
+	    color:white !important;
+	    text-align: center;
+	    font-size: 30px;
+	}
+	.modal-footer {
+	    background-color: #f9f9f9;
+	}
+</style>
             
 </body>
-
-	<script src="/resources/jquery/jquery.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
-
-    <link rel="stylesheet" href="/resources/jquery-ui-1.11.4.custom/jquery-ui.min.css" />
-	<script src="/resources/jquery-ui-1.11.4.custom/jquery-ui.min.js"></script>
-    
-    <link rel="stylesheet" href="/resources/bootstrap/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="resources/bootstrap/css/bootstrap-theme.min.css" />
-	<script src="/resources/bootstrap/js/bootstrap.min.js"></script>
-	<script src="/resources/hoe/js/hoe.js"></script>
-	
-	
-	<script src="/resources/moment/moment-with-locales.min.js"></script>
-	<link rel="stylesheet" href="/resources/eonasdan-bootstrap-datetimepicker/bootstrap-datetimepicker.min.css" />
-	<script src="/resources/eonasdan-bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
-	
-	<script src="https://code.angularjs.org/1.4.8/angular.min.js"></script>
-    <script src="https://code.angularjs.org/1.4.8/angular-touch.min.js"></script>
-    <script src="https://code.angularjs.org/1.4.8/angular-animate.min.js"></script>
-    <script src="https://code.angularjs.org/1.4.8/angular-route.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.8/angular-cookies.min.js"></script>
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.14.3/ui-bootstrap-tpls.min.js"></script>
-    <script src="http://angular-ui.github.io/ui-router/release/angular-ui-router.js"></script>
-    
-    <script src="/resources/angularjs/grid-ui/grunt-scripts/csv.js"></script>
-    <script src="/resources/angularjs/grid-ui/grunt-scripts/pdfmake.js"></script>
-    <script src="/resources/angularjs/grid-ui/grunt-scripts/vfs_fonts.js"></script>
-    
-	<script src="/resources/angularjs/grid-ui/3.0.7/ui-grid.min.js"></script>
-    <link rel="stylesheet" href="/resources/angularjs/grid-ui/3.0.7/ui-grid.min.css" />
-    
-    <link rel="stylesheet" href="/resources/css/simple-sidebar.css" />
-
-    <script src="script1.js"></script>
-    <script src="/resources/js/contextMenu.js"></script>
-    
-    <script src="/resources/js/sockjs-0.3.4.js"></script>
-    <script src="/resources/js/stomp.js"></script>
-
-    <link rel="stylesheet" href="resources/css/main.css" />    
-	<script src="/resources/js/MessageValues.js"></script>
-	<script src="/resources/js/local.js"></script>
-
-	<script src="resources/apps/controller_callstatus.js"></script>
-	<script src="resources/apps/controller_telstatus.js"></script>
-	<script src="resources/apps/controller_customers.js"></script>
-	<script src="resources/apps/controller_calls.js"></script>
-	<script src="resources/apps/controller_smses.js"></script>
-	<script src="resources/apps/controller_records.js"></script>
-	<script src="resources/apps/controller_exts.js"></script>
-	<script src="resources/apps/controller_counsellors.js"></script>
-	<script src="resources/apps/CtrlGroups.js"></script>
-	<script src="resources/apps/CtrlEmptyExtensions.js"></script>
-	
-	<script>
-	/*
-	    (function() {
-	        var socket = new SockJS('/webcrm');
-	        var stompClient = Stomp.over(socket);
-	
-	        var appModel = new ApplicationModel(stompClient);
-	        ko.applyBindings(appModel);
-	
-	        appModel.connect();
-	        appModel.pushNotification("Trade results take a 2-3 second simulated delay. Notifications will appear.");
-		})();
-	*/
-	
-		var worker;
-		function connect() {
-	        worker = new Worker('resources/js/ExtStatus_multi-worker.js');
-
-	        /* 	        worker.addEventListener('message', function(e) {
-	        	// update_ext_status(e.data);
-	        	console.log("worker front side got message...." + e.data);
-	        }); */
-	        
-	        worker.onmessage = function (event) {
-	        	// console.log("worker front side got message...." + event.data);
-	        	update_ext_status(event.data);
-			};
-	
-	        var command = {
-	        	cmd: 'connect'
-	        }
-	        worker.postMessage(JSON.stringify(command));
-		}
-	
-		var whoami;
-		var stompClient;
-		var group;
-		
-	    function connect2() {
-	        var socket = new SockJS('/webcrm');
-	        stompClient = Stomp.over(socket);
-	        stompClient.outgoing = 20000;
-	        stompClient.incoming = 20000;
-	        
-	        stompClient.connect({}, function(frame) {
-	        	whoami = frame.headers['user-name'];
-
-	            stompClient.subscribe("/topic/ext.state.*", function(message) {
-	            	var data = JSON.parse(message.body);
-	                update_ext_status(data);
-	            });
-	            
-	            stompClient.subscribe("/user/queue/groupware", function(message) {
-	            	TreatMySelf(JSON.parse(message.body));
-				});
-	            
-	            stompClient.subscribe("/user/queue/errors", function(message) {
-	            	console.log('index.html /app/queue/errors: ' + JSON.parse(message.body));
-				});
-	            
-	            // InitializeExts();
-	            setInterval(SetCallState, 2000);
-	        });
-	    }
-	    
-	    function disconnect() {
-	        if (stompClient != null) {
-	            stompClient.disconnect();
-	        }
-	        // setConnected(false);
-	        console.log("Disconnected");
-	    }
-	    
-	    function sendName() {
-	        var name = document.getElementById('name').value;
-	        stompClient.send("/user/hello", {}, JSON.stringify({ 'name': name }));
-	    }
-	</script>
-	
-	<script>
-	    function update_ext_status(data){
-	    	var scope = angular.element($("#ctrlextstatus")).scope();
-		    scope.$apply(function () {
-		        scope.updateExtStatus(data);
-		    });
-	    }
-	    
-		$(document).ready(function(){
-		    $("#btn_connect").click(function(){
-		    	//connect();
-		    	connect2();
-		    });
-			
-		    $("#btn_disconnect").click(function(){
-				disconnect();
-		    });
-		    
-		    $("#btn_makecall").click(function(){
-		    	// makecall
-		        trade = {
-		                cmd : 74,
-		                extension : '3001',
-		                caller : '3001',
-		                callee : '01045455962',
-		                unconditional : '',
-		                status: -1
-		              };
-		        
-		     	stompClient.send("/app/traders", {}, JSON.stringify(trade));
-		        console.log("socktest sock sent");
-		    });
-		    
-		    $("#btn_dropcall").click(function(){
-		    	// pickup
-		        trade = {
-		                cmd : 76,
-		                extension : '3001',
-		                caller : '3001',
-		                callee : '01045455962',
-		                unconditional : '',
-		                status: -1
-		              };
-		        
-		     	stompClient.send("/app/traders", {}, JSON.stringify(trade));
-		        console.log("socktest sock sent");
-		    });
-		    
-		    $("#btn_holdcall").click(function(){
-		    	// pickup
-		        trade = {
-		                cmd : 82,
-		                extension : '3001',
-		                caller : '01045455962',
-		                callee : '3001',
-		                unconditional : '',
-		                status: -1
-		              };
-		        
-		     	stompClient.send("/app/traders", {}, JSON.stringify(trade));
-		        console.log("socktest sock sent");
-		    });
-		    
-		    $("#btn_activecall").click(function(){
-		    	// pickup
-		        trade = {
-		                cmd : 84,
-		                extension : '3001',
-		                caller : '01045455962',
-		                callee : '3001',
-		                unconditional : '',
-		                status: -1
-		              };
-		        
-		     	stompClient.send("/app/traders", {}, JSON.stringify(trade));
-		        console.log("socktest sock sent");
-		    });
-		    
-		    $("#btn_transfer").click(function(){
-		    	// transfer
-		        trade = {
-		                cmd : 86,
-		                extension : '3001',
-		                caller : '01045455962',
-		                callee : '3001',
-		                unconditional : '3002',
-		                status: -1
-		              };
-		        
-		     	stompClient.send("/app/traders", {}, JSON.stringify(trade));
-		        console.log("socktest sock sent");
-		    });
-		    
-		    $("#btn_pickup").click(function(){
-		    	// pickup
-		        trade = {
-		                cmd : 80,
-		                extension : '3002',
-		                caller : '',
-		                callee : '3001',
-		                unconditional : '',
-		                status: -1
-		              };
-		        
-		     	stompClient.send("/app/traders", {}, JSON.stringify(trade));
-		        console.log("socktest sock sent");
-		    });
-		    
-		    $("#btn_reqextstatus").click(function(){
-		    	// Requset Extension Status
-		        trade = {
-	                cmd: 64,
-	              };
-		    	
-		     	stompClient.send("/app/traders", {}, JSON.stringify(trade));
-		        console.log("socktest sock sent");
-		    });
-		    
-		    $("#btn_reqdnd").click(function(){
-		    	// Requset DnD
-		    	
-		        trade = {
-		                cmd: UC_SET_SRV_REQ,
-		                direct: 0,
-		                call_idx: 0,
-		                extension: '3001',
-		                cust_idx: 0,
-		                caller: '',
-		                callername: '',
-		                callee: '',
-		                calleename: '',
-		                responseCode: UC_SRV_DND,
-		                unconditional: '',
-		                status: 0
-		              };
-		        
-		     	stompClient.send("/app/traders", {}, JSON.stringify(trade));
-		    });
-		    
-		    $("#btn_dismissdnd").click(function(){
-		    	// Dismiss DnD
-		    	
-		        trade = {
-		                cmd: UC_CLEAR_SRV_REQ,
-		                direct: 0,
-		                call_idx: 0,
-		                extension: '3001',
-		                cust_idx: 0,
-		                caller: '',
-		                callername: '',
-		                callee: '',
-		                calleename: '',
-		                responseCode: UC_SRV_DND,
-		                unconditional: '',
-		                status: 0
-		              };
-		        
-		     	stompClient.send("/app/traders", {}, JSON.stringify(trade));
-		    });
-		    
-		    $("#btn_reqredirect").click(function(){
-		    	// Requset Redirect
-		    	
-		        trade = {
-		                cmd: UC_SET_SRV_REQ,
-		                direct: 0,
-		                call_idx: 0,
-		                extension: '3001',
-		                cust_idx: 0,
-		                caller: '',
-		                callername: '',
-		                callee: '',
-		                calleename: '',
-		                responseCode: UC_SRV_UNCONDITIONAL,
-		                unconditional: '3002',
-		                status: 0
-		              };
-		        
-		     	stompClient.send("/app/traders", {}, JSON.stringify(trade));
-		    });
-		    
-		    $("#btn_dismissredirect").click(function(){
-		    	// Requset Redirect
-		    	
-		        trade = {
-		                cmd: UC_CLEAR_SRV_REQ,
-		                direct: 0,
-		                call_idx: 0,
-		                extension: '3001',
-		                cust_idx: 0,
-		                caller: '',
-		                callername: '',
-		                callee: '',
-		                calleename: '',
-		                responseCode: UC_SRV_UNCONDITIONAL,
-		                unconditional: '',
-		                status: 0
-		              };
-		        
-		     	stompClient.send("/app/traders", {}, JSON.stringify(trade));
-		    });
-		    
-			connect2();
-		});
-	</script>
-	<style>
-		.modal-header, h4, .close {
-		    background-color: #3175AF;
-		    color:white !important;
-		    text-align: center;
-		    font-size: 30px;
-		}
-		.modal-footer {
-		    background-color: #f9f9f9;
-		}
-	</style>
 </html>

@@ -78,7 +78,7 @@ angular.module('app', ['ui.router', 'ui.bootstrap', 'ui.grid', 'ui.grid.selectio
         parent: 'site',
         url: '/records',
         data: {
-          roles: ['User', 'Admin']
+          roles: ['Admin']
         },
         views: {
           'content@': {
@@ -91,7 +91,7 @@ angular.module('app', ['ui.router', 'ui.bootstrap', 'ui.grid', 'ui.grid.selectio
         parent: 'site',
         url: '/counsellors',
         data: {
-          roles: ['User', 'Admin']
+          roles: ['Admin']
         },
         views: {
           'content@': {
@@ -104,12 +104,39 @@ angular.module('app', ['ui.router', 'ui.bootstrap', 'ui.grid', 'ui.grid.selectio
         parent: 'site',
         url: '/exts',
         data: {
-          roles: ['USER', 'Admin']
+          roles: ['Admin']
         },
         views: {
           'content@': {
               templateUrl: 'view/extensions.html',
               controller: 'CtrlExts'
+          }
+        }
+      })
+      // 개별 상담원 시간별 통화 내역
+      .state('statistics0', {
+        parent: 'site',
+        url: '/statis0',
+        data: {
+          roles: ['Admin']
+        },
+        views: {
+          'content@': {
+              templateUrl: 'view/statistics0.html',
+              controller: 'CtrlStatistics0'
+          }
+        }
+      })
+      .state('statistics1', {
+        parent: 'site',
+        url: '/statis1',
+        data: {
+          roles: ['Admin']
+        },
+        views: {
+          'content@': {
+              templateUrl: 'view/statistics1.html',
+              controller: 'CtrlStatistics1'
           }
         }
       })

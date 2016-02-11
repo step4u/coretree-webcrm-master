@@ -18,10 +18,18 @@
 	
 	$("#btnAdd").click(function(){
 		custbhv = bhv.add;
-		$("#addCustomer .modal-title").html("고객 등록");
 		ClearForm();
+		$("#addCustomer").css("border-top", "solid green 3px");
+		$("#addCustomer .modal-title").html("고객 등록");
+		$('#addCustomer').modal({
+				backdrop: false,
+				top: 100,
+				left: 1000
+				});
 		
-		$('#addCustomer').modal({backdrop: false});
+		alert($(window).width() + "//" + $(window).height());
+		
+		
 	});
 	
 	$("#btnDel").click(function(){
