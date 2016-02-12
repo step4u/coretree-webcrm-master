@@ -393,7 +393,7 @@
 	    	scope0.gridOptions.data[0].count = data.length;
 	    	
 	    	data = scope1.gridOptions.data.filter(function(element, index){
-	    		return element.status == '대기중';
+	    		return element.status == '온라인';
 	    	});
 	    	scope0.gridOptions.data[1].count = data.length;
 	    	
@@ -437,7 +437,7 @@
 						switch (item.status) {
 							case UC_CALL_STATE_IDLE:
 								if (currentCallInfo.status == UC_CALL_STATE_RINGING || currentCallInfo.status == UC_CALL_STATE_BUSY) {
-									var msg = "대기중...";
+									var msg = "온라인...";
 									$("#mainalert").html(msg);
 									
 									currentCallInfo.status = UC_CALL_STATE_IDLE;

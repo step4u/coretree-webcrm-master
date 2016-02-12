@@ -1,0 +1,94 @@
+					<div>
+						<div ui-grid="gridOptions" ui-grid-selection ui-grid-pagination class="grid" id="ctrlexts"></div>
+					</div>
+					<div class="form-group form-inline" style='margin-top: 10px;'>
+						<input type='text' id='txtsearch' class='form-control' placeholder="내선번호 / 상담원" />
+						<button type='button' for='txtsearch' class="btn btn-info btn-sm" id="btn_Search">검색</button>
+						<button type="button" class="btn btn-warning btn-sm" style="float: right;" id="btn_Del">삭제</button>
+						<button type="button" class="btn btn-primary btn-sm" style="float: right; margin-right: 10px;" id="btnExtAdd">등록</button>
+					</div>
+
+<!-- Exts Modal -->
+<div class="modal fade" id="modalexts" role="dialog">
+	<div class="modal-dialog modal-sm">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h5 class="modal-title">내선 등록</h5>
+			</div>
+			<div class="modal-body">
+				<form class="form-horizontal" role="form">
+					<div class="form-group">
+						<div class="col-lg-4">
+							<label class="control-label" for="extension">내선번호</label>
+						</div>
+						<div class="col-lg-8">
+							<input type="hidden" id="extension" />
+							<input type="text" id="newext" class="form-control" placeholder="내선번호" />
+						</div>
+					</div>
+<!-- 					<div class="form-group">
+						<div class="col-lg-4">
+							<label class="control-label" for="extension">상담원</label>
+						</div>
+						<div class="col-lg-8">
+							<input type="text" id="extension" class="form-control" placeholder="내선번호" />
+						</div>
+					</div> -->
+				</form>
+      		</div>
+      		<div class="modal-footer">
+        		<button type="button" class="btn btn-primary btn-sm" id="btnExtSave">저장</button>
+        		<button type="button" class="btn btn-default btn-sm" id="btnExtClose">닫기</button>
+      		</div>
+    	</div>
+  	</div>
+</div>
+
+<script>
+	$(document).ready(function(){
+/* 		$("#modalexts").draggable({
+		      handle: ".modal-header"
+		}); */
+		
+		$("#btnExtAdd").click(function(){
+			custbhv = bhv.add;
+			$("#modalexts").modal("show");
+		});
+		
+		$("#btnExtClose").click(function(){
+			$("#modalexts").modal("hide");
+		});
+		
+		$("#modalexts").on('shown.bs.modal', function () {
+			$("#modalexts #newext").focus();
+    	});
+		
+		$("#modalexts").on('hidden.bs.modal', function () {
+			$("#modalexts #newext").val("");
+    	});
+		
+		$("#btnExtSave").click(function(){
+			var obj, url;
+			
+			if (custbhv == bhv.add) {
+				obj = {extension: $("#modalexts #newext").val()}
+				url = "/extension/add";
+			} else if (custbhv == bhv.modi) {
+				obj = {extension: $("#modalexts #extension").val(), newext: $("#modalexts #newext").val()}
+				url = "/extension/modi";
+			}
+			
+			$.post(url, obj, function(response){
+				$('#modalexts').modal("hide");
+				
+		    	var scope = angular.element($("#ctrlexts")).scope();
+			    scope.$apply(function () {
+			        scope.getPage('');
+			    });
+				
+				custbhv = bhv.none;
+			});
+		});
+	});
+</script>

@@ -16,8 +16,8 @@
     	<if test="rowsperpage > 0 and curpage > 0">
     		first #{rowsperpage} skip ((#{curpage} - 1) * #{rowsperpage})
     	</if>
-			a.extension, (select uname from users where username=b.username), '대기중' status
-			from extensions a join users_exts b
+			a.extension, iif((select uname from users where username=b.username) is null, '-', (select uname from users where username=b.username)) uname
+			from extensions a left join users_exts b
 				on a.extension=b.extension 
 			 order by a.extension asc
     </select>
@@ -30,7 +30,7 @@
     </select>
     
     <select id="selectByTxt" resultMap="extensionMap">
-    	select a.extension, (select uname from users where username=b.username) as username, '대기중' as status
+    	select a.extension, (select uname from users where username=b.username) as username
 			from extensions a join users_exts b
 				on a.extension=b.extension 
 			where a.extension like #{txt} or b.username like #{txt}
@@ -48,10 +48,9 @@
     	select case when count(extension) > 0 then 0 else 1 end from extensions where extension=#{ext}
     </select>
     
-    <delete id="del">
-    	delete from extensions where extension=#{ext};
-    	delete from users_exts where extension=#{ext};
-    </delete>
+    <select id="del" resultType="java.lang.Void">
+    	{call RMV_EXTENSION ( #{ext, mode=IN, jdbcType=VARCHAR} )}
+    </select>
     
     <delete id="delAll" parameterType="java.util.List">
 		delete from extensions where
@@ -64,7 +63,7 @@
 		</foreach>
     </delete>
     
-    <update id="modi">
-		update users_exts set username=#{username} where extension=#{extension}
-    </update>
+    <select id="modi" resultType="java.lang.Void">
+	    {call UDP_EXTENSION ( #{extension, mode=IN, jdbcType=VARCHAR}, #{newext, mode=IN, jdbcType=VARCHAR} )}
+    </select>
 </mapper>

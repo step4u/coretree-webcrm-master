@@ -1,6 +1,6 @@
 	/* 통화내역 */
 	angular.module('app')
-	.controller('CtrlExts', ['$scope', '$http', 'uiGridConstants', function ($scope, $http, uiGridConstants) {
+	.controller('CtrlSms', ['$scope', '$http', '$log', '$timeout', 'uiGridConstants', function ($scope, $http, $log, $timeout, uiGridConstants) {
 		
 		var paginationOptions = {
 			    pageNumber: 1,
@@ -21,18 +21,21 @@
 			    paginationPageSize: 20,
 			    useExternalPagination: true,
 			    useExternalSorting: true,
-				enableSorting: false,
+				enableSorting: true,
 				showGridFooter: false,
 				columnDefs: [
-			    		      { displayName: '내선번호', field: 'extension', headerCellClass:'white', cellClass: 'grid-cell', width: 120 },
-			    		      { displayName: '사용자(상담원)', field: 'uname', headerCellClass: 'white', cellClass: 'grid-cell', width: 150 },
+			    		      { displayName: '이름', field: 'name', headerCellClass: 'white', cellClass: 'grid-cell', width: 120 },
+			    		      { displayName: '전화번호', field: 'tel', headerCellClass:'white', cellClass: 'grid-cell', width: 120 },
+			    		      { displayName: '날짜', field: 'date', headerCellClass: 'white', cellClass: 'grid-cell', width: 120 },
+			    		      { displayName: '시각', field: 'time', headerCellClass: 'white', cellClass: 'grid-cell', width: 100 },
+			    		      { displayName: '통화시간', field: 'duration', headerCellClass: 'white', cellClass: 'grid-cell', width: 100 },
+			    		      { displayName: '상담내용', field: 'memo', headerCellClass: 'white', cellClass: 'grid-cell' },
 			    		      { displayName: '기타', field: 'etc',
 			    		    	  headerCellClass: 'white',
 			    		    	  cellClass: 'grid-cell-align',
 			    		    	  width: 120,
-			    		    	  cellTemplate: '<button class="btn btn-primary btn-xs" ng-click="grid.appScope.modiRow(row)">수정</button>'
-							  },
-							  { displayName: '', field: 'blank', headerCellClass: 'white', cellClass: 'grid-cell' }
+			    		    	  cellTemplate: '<button class="btn btn-primary btn-xs" ng-click="grid.appScope.viewRow(row)">보기</button>'
+							  }
 			    		    ],
 			    groupHeaders: false,
 			    enableRowSelection: true,
@@ -47,16 +50,16 @@
 			    	
 			    	$scope.gridApi.core.on.sortChanged($scope, function(grid, sortColumns) {
 			            if (sortColumns.length == 0) {
-			            	paginationOptions.sort = null;
+			            	paginationOptionsCall.sort = null;
 			            } else {
-			            	paginationOptions.sort = sortColumns[0].sort.direction;
+			            	paginationOptionsCall.sort = sortColumns[0].sort.direction;
 			            }
 			            $scope.getPage();
 			    	});
 			    	
 			    	gridApi.pagination.on.paginationChanged($scope, function (newPage, pageSize) {
-			    		paginationOptions.pageNumber = newPage;
-			    		paginationOptions.pageSize = pageSize;
+			    		paginationOptionsCall.pageNumber = newPage;
+			    		paginationOptionsCall.pageSize = pageSize;
 			    		$scope.getPage();
 			    	});
 			    	
@@ -78,16 +81,16 @@
 			var url;
 			
 			if (txt == ''){
-				url = '/extension/get/all/' + paginationOptions.pageNumber + '/' + paginationOptions.pageSize;
+				url = '/sms/get/all/' + paginationOptions.pageNumber + '/' + paginationOptions.pageSize;
 			} else {
-				url = '/extension/get/search/' + txt;
+				url = '/sms/get/search/' + txt;
 			}
 			
 			if (typeof(txt) == 'undefined'){
-				url = '/extension/get/all/' + paginationOptions.pageNumber + '/' + paginationOptions.pageSize;
+				url = '/sms/get/all/' + paginationOptions.pageNumber + '/' + paginationOptions.pageSize;
 			}
 			
-			var counturl = '/extension/get/count';
+			var counturl = '/sms/get/count';
 			$http.get(counturl)
 			.success(function(data) {
 				if ($scope.gridOptions.totalItems != data) {
@@ -98,7 +101,6 @@
 				
 				$http.get(url)
 				.success(function(data) {
-					// console.log(JSON.stringify(data));
 					$scope.gridOptions.data = data;
 				});
 			});
@@ -109,7 +111,7 @@
 		$scope.viewRow = function(row) {
 			var item = row.entity;
 			
-			$http.get('/extension/get/' + item.idx)
+			$http.get('/sms/get/' + item.idx)
 			.success(function(data) {
 				$scope.getPage();
 				custbhv = bhv.none;
@@ -120,7 +122,7 @@
 			custbhv = bhv.del;
 			var item = row.entity;
 			
-			$http.get('/extension/del/' + item.idx)
+			$http.get('/sms/del/' + item.idx)
 			.success(function(data) {
 				$scope.getPage();
 				custbhv = bhv.none;
@@ -136,7 +138,7 @@
 			$("#idx").val(item.idx);
 			$("#depthorder").val('string:' + item.depthorder);
 			$("#uname").val(item.uname);
-			$("#firm").val(item.company);
+			$("#company").val(item.company);
 			$("#posi").val(item.posi);
 			$("#tel").val(item.tel);
 			$("#cellular").val(item.cellular);

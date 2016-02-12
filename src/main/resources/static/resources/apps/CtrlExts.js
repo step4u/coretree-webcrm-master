@@ -1,7 +1,7 @@
 	/* 통화내역 */
 	angular.module('app')
-	.controller('CtrlCounsellors', ['$scope', '$http', 'uiGridConstants', function ($scope, $http, uiGridConstants) {
-
+	.controller('CtrlExts', ['$scope', '$http', 'uiGridConstants', function ($scope, $http, uiGridConstants) {
+		
 		var paginationOptions = {
 			    pageNumber: 1,
 			    pageSize: 20,
@@ -24,21 +24,15 @@
 				enableSorting: false,
 				showGridFooter: false,
 				columnDefs: [
-			             	  { displayName: '아이디', field: 'username', headerCellClass: 'white', cellClass: 'grid-cell', width: 120 },
-			    		      { displayName: '이름', field: 'uname', headerCellClass: 'white', cellClass: 'grid-cell', width: 120 },
-			    		      { displayName: '직급', field: 'posi', headerCellClass: 'white', cellClass: 'grid-cell', width: 120 },
-			    		      { displayName: '전화번호', field: 'tel', headerCellClass:'white', cellClass: 'grid-cell', width: 150 },
-			    		      { displayName: '휴대전화', field: 'cellular', headerCellClass: 'white', cellClass: 'grid-cell', width: 150 },
+			    		      { displayName: '내선번호', field: 'extension', headerCellClass:'white', cellClass: 'grid-cell', width: 120 },
+			    		      { displayName: '사용자(상담원)', field: 'uname', headerCellClass: 'white', cellClass: 'grid-cell', width: 150 },
 			    		      { displayName: '기타', field: 'etc',
 			    		    	  headerCellClass: 'white',
 			    		    	  cellClass: 'grid-cell-align',
-			    		    	  width: 150,
+			    		    	  width: 120,
 			    		    	  cellTemplate: '<button class="btn btn-primary btn-xs" ng-click="grid.appScope.modiRow(row)">수정</button> <button class="btn btn-warning btn-xs" ng-click="grid.appScope.deleteRow(row)">삭제</button>'
 							  },
-			    		      { displayName: '', field: 'etc2',
-			    		    	  headerCellClass: 'white',
-			    		    	  cellClass: 'grid-cell-align'
-							  }
+							  { displayName: '', field: 'blank', headerCellClass: 'white', cellClass: 'grid-cell' }
 			    		    ],
 			    groupHeaders: false,
 			    enableRowSelection: true,
@@ -68,12 +62,12 @@
 			    	
 			    	gridApi.selection.on.rowSelectionChanged($scope,function(row){
 			            var msg = 'row selected ' + row.isSelected;
-			            $console.log(msg);
+			            $log.log(msg);
 			    	});
 	
 					gridApi.selection.on.rowSelectionChangedBatch($scope,function(rows){
 						var msg = 'rows changed ' + rows.length;
-						$console.log(msg);
+						$log.log(msg);
 						
 						$scope.gridOptions.selectedItems = rows;
 					});
@@ -84,30 +78,26 @@
 			var url;
 			
 			if (txt == ''){
-				url = '/member/get/all/' + paginationOptions.pageNumber + '/' + paginationOptions.pageSize;
+				url = '/extension/get/all/' + paginationOptions.pageNumber + '/' + paginationOptions.pageSize;
 			} else {
-				url = '/member/get/search/' + txt;
+				url = '/extension/get/search/' + txt;
 			}
 			
 			if (typeof(txt) == 'undefined'){
-				url = '/member/get/all/' + paginationOptions.pageNumber + '/' + paginationOptions.pageSize;
+				url = '/extension/get/all/' + paginationOptions.pageNumber + '/' + paginationOptions.pageSize;
 			}
 			
-			var counturl = '/member/get/count';
+			var counturl = '/extension/get/count';
 			$http.get(counturl)
 			.success(function(data) {
-				
 				if ($scope.gridOptions.totalItems != data) {
 					paginationOptions.pageNumber = 1;
 				}
-				
-				// console.log("count:" + data);
 				
 				$scope.gridOptions.totalItems = data;
 				
 				$http.get(url)
 				.success(function(data) {
-					// console.log("calls list:" + data);
 					$scope.gridOptions.data = data;
 				});
 			});
@@ -118,7 +108,7 @@
 		$scope.viewRow = function(row) {
 			var item = row.entity;
 			
-			$http.get('/member/get/' + item.idx)
+			$http.get('/extension/get/' + item.idx)
 			.success(function(data) {
 				$scope.getPage();
 				custbhv = bhv.none;
@@ -129,7 +119,7 @@
 			custbhv = bhv.del;
 			var item = row.entity;
 			
-			$http.get('/member/del/' + item.username)
+			$http.get('/extension/del/' + item.extension)
 			.success(function(data) {
 				$scope.getPage();
 				custbhv = bhv.none;
@@ -138,23 +128,16 @@
 		
 		$scope.modiRow = function(row) {
 			custbhv = bhv.modi;
-			$("#ModalUser .modal-title").html("사용자(상담원) 수정");
+			$("#modalexts .modal-title").html("내선번호 수정");
 			
 			var item = row.entity;
-
-			$("#ModalUser #username").val(item.username);
-			$("#ModalUser #username").attr("readonly", "readonly");
-			$("#ModalUser #btn_Chk1").css("display", "none");
-			$("#ModalUser #uname").val(item.uname);
-			$("#ModalUser #posi").val(item.posi);
-			$("#ModalUser #tel").val(item.tel);
-			$("#ModalUser #cellular").val(item.cellular);
-			
-			$("#ModalUser").modal("show");
+			$("#modalexts #extension").val(item.extension);
+			$("#modalexts #newext").val(item.extension);
+			$("#modalexts").modal("show");
 		};
 		
 		$scope.getCurrentSelection = function() {
 			  var currentSelection = $scope.gridApi.selection.getSelectedRows();
-			  console.log(currentSelection);
+			  $log.log(currentSelection);
 		};
 	}]);

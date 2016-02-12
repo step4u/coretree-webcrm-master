@@ -41,14 +41,14 @@
 					<li class="dropdown hoe-rheader-submenu hoe-header-profile">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 							<i class="fa fa-plus fa-fw"></i>
-                            <span><b>대기중</b> <i class=" fa fa-angle-down fa-fw"></i></span>
+                            <span><b>온라인</b> <i class=" fa fa-angle-down fa-fw"></i></span>
 						</a>
 						<ul class="dropdown-menu ">
-							<li><a href="#"><i class="fa fa-plus fa-fw"></i>대기중</a></li>
+							<li><a href="#"><i class="fa fa-plus fa-fw"></i>온라인</a></li>
 							<li><a href="#"><i class="fa fa-check fa-fw"></i>통화중</a></li>
 							<li><a href="#"><i class="fa fa-minus fa-fw"></i>자리비움</a></li>
 							<li><a href="#"><i class="fa fa-times fa-fw"></i>수신거부</a></li>
-							<li><a href="#"><i class="fa fa-power-off fa-fw"></i>로그아웃</a></li>
+							<li><a href="#" id="logout"><i class="fa fa-power-off fa-fw"></i>로그아웃</a></li>
 						</ul>
 					</li>
 <!--
@@ -121,7 +121,7 @@
                     </li>
                     <li class="nav-level">관리자</li>
                     <li>
-                        <a href="#/extensions">
+                        <a href="#/exts">
                         	<i class="fa fa-phone-square fa-fw"></i>
                             <span class="menu-text">내선 관리</span>
                             <span class="selected"></span>
@@ -471,7 +471,7 @@
 <script src="/resources/js/sockjs-0.3.4.js"></script>
 <script src="/resources/js/stomp.js"></script>
 
-<link rel="stylesheet" href="resources/css/main.css" />    
+<link rel="stylesheet" href="/resources/css/main.css" />
 <script src="/resources/js/MessageValues.js"></script>
 <script src="/resources/js/local.js"></script>
 
@@ -479,10 +479,10 @@
 <script src="resources/apps/controller_telstatus.js"></script>
 <script src="resources/apps/controller_customers.js"></script>
 <script src="resources/apps/controller_calls.js"></script>
-<script src="resources/apps/controller_smses.js"></script>
-<script src="resources/apps/controller_records.js"></script>
-<script src="resources/apps/controller_exts.js"></script>
-<script src="resources/apps/controller_counsellors.js"></script>
+<script src="resources/apps/CtrlSms.js"></script>
+<script src="resources/apps/CtrlRecords.js"></script>
+<script src="resources/apps/CtrlExts.js"></script>
+<script src="resources/apps/CtrlCounsellors.js"></script>
 <script src="resources/apps/CtrlGroups.js"></script>
 <script src="resources/apps/CtrlEmptyExtensions.js"></script>
 
@@ -510,7 +510,6 @@
         }); */
         
         worker.onmessage = function (event) {
-        	// console.log("worker front side got message...." + event.data);
         	update_ext_status(event.data);
 		};
 

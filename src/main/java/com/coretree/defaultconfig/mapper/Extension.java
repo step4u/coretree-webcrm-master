@@ -5,6 +5,7 @@ public class Extension {
 	private String username;
 	private String uname;
 	private String status;
+	private String newext;
 	
 	public String getExtension() { return this.extension; }
 	public void setExtension(String extension) { this.extension = extension; }
@@ -17,6 +18,9 @@ public class Extension {
 	
 	public String getStatus() { return this.status; }
 	public void setStatus(String status) { this.status = status; }
+	
+	public String getNewext() { return this.newext; }
+	public void setNewext(String newext) { this.newext = newext; }
 	
 	@Override
 	public String toString() {

@@ -54,13 +54,13 @@ public class ExtensionController {
 		mapper.add(info);
 	}
 	
-	@RequestMapping(value = "/extension/del/{id}", method = RequestMethod.GET)
-	public void del(@PathVariable("id") String id, Principal principal) {
-		mapper.del(id);
+	@RequestMapping(value = "/extension/del/{ext}", method = RequestMethod.GET)
+	public void del(@PathVariable("ext") String ext, Principal principal) {
+		mapper.del(ext);
 	}
 	
 	@RequestMapping(value = "/extension/modi", method = RequestMethod.POST)
-	public void modi(Extension memberinfo) {
-		mapper.modi(memberinfo);
+	public void modi(Extension info, Principal principal) {
+		mapper.modi(info);
 	}
 }

@@ -87,6 +87,19 @@ angular.module('app', ['ui.router', 'ui.bootstrap', 'ui.grid', 'ui.grid.selectio
           }
         }
       })
+      .state('extensions', {
+        parent: 'site',
+        url: '/exts',
+        data: {
+          roles: ['Admin']
+        },
+        views: {
+          'content@': {
+              templateUrl: 'view/exts.html',
+              controller: 'CtrlExts'
+          }
+        }
+      })
       .state('counsellors', {
         parent: 'site',
         url: '/counsellors',
@@ -97,19 +110,6 @@ angular.module('app', ['ui.router', 'ui.bootstrap', 'ui.grid', 'ui.grid.selectio
           'content@': {
               templateUrl: 'view/counsellors.html',
               controller: 'CtrlCounsellors'
-          }
-        }
-      })
-      .state('extensions', {
-        parent: 'site',
-        url: '/exts',
-        data: {
-          roles: ['Admin']
-        },
-        views: {
-          'content@': {
-              templateUrl: 'view/extensions.html',
-              controller: 'CtrlExts'
           }
         }
       })
