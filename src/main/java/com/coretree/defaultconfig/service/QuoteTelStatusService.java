@@ -76,7 +76,7 @@ public class QuoteTelStatusService implements ApplicationListener<BrokerAvailabi
 	public void onApplicationEvent(BrokerAvailabilityEvent event) {
 		this.brokerAvailable.set(event.isBrokerAvailable());
 		
-		uc = new UcServer("14.63.166.98", 31001, 1, ByteOrder.BIG_ENDIAN);
+		uc = new UcServer("14.63.171.190", 31001, 1, ByteOrder.BIG_ENDIAN);
 		uc.HaveGotUcMessageEventHandler.addEventHandler(this);
 		uc.regist();
 		

@@ -11,6 +11,39 @@
 		});
 		*/
 		
+		// 컨텍스트 메뉴
+		$scope.menuOptions = function (item) {
+			var itm = item.entity;
+		    return [
+	            ['고객  [ ' + itm.uname + ' ]', function(){return;}]
+	            ,null
+		        ,['전화하기 : ' + itm.tel, function () {
+					trade = {
+			                cmd: 74,
+			                extension: crmidentity.ext,
+			                caller: crmidentity.ext,
+			                callee: itm.tel,
+			                unconditional: '',
+			                status: -1
+			              };
+			     	stompClient.send("/app/traders", {}, JSON.stringify(trade));
+		        	console.log("전화하기: " + angular.toJson(item.entity));
+		        }]
+	            ,['전화하기 : ' + itm.cellular, function () {
+					trade = {
+			                cmd: 74,
+			                extension: crmidentity.ext,
+			                caller: crmidentity.ext,
+			                callee: itm.cellular,
+			                unconditional: '',
+			                status: -1
+			              };
+			     	stompClient.send("/app/traders", {}, JSON.stringify(trade));
+		        	console.log("전화하기: " + angular.toJson(item.entity));
+		        }]
+		    ];
+		};
+		
 		// 고객리스트
 		var paginationOptions = {
 			    pageNumber: 1,
@@ -33,6 +66,7 @@
 			    useExternalSorting: true,
 				enableSorting: false,
 				showGridFooter: false,
+				rowTemplate: '<div ng-repeat="col in colContainer.renderedColumns track by col.colDef.name" class="ui-grid-cell" ui-grid-cell context-menu="grid.appScope.menuOptions(row)"></div>',
 				columnDefs: [
 			    		      { displayName: '고객이름', field: 'uname', headerCellClass: 'white' , cellClass: 'grid-cell' },
 			    		      { displayName: '회사', field: 'firm', headerCellClass:'white', cellClass: 'grid-cell' },
@@ -43,7 +77,7 @@
 			    		    	  enableFiltering: false,
 			    		    	  cellClass: 'grid-cell-align',
 			    		    	  headerCellClass: 'white',
-			    		    	  cellTemplate: '<button class="btn btn-primary btn-xs" ng-click="grid.appScope.makeCall(row)">전화걸기</button> <button class="btn btn-primary btn-xs" ng-click="grid.appScope.modiRow(row)">수정</button> <button class="btn btn-warning btn-xs" ng-click="grid.appScope.deleteRow(row)">삭제</button>'
+			    		    	  cellTemplate: '<button class="btn btn-primary btn-xs" ng-click="grid.appScope.modiRow(row)">수정</button> <button class="btn btn-warning btn-xs" ng-click="grid.appScope.deleteRow(row)">삭제</button>'
 							  }
 			    		    ],
 			    groupHeaders: false,
@@ -92,8 +126,6 @@
 			    }
 		};
 		
-		group = $stateParams.param;
-		
 		$scope.getPage = function(searchtxt) {
 			//console.log("getPage searchtxt: " + searchtxt);
 			var url;
@@ -137,8 +169,28 @@
 				});
 			});
 		}
-		
 		$scope.getPage();
+		
+		$scope.bindSubGroup = function(){
+			//console.log("$stateParams.param.substring(0,1) : " + $stateParams.param.substring(0,1));
+			$http.get('/customer/get/group/' + $stateParams.param.substring(0,1))
+			.success(function(response) {
+				$scope.options = response;
+				var item = response.find(function(element, index){
+					//console.log("$stateParams.param.substring(1,2) : " + $stateParams.param.substring(1,2));
+					//console.log("element.subgroup : " + element.subgroup);
+					return element.subgroup == $stateParams.param.substring(1,2);
+				});
+				
+				// console.log("item : " + angular.toJson(item));
+				if (typeof(item) == 'undefined') {
+					$scope.modeloption = "0";
+				} else {
+					$scope.modeloption = item.subgroup;
+				}
+			});
+		};
+		$scope.bindSubGroup();
 		
 		$scope.makeCall = function(row) {
 			custbhv = bhv.del;
@@ -180,20 +232,21 @@
 			$("#addCustomer .modal-title").html("고객 수정");
 			
 			var item = row.entity;
-			//console.log("modiRow row.entity:" + item);
-			//console.log("modiRow row.entity:" + angular.toJson(item));
 
-			$("#idx").val(item.idx);
-			$("#depthorder").val('string:' + item.depthorder);
-			$("#uname").val(item.uname);
-			$("#company").val(item.firm);
-			$("#posi").val(item.posi);
-			$("#tel").val(item.tel);
-			$("#cellular").val(item.cellular);
-			$("#extension").val(item.extension);
-			$("#email").val(item.email);
+			$("#addCustomer idx").val(item.idx);
+			$("#addCustomer #maingroup").val(item.maingroup);
+			// $("#addCustomer #subgroup").val(item.subgroup);
+			$("#addCustomer #uname").val(item.uname);
+			$("#addCustomer #company").val(item.firm);
+			$("#addCustomer #posi").val(item.posi);
+			$("#addCustomer #tel").val(item.tel);
+			$("#addCustomer #cellular").val(item.cellular);
+			$("#addCustomer #extension").val(item.extension);
+			$("#addCustomer #email").val(item.email);
 			
 			$("#addCustomer").modal({backdrop: false});
+			
+			SetSubgroups(item.maingroup, item.subgroup);
 		};
 		
 		$scope.getCurrentSelection = function() {

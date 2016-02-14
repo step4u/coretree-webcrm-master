@@ -85,13 +85,13 @@
                         </a>
                         <ul class="hoe-sub-menu">
                             <li>
-                                <a href="#/addr/0">
+                                <a href="#/addr/11">
                                     <span class="menu-text">공용 주소록</span>
                                     <span class="selected"></span>
                                 </a>
                             </li>
                             <li>
-                                <a href="#/addr/1">
+                                <a href="#/addr/21">
                                     <span class="menu-text">개인 주소록</span>
                                     <span class="selected"></span>
                                 </a>
@@ -183,7 +183,7 @@
 									<div class="row clearfix">
 					                    <div class="alert alert-dismissable alert-info col-md-6" id="mainalert" style="height: 70px;">
 					                        <!-- <button data-dismiss="alert" class="close" type="button">&times;</button> -->
-					                        	대기중...
+					                        	온라인...
 					                        <br />
 					                        <br />
 					                    </div>
@@ -349,58 +349,86 @@
 				<h4 class="modal-title">고객 등록</h4>
 			</div>
 			<div class="modal-body">
-        		<!-- <p>This is a large modal.</p>  -->
-				<div class="alert alert-warning fade in" style="display: none;" id="alertcust">
-		  			<strong>Warning!</strong> This alert box could indicate a warning that might need attention.
-				</div>
-        		<div class="row">
-					<div class="form-group col-sm-6" ng-controller="CtrlGroups">
-						<input type="hidden" id="idx">
-				    	<label class="control-label" for="depthorder">그룹</label>
-				    	<select class="form-control" ng-model="modeloption" id="depthorder" ng-options="option.depthorder as option.txt for option in options">
-				    		<option value="">:: 그룹선택 ::</option>
-				    	</select>
+				<form class="form-horizontal" role="form">
+					<input type="hidden" id="idx">
+					<div class="alert alert-warning fade in" style="display: none;" id="alertcust">
+			  			<strong>Warning!</strong> This alert box could indicate a warning that might need attention.
+					</div>
+					<!-- <div class="form-group" ng-controller="CtrlGroups"> -->
+					<div class="form-group">
+						<div class="col-sm-2">
+							<label class="control-label" for="depthorder">그룹</label>
+						</div>
+						<div class="col-sm-4">
+					    	<select class="form-control" id="maingroup">
+					    		<option value="0">:: 메인그룹 ::</option>
+					    		<option value="1">공용 주소록</option>
+					    		<option value="2">개인 주소록</option>
+					    	</select>
+						</div>
+						<div class="col-sm-4" ng-controller="CtrlGroups">
+							<select class="form-control" id="subgroup">
+					    		<option value="0">:: 서브그룹 ::</option>
+					    	</select>
+						</div>
+						<div class="col-sm-2">
+							<button type="button" class="btn btn-primary">추가</button>
+						</div>
 				  	</div>
-			  	</div>
-			  	<div class="row">
-					<div class="form-group col-sm-6">
-				    	<label for="uname">이름</label>
-				    	<input type="text" class="form-control" id="uname" placeholder="이름">
+					<div class="form-group">
+						<div class="col-sm-2">
+							<label for="uname">이름</label>
+						</div>
+				    	<div class="col-sm-4">
+				    		<input type="text" class="form-control" id="uname" placeholder="이름">
+				    	</div>
+				  		<div class="col-sm-2">
+				  			<label for="company">회사</label>
+				  		</div>
+				    	<div class="col-sm-4">
+				    		<input type="text" class="form-control" id="firm" placeholder="회사">
+				    	</div>				    	
 				  	</div>
-				  	<div class="form-group col-sm-6">
-				    	<label for="company">회사</label>
-				    	<input type="text" class="form-control" id="firm" placeholder="회사">
+				  	<div class="form-group">
+				  		<div class="col-sm-2">
+				  			<label for="tel">전화</label>
+				  		</div>
+				    	<div class="col-sm-4">
+				    		<input type="text" class="form-control" id="tel" placeholder="전화">
+				    	</div>
+				  		<div class="col-sm-2">
+				  			<label for="cellular">휴대전화</label>
+				  		</div>
+				    	<div class="col-sm-4">
+				    		<input type="text" class="form-control" id="cellular" placeholder="휴대전화">
+				    	</div>
 				  	</div>
-			  	</div>
-			  	<div class="row">
-				  	<div class="form-group col-sm-6">
-				    	<label for="tel">전화</label>
-				    	<input type="text" class="form-control" id="tel" placeholder="전화">
+				  	<div class="form-group">
+				  		<div class="col-sm-2">
+				  			<label for="extension">내선</label>
+				  		</div>
+				    	<div class="col-sm-4">
+				    		<input type="text" class="form-control" id="extension" placeholder="내선">
+				    	</div>
+			    		<div class="col-sm-2">
+			    			<label for="posi">직급</label>
+			    		</div>
+			    		<div class="col-sm-4">
+			    			<input type=text class="form-control" id="posi" placeholder="직급">
+			    		</div>
 				  	</div>
-				  	<div class="form-group col-sm-6">
-				    	<label for="cellular">휴대전화</label>
-				    	<input type="text" class="form-control" id="cellular" placeholder="휴대전화">
-				  	</div>
-			  	</div>
-			  	<div class="row">
-				  	<div class="form-group col-sm-6">
-				    	<label for="extension">내선</label>
-				    	<input type="text" class="form-control" id="extension" placeholder="내선">
+				  	<div class="form-group">
+				  		<div class="col-sm-2">
+				  			<label for="email">이메일</label>
+				  		</div>
+				    	<div class="col-sm-4">
+				    		<input type="text" class="form-control" id="email" placeholder="이메일">
+				    	</div>
 			    	</div>
-			    	<div class="form-group col-sm-6">
-				    	<label for="posi">직급</label>
-				    	<input type=text class="form-control" id="posi" placeholder="직급">
-				  	</div>
-			  	</div>
-			  	<div class="row">
-				  	<div class="form-group col-sm-8">
-				    	<label for="email">이메일</label>
-				    	<input type="text" class="form-control" id="email" placeholder="이메일">
-			    	</div>
-			  	</div>
+			</form>
       		</div>
       		<div class="modal-footer">
-        		<button type="button" class="btn btn-primary" id="btnMemo">메모</button>
+        		<button type="button" class="btn btn-primary" id="btnMemo" style="display: none;">메모</button>
         		<button type="button" class="btn btn-primary" id="btnSave">저장</button>
         		<button type="button" class="btn btn-default" id="btnClose">닫기</button>
       		</div>
@@ -453,7 +481,7 @@
 <script src="https://code.angularjs.org/1.4.8/angular-route.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.8/angular-cookies.min.js"></script>
    
-<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.14.3/ui-bootstrap-tpls.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/1.1.2/ui-bootstrap-tpls.min.js"></script>
 <script src="http://angular-ui.github.io/ui-router/release/angular-ui-router.js"></script>
 
 <script src="/resources/angularjs/grid-ui/grunt-scripts/csv.js"></script>
@@ -476,8 +504,8 @@
 <script src="/resources/js/local.js"></script>
 
 <script src="resources/apps/controller_callstatus.js"></script>
-<script src="resources/apps/controller_telstatus.js"></script>
-<script src="resources/apps/controller_customers.js"></script>
+<script src="resources/apps/CtrlExtState.js"></script>
+<script src="resources/apps/CtrlCustomers.js"></script>
 <script src="resources/apps/controller_calls.js"></script>
 <script src="resources/apps/CtrlSms.js"></script>
 <script src="resources/apps/CtrlRecords.js"></script>
@@ -521,7 +549,6 @@
 
 	var whoami;
 	var stompClient;
-	var group;
 	
     function connect2() {
         var socket = new SockJS('/webcrm');

@@ -19,8 +19,10 @@
     
     <select id="selectAll" resultMap="resMap">
     	select first #{rowsperpage} skip ((#{curpage} - 1) * #{rowsperpage})
-			username, uname, posi, tel, cellular, role, state, enabled
-			from users order by uname asc
+			a.username, a.uname, a.posi, a.tel, a.cellular, a.role, a.state, a.enabled, b.extension
+			from users a join users_exts b
+				on a.username=b.username
+			order by a.uname asc
     </select>
     
     <select id="selectByIdx" resultMap="resMap">
@@ -43,20 +45,25 @@
 			where uname like #{txt}
     </select>
     
-    <insert id="add">
-    	insert into users
-    	(username, password, uname, posi, tel, cellular)
-    	values
-    	(#{username}, #{password}, #{uname}, #{posi}, #{tel}, #{cellular})
-    </insert>
+    <select id="add" resultType="java.lang.Void">
+    	{call INS_MEMBER ( 
+    		#{username, mode=IN, jdbcType=VARCHAR},
+    		#{password, mode=IN, jdbcType=VARCHAR},
+    		#{uname, mode=IN, jdbcType=VARCHAR},
+    		#{posi, mode=IN, jdbcType=VARCHAR},
+    		#{tel, mode=IN, jdbcType=VARCHAR},
+    		#{cellular, mode=IN, jdbcType=VARCHAR},
+    		#{extension, mode=IN, jdbcType=VARCHAR}
+		)}
+    </select>
 
     <select id="chkById" resultType="java.lang.Integer">
     	select case when count(username) > 0 then 0 else 1 end from users where username=#{username}
     </select>
     
-    <delete id="del">
-    	delete from users where username = #{username}
-    </delete>
+    <select id="del" resultType="java.lang.Void">
+    	{call RMV_MEMBER ( #{username, mode=IN, jdbcType=VARCHAR} )}
+    </select>
     
     <delete id="delAll" parameterType="java.util.List">
 		delete from users where
@@ -65,12 +72,15 @@
 		</foreach>
     </delete>
     
-    <update id="modi">
-		update users set
-		uname=#{uname}, posi=#{posi}, tel=#{tel}, cellular=#{cellular}
-		<if test="password.trim() != null or password.trim() != ''">
-			, password=#{password}
-		</if>
-		where username=#{username}
-    </update>
+    <select id="modi" resultType="java.lang.Void">
+		{call UDP_MEMBER (
+    		#{username, mode=IN, jdbcType=VARCHAR},
+    		#{password, mode=IN, jdbcType=VARCHAR},
+    		#{uname, mode=IN, jdbcType=VARCHAR},
+    		#{posi, mode=IN, jdbcType=VARCHAR},
+    		#{tel, mode=IN, jdbcType=VARCHAR},
+    		#{cellular, mode=IN, jdbcType=VARCHAR},
+    		#{extension, mode=IN, jdbcType=VARCHAR}
+		)}
+    </select>
 </mapper>

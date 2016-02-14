@@ -21,19 +21,6 @@ public interface CustomerMapper {
 	@Options(statementType = StatementType.CALLABLE)
 	int count(@Param("group") String group, @Param("username") String username);
 	
-/*	@Results({
-        @Result(property = "idx", column = "idx"),
-        @Result(property = "groups_idx", column = "groups_idx"),
-        @Result(property = "customgroups_idx", column = "customgroups_idx"),
-        @Result(property = "uname", column = "uname"),
-        @Result(property = "company", column = "company"),
-        @Result(property = "posi", column = "posi"),
-        @Result(property = "tel", column = "tel"),
-        @Result(property = "cellular", column = "cellular"),
-        @Result(property = "extension", column = "extension"),
-        @Result(property = "email", column = "email")
-	})
-*/
 	@Select(value = "{ call GET_CUSTLIST ( #{curpage, mode=IN, jdbcType=INTEGER}, #{rowsperpage, mode=IN, jdbcType=INTEGER}, #{group, mode=IN, jdbcType=VARCHAR}, #{username, mode=IN, jdbcType=VARCHAR} ) }")
 	@Options(statementType = StatementType.CALLABLE)
 	List<Customer> findAll(@Param("curpage") int curpage
@@ -50,7 +37,7 @@ public interface CustomerMapper {
 			+ " or firm like #{searchtxt}")
 	List<Customer> findByTxt(@Param("searchtxt") String searchtxt);
 	
-	@Select("select idx, depthorder, username, uname, firm, posi, tel, cellular, extension, email"
+	@Select("select idx, iif(depthorder is null, '00', substring(depthorder from 1 for 1)) maingroup, iif(depthorder is null, '00', substring(depthorder from 2 for 1)) subgroup, username, uname, firm, posi, tel, cellular, extension, email"
 			+ " from customers"
 			+ " where idx = #{idx}")
 	Customer findByIdx(@Param("idx") long idx);
@@ -86,4 +73,7 @@ public interface CustomerMapper {
 	
 	@Select("select depthorder, txt from groups where char_length(depthorder)>1 order by depthorder asc")
 	List<Group> getGroup();
+	
+	@Select("select depthorder, iif(depthorder is null, '00', substring(depthorder from 1 for 1)) maingroup, iif(depthorder is null, '00', substring(depthorder from 2 for 1)) subgroup, txt from groups where char_length(depthorder)>1 and substring(depthorder from 1 for 1)=#{maingroup} order by depthorder asc")
+	List<Group> getSubgroup(String maingroup);
 }

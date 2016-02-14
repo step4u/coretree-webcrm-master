@@ -50,6 +50,11 @@ public class CustomerController {
 		return mapper.getGroup();
 	}
 	
+	@RequestMapping(path="/customer/get/group/{maingroup}", method=RequestMethod.GET)
+	public List<Group> getSubgroup(@PathVariable("maingroup") String maingroup, Principal principal) {
+		return mapper.getSubgroup(maingroup);
+	}
+	
 	@RequestMapping(path="/customer/add/", method=RequestMethod.POST)
 	public void add(Customer cust, Principal principal) {
 		//System.err.print(cust.toString());

@@ -9,7 +9,7 @@
 					</div>
 
 <!-- Modal -->
-<div class="modal fade" id="ModalUser" role="dialog">
+<div class="modal fade" id="modaluser" role="dialog">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -75,6 +75,14 @@
 			    		<input type="text" class="form-control" id="cellular" placeholder="휴대전화" />
 			    	</div>
 			  	</div>
+			  	<div class="form-group">
+			  		<div class="col-sm-2">
+			    		<label for="ext">내선번호</label>
+			    	</div>
+			    	<div class="col-sm-4">
+			    		<input type="text" class="form-control" id="ext" placeholder="내선번호" />
+			    	</div>
+			  	</div>
 				</form>
       		</div>
       		<div class="modal-footer">
@@ -88,76 +96,87 @@
 <script>
 	$(document).ready(function(){
 		custbhv = bhv.none;
-	});
+		
+		$("#modaluser").on('shown.bs.modal', function () {
+			if (custbhv == bhv.add) {
+				$("#modaluser #username").focus();
+			} else if (custbhv == bhv.modi) {
+				$("#modaluser #uname").focus();
+			}
+    	});
+		
+		$("#modaluser").on('hidden.bs.modal', function () {
+			ClearForm();
+    	});
 
-	$("#btn_Search").click(function(){
-    	var scope = angular.element($("#ctrlcounsellers")).scope();
-	    scope.$apply(function () {
-	        scope.getPage($("#txtsearch").val().trim());
-	    });
-	});
-	
-	$("#btn_Add").click(function(){
-		ClearForm();
-		$("#ModalUser .modal-title").html("사용자(상담원) 추가");
-		$('#ModalUser').modal("show");
-		$("#username").focus();
+		$("#btn_Search").click(function(){
+	    	var scope = angular.element($("#ctrlcounsellers")).scope();
+		    scope.$apply(function () {
+		        scope.getPage($("#txtsearch").val().trim());
+		    });
+		});
 		
-		custbhv = bhv.add;
-	});
-	
-	$("#btn_Chk1").click(function(){
-		var obj = {
-				username: $("#username").val()
-			};
-		
-		if ($("#username").val() == "") {
-			$("#alert").html("<strong>필수입력</strong> 아이디를 입력하세요.").css('display', 'block');
-			$("#username").focus();
-			return;
-		}
-		
-		$.get("/member/chk/" + obj.username, function(response){
-			var data = JSON.parse(response);
+		$("#btn_Add").click(function(){
+			$("#modaluser .modal-title").html("사용자(상담원) 추가");
+			$('#modaluser').modal("show");
 			
-			if (data.result == 1) {
-				$("#alert").html("사용할 수 있는 아이디 입니다.").css('display', 'block');
-				$("#password").focus();
-				$("#confirm_id").val(data.result);
-				return;
-			} else {
-				$("#alert").html("<strong>필수입력</strong> 사용할 수 없는 아이디 입니다.").css('display', 'block');
+			custbhv = bhv.add;
+		});
+		
+		$("#btn_Chk1").click(function(){
+			var obj = {
+					username: $("#username").val()
+				};
+			
+			if ($("#username").val() == "") {
+				$("#alert").html("<strong>필수입력</strong> 아이디를 입력하세요.").css('display', 'block');
 				$("#username").focus();
-				$("#confirm_id").val(data.result);
 				return;
 			}
-		});
-	});
-	
-	$("#btn_Del").click(function(){
-    	var scope = angular.element($("#ctrlcounsellers")).scope();
-	    scope.$apply(function () {
-	    	var seledtedItems = scope.gridOptions.selectedItems;
-
-			$.post("/member/del/all", seledtedItems, function(response){
+			
+			$.get("/member/chk/" + obj.username, function(response){
+				var data = JSON.parse(response);
 				
-		    	var scope = angular.element($("#ctrlcounsellers")).scope();
-			    scope.$apply(function () {
-			        scope.getPage('');
-			    });
+				if (data.result == 1) {
+					$("#alert").html("사용할 수 있는 아이디 입니다.").css('display', 'block');
+					$("#password").focus();
+					$("#confirm_id").val(data.result);
+					return;
+				} else {
+					$("#alert").html("<strong>필수입력</strong> 사용할 수 없는 아이디 입니다.").css('display', 'block');
+					$("#username").focus();
+					$("#confirm_id").val(data.result);
+					return;
+				}
 			});
-	    });
-	});
-	
-	$("#btn_Save").click(function(){
-		SaveInfo();
-	});
-	
-	$("#btn_Close").click(function(){
-		ClearForm();
-		$('#ModalUser').modal("hide");
+		});
 		
-		custbhv = bhv.none;
+		$("#btn_Del").click(function(){
+	    	var scope = angular.element($("#ctrlcounsellers")).scope();
+		    scope.$apply(function () {
+		    	var seledtedItems = scope.gridOptions.selectedItems;
+	
+				$.post("/member/del/all", seledtedItems, function(response){
+					
+			    	var scope = angular.element($("#ctrlcounsellers")).scope();
+				    scope.$apply(function () {
+				        scope.getPage('');
+				    });
+				});
+		    });
+		});
+		
+		$("#btn_Save").click(function(){
+			SaveInfo();
+		});
+		
+		$("#btn_Close").click(function(){
+			ClearForm();
+			$('#modaluser').modal("hide");
+			
+			custbhv = bhv.none;
+		});
+	
 	});
 	
 	function SaveInfo() {
@@ -168,11 +187,13 @@
 			posi: $("#posi").val(),
 			tel: $("#tel").val(),
 			cellular: $("#cellular").val(),
-			extension: '',
+			extension: $("#ext").val(),
 			role: '',
 			status: '',
 			enabled: '1'
 		};
+		
+		var url;
 		
 		if (custbhv == bhv.add) {
 			if (obj.username == "") {
@@ -206,6 +227,8 @@
 				$("#confirm_id").focus();
 				return;
 			}
+			
+			url = "/member/add";
 		} else if (custbhv == bhv.modi) {
 			if (obj.uname == "") {
 				$("#alert").html("<strong>필수입력</strong> 이름을 입력하세요.").css('display', 'block');
@@ -219,20 +242,12 @@
 					return;
 				}
 			}
-		}
-		
-		var url;
-		
-		if (custbhv == bhv.add) {
-			url = "/member/add";
-		} else if (custbhv == bhv.modi) {
+			
 			url = "/member/modi";
 		}
 		
 		$.post(url, obj, function(response){
-			$('#ModalUser').modal("hide");
-			
-			ClearForm();
+			$('#modaluser').modal("hide");
 			
 	    	var scope = angular.element($("#ctrlcounsellers")).scope();
 		    scope.$apply(function () {
@@ -244,13 +259,14 @@
 	}
 	
 	function ClearForm() {
-		$("#username").val('');
-		$("#password").val('');
-		$("#password_confirm").val('');
-		$("#uname").val('');
-		$("#posi").val('');
-		$("#tel").val('');
-		$("#cellular").val('');
+		$("#username").val("");
+		$("#password").val("");
+		$("#password_confirm").val("");
+		$("#uname").val("");
+		$("#posi").val("");
+		$("#tel").val("");
+		$("#cellular").val("");
+		$("#ext").val("");
 		
 		$("#username").removeAttr("readonly");
 		$("#btn_Chk1").css("display", "block");

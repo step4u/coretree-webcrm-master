@@ -82,6 +82,14 @@
 		      handle: ".modal-header"
 		});
 		
+		$("#addCustomer").on('shown.bs.modal', function () {
+			
+    	});
+		
+		$("#addCustomer").on('hidden.bs.modal', function () {
+			
+    	});
+		
 		$("#Memo").draggable({
 		      handle: ".modal-header"
 		});
@@ -229,7 +237,7 @@
 		
         /*** script for my call button ***/
 		
-	    if (crmidentity.role == "ROLE_ADMIN") {
+	    if (crmidentity.role === "ROLE_ADMIN") {
 	    	$(".ADMIN").css("display", "inline");
 	    }
 	    
@@ -243,7 +251,8 @@
 	function SaveCust() {
 		var obj = {
 			idx: $("#idx").val(),
-			depthorder: $("#depthorder").val() == "" ? $("#depthorder").val() : $("#depthorder").val().replace("string:", ""),
+			//depthorder: $("#depthorder").val() == "" ? $("#depthorder").val() : $("#depthorder").val().replace("string:", ""),
+			depthorder: $("#maingroup").val() + $("#subgroup").val(),
 			username: crmidentity.username,
 			uname: $("#uname").val(),
 			firm: $("#firm").val(),
@@ -254,11 +263,19 @@
 			email: $("#email").val()
 		};
 			
-		//console.log("obj.depthorder: " + obj.depthorder);
-		
-		if (obj.depthorder == "") {
+/*		if (obj.depthorder == "") {
 			$("#alertcust").html("<strong>필수입력</strong> 그룹을 선택하세요.").css('display', 'block');
 			$("#depthorder").focus();
+			return;
+		}*/
+		if ($("#maingroup").val() === "") {
+			$("#alertcust").html("<strong>필수입력</strong> 메인그룹을 선택하세요.").css('display', 'block');
+			$("#maingroup").focus();
+			return;
+		}
+		if ($("#subgroup").val() === "") {
+			$("#alertcust").html("<strong>필수입력</strong> 서브그룹을 선택하세요.").css('display', 'block');
+			$("#subgroup").focus();
 			return;
 		}
 		if (obj.uname == "") {
@@ -301,9 +318,8 @@
 	}
 	
 	function ClearForm() {
-		// console.log("group.length: " + group.length + ", group: " + group);
 		$("#idx").val('-1');
-		group.length == 2 ? $("#depthorder").val('string:' + group) : $("#depthorder option:eq(0)").prop("selected", true);
+		
 		$("#uname").val('');
 		$("#firm").val('');
 		$("#posi").val('');
@@ -311,6 +327,19 @@
 		$("#cellular").val('');
 		$("#extension").val('');
 		$("#email").val('');
+	}
+	
+	function SetSubgroups(maingroup, subgroup) {
+		$.get("/customer/get/group/" + maingroup, function(response){
+			var itm = response;
+
+			$(itm).each(function(i, v){ 
+				console.log(i + "//" + v.subgroup + "//" + v.txt);
+				$("#addCustomer #subgroup").append($("<option>", { value: v.subgroup, html: v.txt }));
+			});
+			
+			$("#addCustomer #subgroup").val(subgroup);
+		});
 	}
 	/*** script for address book ***/
 	
@@ -461,7 +490,8 @@
 										var itm = response;
 	
 										$("#addCustomer #idx").val(itm.idx);
-										$("#addCustomer #depthorder").val('string:' + itm.depthorder);
+										$("#addCustomer #maingroup").val(itm.maingroup);
+										// $("#addCustomer #subgroup").val(itm.subgroup);
 										$("#addCustomer #uname").val(itm.uname);
 										$("#addCustomer #firm").val(itm.firm);
 										$("#addCustomer #posi").val(itm.posi);
@@ -469,6 +499,8 @@
 										$("#addCustomer #cellular").val(itm.cellular);
 										$("#addCustomer #extension").val(itm.extension);
 										$("#addCustomer #email").val(itm.email);
+										
+										SetSubgroups(itm.maingroup, itm.subgroup);
 									});
 								}
 								

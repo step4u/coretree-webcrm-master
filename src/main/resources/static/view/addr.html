@@ -2,6 +2,9 @@
 						<div ui-grid="gridOptions" ui-grid-selection ui-grid-pagination class="grid" id="ctrlcustomers"></div>
 					</div>
 					<div class="form-group form-inline" style='margin-top: 10px;'>
+						<select class='form-control' ng-model="modeloption" ng-options="option.subgroup as option.txt for option in options" id="subgroup">
+							<!-- <option value="0">:: 서브그룹 ::</option> -->
+						</select>
 						<input type='text' id='txtsearch' class='form-control' placeholder="전화번호 / 휴대전화" />
 						<button type='button' for='txtsearch' class="btn btn-info btn-sm" id="btnSearch">검색</button>
 						<button type="button" class="btn btn-warning btn-sm" style="float: right;" id="btnDel">삭제</button>
@@ -9,34 +12,43 @@
 					</div>
 
 <script>
-	$("#btnSearch").click(function(){
-    	var scope = angular.element($("#ctrlcustomers")).scope();
-	    scope.$apply(function () {
-	        scope.getPage($("#txtsearch").val().trim());
-	    });
-	});
-	
-	$("#btnAdd").click(function(){
-		custbhv = bhv.add;
-		ClearForm();
-		// $("#addCustomer").css("border-top", "solid green 3px");
-		$("#addCustomer .modal-title").html("고객 등록");
-		$('#addCustomer').modal({backdrop: false});
+	$(document).ready(function(){
+		$("#btnSearch").click(function(){
+	    	var scope = angular.element($("#ctrlcustomers")).scope();
+		    scope.$apply(function () {
+		        scope.getPage($("#txtsearch").val().trim());
+		    });
+		});
 		
-		// alert($(window).width() + "//" + $(window).height());
+		$("#btnAdd").click(function(){
+			custbhv = bhv.add;
+			ClearForm();
+			// $("#addCustomer").css("border-top", "solid green 3px");
+			$("#addCustomer .modal-title").html("고객 등록");
+			$('#addCustomer').modal({backdrop: false});
+			
+			// alert($(window).width() + "//" + $(window).height());
+		});
+		
+		$("#btnDel").click(function(){
+	    	var scope = angular.element($("#ctrlcustomers")).scope();
+		    scope.$apply(function () {
+		    	var seledtedItems = scope.gridOptions.selectedItems;
+
+				$.post("/customer/del/all", seledtedItems, function(response){
+			    	var scope = angular.element($("#ctrlcustomers")).scope();
+				    scope.$apply(function () {
+				        scope.getPage('');
+				    });
+				});
+		    });
+		});
+		
+		SetSubgroup();
 	});
 	
-	$("#btnDel").click(function(){
+	// bind subgroup
+	function SetSubgroup() {
     	var scope = angular.element($("#ctrlcustomers")).scope();
-	    scope.$apply(function () {
-	    	var seledtedItems = scope.gridOptions.selectedItems;
-
-			$.post("/customer/del/all", seledtedItems, function(response){
-		    	var scope = angular.element($("#ctrlcustomers")).scope();
-			    scope.$apply(function () {
-			        scope.getPage('');
-			    });
-			});
-	    });
-	});
+	}
 </script>

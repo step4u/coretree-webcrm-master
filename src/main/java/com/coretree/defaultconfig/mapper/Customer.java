@@ -3,6 +3,8 @@ package com.coretree.defaultconfig.mapper;
 public class Customer {
 	private long idx;
 	private String depthorder;
+	private String maingroup;
+	private String subgroup;
 	private String username;
 	private String uname;
 	private String firm;
@@ -17,6 +19,12 @@ public class Customer {
 	
 	public String getDepthorder() { return this.depthorder; }
 	public void setDepthorder(String depthorder) { this.depthorder = depthorder; }
+	
+	public String getMaingroup() { return this.maingroup; }
+	public void setMaingroup(String maingroup) { this.maingroup = maingroup; }
+	
+	public String getSubgroup() { return this.subgroup; }
+	public void setSubgroup(String subgroup) { this.subgroup = subgroup; }
 	
 	public String getUsername() { return this.username; }
 	public void setUsername(String username) { this.username = username; }

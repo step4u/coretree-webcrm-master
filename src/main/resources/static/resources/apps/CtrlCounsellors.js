@@ -138,19 +138,20 @@
 		
 		$scope.modiRow = function(row) {
 			custbhv = bhv.modi;
-			$("#ModalUser .modal-title").html("사용자(상담원) 수정");
+			$("#modaluser .modal-title").html("사용자(상담원) 수정");
 			
 			var item = row.entity;
 
-			$("#ModalUser #username").val(item.username);
-			$("#ModalUser #username").attr("readonly", "readonly");
-			$("#ModalUser #btn_Chk1").css("display", "none");
-			$("#ModalUser #uname").val(item.uname);
-			$("#ModalUser #posi").val(item.posi);
-			$("#ModalUser #tel").val(item.tel);
-			$("#ModalUser #cellular").val(item.cellular);
+			$("#modaluser #username").val(item.username);
+			$("#modaluser #username").attr("readonly", "readonly");
+			$("#modaluser #btn_Chk1").css("display", "none");
+			$("#modaluser #uname").val(item.uname);
+			$("#modaluser #posi").val(item.posi);
+			$("#modaluser #tel").val(item.tel);
+			$("#modaluser #cellular").val(item.cellular);
+			$("#modaluser #ext").val(item.extension);
 			
-			$("#ModalUser").modal("show");
+			$("#modaluser").modal("show");
 		};
 		
 		$scope.getCurrentSelection = function() {
