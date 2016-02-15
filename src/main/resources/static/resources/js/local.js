@@ -47,6 +47,14 @@
 		hold: 5
 	}
 	
+	var state = {
+		online: 1,
+		left: 2,
+		directed: 3,
+		dnd: 4
+	}
+	var mystate = state.online;
+	
 	// 고객 등록, 수정, 삭제 시 사용
 	var custbhv = bhv.none;
 	// crm 상태 구분할 때 사용
@@ -330,6 +338,7 @@
 		$("#addCustomer #cellular").val('');
 		$("#addCustomer #extension").val('');
 		$("#addCustomer #email").val('');
+		$("#addCustomer #btnMemo").css("display", "none");
 		
 		// $('#addCustomer #subgroup').find('option:not(:first)').remove();
 		// $('#addCustomer #subgroup').empty().append('<option value="0">:: 서브그룹 ::</option>');
@@ -421,47 +430,45 @@
 		extstatecount.busy = 0;*/
 	}
 	
-	function SetCallState() {
+	function SetCallState(data) {
     	var scope0 = angular.element($("#ctrlcallstatus")).scope();
 
 		var scope1 = angular.element($("#ctrlextstatus")).scope();
 		scope1.$apply(function () {
-	    	var data = scope1.gridOptions.data.filter(function(element, index){
+	    	var values = scope1.gridOptions.data.filter(function(element, index){
 	    		return element.state == '온라인';
 	    	});
-	    	scope0.gridOptions.data[0].count = data.length;
+	    	scope0.gridOptions.data[0].count = values.length;
 	    	
-	    	data = scope1.gridOptions.data.filter(function(element, index){
+	    	values = scope1.gridOptions.data.filter(function(element, index){
 	    		return element.state == '연결중';
 	    	});
-	    	scope0.gridOptions.data[1].count = data.length;
+	    	scope0.gridOptions.data[1].count = values.length;
 	    	
-	    	data = scope1.gridOptions.data.filter(function(element, index){
+	    	values = scope1.gridOptions.data.filter(function(element, index){
 	    		return element.state == '통화중';
 	    	});
-	    	scope0.gridOptions.data[2].count = data.length;
+	    	scope0.gridOptions.data[2].count = values.length;
 	    	
-	    	data = scope1.gridOptions.data.filter(function(element, index){
+	    	values = scope1.gridOptions.data.filter(function(element, index){
 	    		return element.state == '자리비움';
 	    	});
-	    	scope0.gridOptions.data[3].count = data.length;
+	    	scope0.gridOptions.data[3].count = values.length;
 	    	
-	    	data = scope1.gridOptions.data.filter(function(element, index){
+	    	values = scope1.gridOptions.data.filter(function(element, index){
 	    		return element.state == '착신전환';
 	    	});
-	    	scope0.gridOptions.data[4].count = data.length;
+	    	scope0.gridOptions.data[4].count = values.length;
 	    	
-	    	data = scope1.gridOptions.data.filter(function(element, index){
-	    		return element.state == '대기중';
-	    	});
-	    	scope0.gridOptions.data[5].count = data.length;
+	    	if (data.cmd == UC_REPORT_WAITING_COUNT) {
+	    		scope0.gridOptions.data[5].count = data.responseCode;
+	    	}
 	    });
 	}
 	
 	var makecall = false;
 	function TreatMySelf(item) {
-		// Button Call 요청에 대한 결과
-		console.log("TreatMySelf: " + item.cmd + " // " + item.direct + " // " + item.status);
+		// console.log("TreatMySelf: " + item.cmd + " // " + item.direct + " // " + item.status);
 		
 		switch (item.cmd) {
 			case UC_MAKE_CALL_RES:
@@ -478,6 +485,10 @@
 			case UC_HOLD_CALL_RES:
 				break;
 			case UC_ACTIVE_CALL_RES:
+				break;
+			case WS_RES_EXTENSION_STATE:
+				update_ext_status(item);
+				SetCallState(item);
 				break;
 			case UC_REPORT_EXT_STATE:
 				if (currentCallInfo.cmd == 0) {
@@ -505,12 +516,14 @@
 								if (item.callername == '') {
 									custbhv = bhv.add;
 									$("#addCustomer .modal-title").html("고객 등록");
+									$("#addCustomer #btnMemo").css("display", "inline");
 									$("#tel").val(item.caller);
 								} else {
 									$.get("/customer/get/idx/" + item.cust_idx, function(response){
 										
 										custbhv = bhv.modi;
 										$("#addCustomer .modal-title").html("고객 정보");
+										$("#addCustomer #btnMemo").css("display", "inline");
 										
 										var itm = response;
 	
@@ -561,6 +574,19 @@
 	function InitializeExts() {
         trade = {
                 cmd: 64,
+                extension: '',
+                caller: '',
+                callee: '',
+                unconditional: '',
+                status: -1
+              };
+        
+     	stompClient.send("/app/traders", {}, JSON.stringify(trade));
+	}
+	
+	function RequestExtState() {
+		trade = {
+                cmd: WS_REQ_EXTENSION_STATE,
                 extension: '',
                 caller: '',
                 callee: '',

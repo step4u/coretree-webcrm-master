@@ -12,7 +12,7 @@
     	select 
 			a.extension
 			, iif((select uname from users where username=b.username) is null, '-', (select uname from users where username=b.username)) uname
-			, iif((select state from users where username=b.username)='IDLE', '온라인', (select state from users where username=b.username)) state
+			, (select state from users where username=b.username) state
 			from extensions a left join users_exts b
 				on a.extension=b.extension
 			 order by a.extension asc

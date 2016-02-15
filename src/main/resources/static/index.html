@@ -560,7 +560,7 @@
             stompClient.subscribe("/topic/ext.state.*", function(message) {
             	var data = JSON.parse(message.body);
                 update_ext_status(data);
-                SetCallState();
+                SetCallState(data);
             });
             
             stompClient.subscribe("/user/queue/groupware", function(message) {
@@ -571,7 +571,8 @@
             	console.log('index.html /app/queue/errors: ' + JSON.parse(message.body));
 			});
             
-            InitializeExts();
+            RequestExtState();
+            // InitializeExts();
             // setInterval(SetCallState, 2000);
         });
     }

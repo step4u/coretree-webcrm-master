@@ -79,8 +79,10 @@
 					}					
 				}
 */
-				return element.extension === extitem.extension;
+				return element.extension == extitem.extension;
 			});
+			
+			console.log(">>>>>>>>>>>>>>>>> log : " + extitem.status);
 			
 			if (item) {
 				switch (extitem.status) {
@@ -98,6 +100,44 @@
 						break;
 					case UC_CALL_STATE_BUSY:
 						item.state = '통화중';
+						break;
+					case WS_VALUE_EXTENSION_STATE_ONLINE:
+						item.state = '온라인';
+						break;
+					case WS_VALUE_EXTENSION_STATE_MOVED:
+						item.state = '자리비움';
+						break;
+					case WS_VALUE_EXTENSION_STATE_REDIRECTED:
+						item.state = '착신전환';
+						break;
+					case WS_VALUE_EXTENSION_STATE_DND:
+						item.state = '수신거부';
+						break;
+					default:
+						switch (extitem.cmd) {
+							case UC_SET_SRV_RES:
+								console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>> UC_SET_SRV_RES");
+								switch (extitem.responseCode) {
+									case UC_SRV_UNCONDITIONAL:
+										item.state = '착신전환';
+										break;
+									case UC_SRV_DND:
+										item.state = '수신거부';
+										break;
+								}
+								break;
+							case UC_CLEAR_SRV_RES:
+								console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>> UC_CLEAR_SRV_RES");
+								switch (extitem.responseCode) {
+									case UC_SRV_UNCONDITIONAL:
+										item.state = '온라인';
+										break;
+									case UC_SRV_DND:
+										item.state = '온라인';
+										break;
+								}
+								break;
+						}
 						break;
 				}
 			}
@@ -130,7 +170,7 @@
 		
 		$http.get('/extstate/get/all')
 			.success(function(data) {
-				console.log('/extstate/get/all/ : ' + angular.toJson(data));
+				// console.log('/extstate/get/all/ : ' + angular.toJson(data));
 				$scope.gridOptions.data = data;
 			}
 		);

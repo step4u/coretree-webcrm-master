@@ -57,14 +57,14 @@ public class LoginHandler implements AuthenticationSuccessHandler {
 
 		Cookie cookie = new Cookie("crm.identity", jsonInString);
 		response.addCookie(cookie);
-		
+/*		
 		UcUser user = new UcUser();
 		user.setUsername(username);
 		user.setExt(info.getExtension());
 		user.setRole(info.getRole());
 		user.setState(UcUserState.valueOf(info.getState()));
 		UcUsers.add(user);
-		
+*/		
 		response.sendRedirect("/");
 	}
 }

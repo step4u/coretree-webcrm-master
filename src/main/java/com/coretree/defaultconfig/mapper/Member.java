@@ -9,8 +9,9 @@ public class Member {
 	private String cellular;
 	private String extension;
 	private String role;
-	private String state;
+	private int state;
 	private short enabled = 1;
+	private int tempval = 0;
 	
 	public String getUsername() { return username; }
 	public void setUsername(String username) { this.username = username; }
@@ -34,13 +35,16 @@ public class Member {
 	public void setExtension(String extension) { this.extension = extension; }
 	
 	public String getRole() { return role; }
-	public void getRole(String role) { this.role = role; }
+	public void setRole(String role) { this.role = role; }
 	
-	public String getState() { return state; }
-	public void getState(String state) { this.state = state; }
+	public int getState() { return state; }
+	public void setState(int state) { this.state = state; }
 	
 	public short getEnabled() { return enabled; }
-	public void getEnabled(short enabled) { this.enabled = enabled; }
+	public void setEnabled(short enabled) { this.enabled = enabled; }
+	
+	public int getTempval() { return tempval; }
+	public void setTempval(int tempval) { this.tempval = tempval; }
 	
 	@Override
 	public String toString() {
