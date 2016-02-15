@@ -13,6 +13,7 @@ public interface MemberMapper {
 	Member selectByIdx(@Param("username") String username);
 	Member selectByExt(@Param("ext") String ext);
 	List<Member> selectByTxt(@Param("txt") String txt);
+	List<Member> getUserState();
 	int chkById(String username);
 	void add(Member member);
     void del(String username);

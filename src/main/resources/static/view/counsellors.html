@@ -106,7 +106,7 @@
     	});
 		
 		$("#modaluser").on('hidden.bs.modal', function () {
-			ClearForm();
+			ClearModalUserForm();
     	});
 
 		$("#btn_Search").click(function(){
@@ -171,7 +171,7 @@
 		});
 		
 		$("#btn_Close").click(function(){
-			ClearForm();
+			// ClearModalUserForm();
 			$('#modaluser').modal("hide");
 			
 			custbhv = bhv.none;
@@ -258,7 +258,7 @@
 		});
 	}
 	
-	function ClearForm() {
+	function ClearModalUserForm() {
 		$("#username").val("");
 		$("#password").val("");
 		$("#password_confirm").val("");

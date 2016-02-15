@@ -127,7 +127,6 @@
 		};
 		
 		$scope.getPage = function(searchtxt) {
-			//console.log("getPage searchtxt: " + searchtxt);
 			var url;
 			
 			if (searchtxt == ''){
@@ -141,11 +140,9 @@
 			}
 
 			var counturl = '/customer/get/count/' + $stateParams.param;
-			// console.log("getPage counturl: " + counturl);
-			// console.log("getPage url: " + url);
+
 			$http.get(counturl)
 			.success(function(data) {
-				// console.log("getPage totalItems: " + data);
 				if ($scope.gridOptions.totalItems != data) {
 					paginationOptions.pageNumber = 1;
 				}
@@ -154,17 +151,6 @@
 				
 				$http.get(url)
 				.success(function(data) {
-					// $scope.gridOptions.data = data;
-					/*
-					$timeout(function() {
-				        if($scope.gridApi.selection.selectRow){
-				          $scope.gridApi.selection.selectRow($scope.gridOptions.data[0]);
-				        }
-					});
-					*/
-					
-					//var firstRow = (paginationOptionsCustomer.pageNumber - 1) * paginationOptionsCustomer.pageSize;
-					//$scope.gridOptions.data = data.slice(firstRow, firstRow + paginationOptionsCustomer.pageSize);
 					$scope.gridOptions.data = data;
 				});
 			});
@@ -213,18 +199,12 @@
 			var item = row.entity;
 			
 			$http.get('/customer/del/' + item.idx)
-			.success(function(data) {
+			.then(function(response) {
 				$scope.getPage();
 				custbhv = bhv.none;
+			}, function(response){
+				console.log("/customer/del/ : " + angular.toJson(response));
 			});
-/*			
-			var index = $scope.gridOptions.data.indexOf(row.entity);
-			$scope.gridOptions.data.splice(index, 1);
-			
-			$scope.gridOptions.totalItems--;
-			var firstRow = (paginationOptions.pageNumber - 1) * paginationOptions.pageSize;
-			$scope.gridOptions.data = $scope.gridOptions.data.slice(firstRow, firstRow + paginationOptions.pageSize);
-*/
 		};
 		
 		$scope.modiRow = function(row) {
@@ -233,9 +213,9 @@
 			
 			var item = row.entity;
 
-			$("#addCustomer idx").val(item.idx);
+			$("#addCustomer #idx").val(item.idx);
 			$("#addCustomer #maingroup").val(item.maingroup);
-			// $("#addCustomer #subgroup").val(item.subgroup);
+
 			$("#addCustomer #uname").val(item.uname);
 			$("#addCustomer #company").val(item.firm);
 			$("#addCustomer #posi").val(item.posi);
@@ -247,6 +227,8 @@
 			$("#addCustomer").modal({backdrop: false});
 			
 			SetSubgroups(item.maingroup, item.subgroup);
+			
+			console.log(item.idx + '//' + item.maingroup + '//' + item.subgroup);
 		};
 		
 		$scope.getCurrentSelection = function() {

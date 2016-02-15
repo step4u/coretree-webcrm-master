@@ -1,14 +1,26 @@
 [
+	{
+        "title": "온라인",
+		"count": "0"
+    },
+    {
+        "title": "연결중",
+		"count": "0"
+    },
     {
         "title": "통화중",
 		"count": "0"
     },
     {
-        "title": "대기중",
+        "title": "자리비움",
 		"count": "0"
     },
     {
-        "title": "연결중",
+        "title": "착신전환",
+		"count": "0"
+    },
+    {
+        "title": "대기중",
 		"count": "0"
     }
 ]

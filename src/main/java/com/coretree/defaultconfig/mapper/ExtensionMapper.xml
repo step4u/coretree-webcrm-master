@@ -4,7 +4,7 @@
     <resultMap id="extensionMap" type="com.coretree.defaultconfig.mapper.Extension">
         <id		property="extension"	column="extension" />
         <result property="username"		column="username" />
-        <result property="status"		column="status" />
+        <result property="state"		column="state" />
     </resultMap>
     
     <select id="count" resultType="java.lang.Integer">
@@ -16,9 +16,10 @@
     	<if test="rowsperpage > 0 and curpage > 0">
     		first #{rowsperpage} skip ((#{curpage} - 1) * #{rowsperpage})
     	</if>
-			a.extension, iif((select uname from users where username=b.username) is null, '-', (select uname from users where username=b.username)) uname
+			a.extension
+			, iif((select uname from users where username=b.username) is null, '-', (select uname from users where username=b.username)) uname
 			from extensions a left join users_exts b
-				on a.extension=b.extension 
+				on a.extension=b.extension
 			 order by a.extension asc
     </select>
     

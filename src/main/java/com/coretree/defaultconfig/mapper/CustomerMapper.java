@@ -28,7 +28,7 @@ public interface CustomerMapper {
 			, @Param("group") String group
 			, @Param("username") String username);
 	
-	@Select("select idx, uname, firm, posi, tel, cellular, extension, email"
+	@Select("select idx, iif(depthorder is null, '00', substring(depthorder from 1 for 1)) maingroup, iif(depthorder is null, '00', substring(depthorder from 2 for 1)) subgroup, uname, firm, posi, tel, cellular, extension, email"
 			+ " from customers"
 			+ " where uname like #{searchtxt}"
 			+ " or tel like #{searchtxt}"

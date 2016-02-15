@@ -87,7 +87,7 @@
     	});
 		
 		$("#addCustomer").on('hidden.bs.modal', function () {
-			
+			ClearForm();
     	});
 		
 		$("#Memo").draggable({
@@ -95,6 +95,10 @@
 		});
 		
 	    /*** script for address book ***/
+		$("#addCustomer #maingroup").change(function(){
+			SetSubgroups($(this).val());
+		});
+		
 		$("#btnSave").click(function(){
 			SaveCust();
 		});
@@ -250,17 +254,16 @@
 	/*** script for address book ***/
 	function SaveCust() {
 		var obj = {
-			idx: $("#idx").val(),
-			//depthorder: $("#depthorder").val() == "" ? $("#depthorder").val() : $("#depthorder").val().replace("string:", ""),
-			depthorder: $("#maingroup").val() + $("#subgroup").val(),
+			idx: $("#addCustomer #idx").val(),
+			depthorder: $("#addCustomer #maingroup").val() + $("#addCustomer #subgroup").val(),
 			username: crmidentity.username,
-			uname: $("#uname").val(),
-			firm: $("#firm").val(),
-			posi: $("#posi").val(),
-			tel: $("#tel").val(),
-			cellular: $("#cellular").val(),
-			extension: $("#extension").val(),
-			email: $("#email").val()
+			uname: $("#addCustomer #uname").val(),
+			firm: $("#addCustomer #firm").val(),
+			posi: $("#addCustomer #posi").val(),
+			tel: $("#addCustomer #tel").val(),
+			cellular: $("#addCustomer #cellular").val(),
+			extension: $("#addCustomer #extension").val(),
+			email: $("#addCustomer #email").val()
 		};
 			
 /*		if (obj.depthorder == "") {
@@ -268,23 +271,23 @@
 			$("#depthorder").focus();
 			return;
 		}*/
-		if ($("#maingroup").val() === "") {
-			$("#alertcust").html("<strong>필수입력</strong> 메인그룹을 선택하세요.").css('display', 'block');
-			$("#maingroup").focus();
+		if ($("#addCustomer #maingroup").val() === "0") {
+			$("#addCustomer #alertcust").html("<strong>필수입력</strong> 메인그룹을 선택하세요.").css('display', 'block');
+			$("#addCustomer #maingroup").focus();
 			return;
 		}
-		if ($("#subgroup").val() === "") {
-			$("#alertcust").html("<strong>필수입력</strong> 서브그룹을 선택하세요.").css('display', 'block');
-			$("#subgroup").focus();
+		if ($("#addCustomer #subgroup").val() === "0") {
+			$("#addCustomer #alertcust").html("<strong>필수입력</strong> 서브그룹을 선택하세요.").css('display', 'block');
+			$("#addCustomer #subgroup").focus();
 			return;
 		}
 		if (obj.uname == "") {
-			$("#alertcust").html("<strong>필수입력</strong> 이름을 입력하세요.").css('display', 'block');
-			$("#uname").focus();
+			$("#addCustomer #alertcust").html("<strong>필수입력</strong> 이름을 입력하세요.").css('display', 'block');
+			$("#addCustomer #uname").focus();
 			return;
 		}
 		if (!(obj.tel != "" || obj.cellular != "")) {
-			$("#alertcust").html("<strong>필수입력</strong> 전화번호와 휴대전화 하나는 입력해야합니다.").css('display', 'block');
+			$("#addCustomer #alertcust").html("<strong>필수입력</strong> 전화번호와 휴대전화 하나는 입력해야합니다.").css('display', 'block');
 			if (obj.tel == "") {
 				$("#tel").focus();
 				return;
@@ -303,10 +306,11 @@
 			url = "/customer/modi/";
 		}
 		
+		console.log(JSON.stringify(obj));
+		
 		$.post(url, obj, function(response){
 			// console.log("cust bhv: " + bhv + ", response: " + response + ", response.data: " + response.data);
 			$('#addCustomer').modal("hide");
-			ClearForm();
 			
 	    	var scope = angular.element($("#ctrlcustomers")).scope();
 		    scope.$apply(function () {
@@ -318,27 +322,33 @@
 	}
 	
 	function ClearForm() {
-		$("#idx").val('-1');
+		$("#addCustomer #idx").val('-1');
+		$("#addCustomer #uname").val('');
+		$("#addCustomer #firm").val('');
+		$("#addCustomer #posi").val('');
+		$("#addCustomer #tel").val('');
+		$("#addCustomer #cellular").val('');
+		$("#addCustomer #extension").val('');
+		$("#addCustomer #email").val('');
 		
-		$("#uname").val('');
-		$("#firm").val('');
-		$("#posi").val('');
-		$("#tel").val('');
-		$("#cellular").val('');
-		$("#extension").val('');
-		$("#email").val('');
+		// $('#addCustomer #subgroup').find('option:not(:first)').remove();
+		// $('#addCustomer #subgroup').empty().append('<option value="0">:: 서브그룹 ::</option>');
+		// $('#addCustomer #subgroup').find('option:not(:first)').remove();
 	}
 	
 	function SetSubgroups(maingroup, subgroup) {
+		$('#addCustomer #subgroup').find('option:not(:first)').remove();
+		
 		$.get("/customer/get/group/" + maingroup, function(response){
 			var itm = response;
-
 			$(itm).each(function(i, v){ 
-				console.log(i + "//" + v.subgroup + "//" + v.txt);
 				$("#addCustomer #subgroup").append($("<option>", { value: v.subgroup, html: v.txt }));
 			});
 			
-			$("#addCustomer #subgroup").val(subgroup);
+			if (subgroup) {
+				$("#addCustomer #subgroup").val(subgroup);				
+			}
+			// console.log("SetSubgroups : entered");
 		});
 	}
 	/*** script for address book ***/
@@ -352,7 +362,7 @@
 	function SetMyState(extitem, statecount) {
 		// console.log("set my state: " + extitem.status + ", statecount.ring: " + statecount.ring);
 		
-		switch (extitem.status) {
+		switch (extitem.state) {
 			case UC_CALL_STATE_UNREG:
 				MyState = crmstate.unreg;
 				
@@ -403,12 +413,12 @@
 				$("#btnHold").removeClass("disabled");
 				break;
 		}
-		
+/*		
 		extstatecount.unreg = 0;
 		extstatecount.idle = 0;
 		extstatecount.invite = 0;
 		extstatecount.ring = 0;
-		extstatecount.busy = 0;
+		extstatecount.busy = 0;*/
 	}
 	
 	function SetCallState() {
@@ -417,19 +427,34 @@
 		var scope1 = angular.element($("#ctrlextstatus")).scope();
 		scope1.$apply(function () {
 	    	var data = scope1.gridOptions.data.filter(function(element, index){
-	    		return element.status == '통화중';
+	    		return element.state == '온라인';
 	    	});
 	    	scope0.gridOptions.data[0].count = data.length;
 	    	
 	    	data = scope1.gridOptions.data.filter(function(element, index){
-	    		return element.status == '온라인';
+	    		return element.state == '연결중';
 	    	});
 	    	scope0.gridOptions.data[1].count = data.length;
 	    	
 	    	data = scope1.gridOptions.data.filter(function(element, index){
-	    		return element.status == '연결중';
+	    		return element.state == '통화중';
 	    	});
 	    	scope0.gridOptions.data[2].count = data.length;
+	    	
+	    	data = scope1.gridOptions.data.filter(function(element, index){
+	    		return element.state == '자리비움';
+	    	});
+	    	scope0.gridOptions.data[3].count = data.length;
+	    	
+	    	data = scope1.gridOptions.data.filter(function(element, index){
+	    		return element.state == '착신전환';
+	    	});
+	    	scope0.gridOptions.data[4].count = data.length;
+	    	
+	    	data = scope1.gridOptions.data.filter(function(element, index){
+	    		return element.state == '대기중';
+	    	});
+	    	scope0.gridOptions.data[5].count = data.length;
 	    });
 	}
 	
@@ -475,7 +500,7 @@
 								}
 								break;
 							case UC_CALL_STATE_RINGING:
-								var msg = "전화가 왔습니다." + item.callername + " (" + item.caller + ")";
+								var msg = "전화가 왔습니다. " + item.callername + " (" + item.caller + ")";
 								$("#mainalert").html(msg);
 								if (item.callername == '') {
 									custbhv = bhv.add;

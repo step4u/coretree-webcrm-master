@@ -39,13 +39,13 @@
 						</ul>
 					</li>
 					<li class="dropdown hoe-rheader-submenu hoe-header-profile">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+						<a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown">
 							<i class="fa fa-plus fa-fw"></i>
                             <span><b>온라인</b> <i class=" fa fa-angle-down fa-fw"></i></span>
 						</a>
 						<ul class="dropdown-menu ">
-							<li><a href="#"><i class="fa fa-plus fa-fw"></i>온라인</a></li>
-							<li><a href="#"><i class="fa fa-check fa-fw"></i>통화중</a></li>
+							<li><a href="javascript:void(0)"><i class="fa fa-plus fa-fw"></i>온라인</a></li>
+							<!-- <li><a href="javascript:void(0)"><i class="fa fa-check fa-fw"></i>통화중</a></li> -->
 							<li><a href="#"><i class="fa fa-minus fa-fw"></i>자리비움</a></li>
 							<li><a href="#"><i class="fa fa-times fa-fw"></i>수신거부</a></li>
 							<li><a href="#" id="logout"><i class="fa fa-power-off fa-fw"></i>로그아웃</a></li>
@@ -202,7 +202,6 @@
 						        <div class="col-md-3">
 						        	<div ng-controller="CtrlCallStatus" id="ctrlcallstatus">
 						        		<div ui-grid="gridOptions" class="grid_teller_status"></div>
-						        		<!-- <button type="button" class="btn btn-primary btn-sm" id='scopetest'>테스트</button> -->
 						        	</div>
 									<div ng-controller="CtrlTelStatus" style="margin-top: 15px;" id="ctrlextstatus">
 										<div ui-grid="gridOptions" class="grid_tels"></div>
@@ -350,11 +349,10 @@
 			</div>
 			<div class="modal-body">
 				<form class="form-horizontal" role="form">
-					<input type="hidden" id="idx">
+					<input type="hidden" id="idx" />
 					<div class="alert alert-warning fade in" style="display: none;" id="alertcust">
 			  			<strong>Warning!</strong> This alert box could indicate a warning that might need attention.
 					</div>
-					<!-- <div class="form-group" ng-controller="CtrlGroups"> -->
 					<div class="form-group">
 						<div class="col-sm-2">
 							<label class="control-label" for="depthorder">그룹</label>
@@ -366,7 +364,7 @@
 					    		<option value="2">개인 주소록</option>
 					    	</select>
 						</div>
-						<div class="col-sm-4" ng-controller="CtrlGroups">
+						<div class="col-sm-4">
 							<select class="form-control" id="subgroup">
 					    		<option value="0">:: 서브그룹 ::</option>
 					    	</select>
@@ -562,6 +560,7 @@
             stompClient.subscribe("/topic/ext.state.*", function(message) {
             	var data = JSON.parse(message.body);
                 update_ext_status(data);
+                SetCallState();
             });
             
             stompClient.subscribe("/user/queue/groupware", function(message) {
@@ -572,8 +571,8 @@
             	console.log('index.html /app/queue/errors: ' + JSON.parse(message.body));
 			});
             
-            // InitializeExts();
-            setInterval(SetCallState, 2000);
+            InitializeExts();
+            // setInterval(SetCallState, 2000);
         });
     }
     

@@ -33,6 +33,8 @@ const UC_PICKUP_TRANSFER_RES = 89;
 const UC_CLEAR_EXT_STATE_REQ = 100;
 const UC_CLEAR_EXT_STATE_RES = 101;
 const UC_REPORT_EXT_STATE = 102;
+const UC_REPORT_SRV_STATE = 103;
+const UC_REPORT_WAITING_COUNT = 104;
 
 const UC_SMS_SEND_REQ = 120;
 const UC_SMS_SEND_RES = 121;
@@ -87,3 +89,9 @@ const UC_SRV_DND = 4;
 // DND
 const UC_DND_SET = 1;
 const UC_DND_CLEAR = 0;
+
+// etc command
+const UC_SET_EXT_STATE = 10001;
+
+// etc status
+const UC_RES_EXT_STATE = 20001;

@@ -4,7 +4,7 @@ public class Extension {
 	private String extension;
 	private String username;
 	private String uname;
-	private String status;
+	private String state;
 	private String newext;
 	
 	public String getExtension() { return this.extension; }
@@ -16,14 +16,14 @@ public class Extension {
 	public String getUname() { return this.uname; }
 	public void setUname(String uname) { this.uname = uname; }
 	
-	public String getStatus() { return this.status; }
-	public void setStatus(String status) { this.status = status; }
+	public String getState() { return this.state; }
+	public void setState(String state) { this.state = state; }
 	
 	public String getNewext() { return this.newext; }
 	public void setNewext(String newext) { this.newext = newext; }
 	
 	@Override
 	public String toString() {
-		return "Extension [extension=" + extension + ", username=" + username + ", status=" + status + "]";
+		return "Extension [extension=" + extension + ", username=" + username + ", state=" + state + "]";
 	}
 }

@@ -45,6 +45,14 @@
 			where uname like #{txt}
     </select>
     
+    <select id="getUserState" resultMap="resMap">
+		select a.username, a.uname, a.posi, a.tel, a.cellular, a.role, a.state, a.enabled, b.extension
+			from users a join users_exts b
+				on a.username=b.username
+			where a.enabled=1
+			order by a.uname asc
+    </select>
+    
     <select id="add" resultType="java.lang.Void">
     	{call INS_MEMBER ( 
     		#{username, mode=IN, jdbcType=VARCHAR},

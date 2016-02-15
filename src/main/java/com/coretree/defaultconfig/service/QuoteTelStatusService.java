@@ -63,6 +63,7 @@ public class QuoteTelStatusService implements ApplicationListener<BrokerAvailabi
 	private CallMapper callMapper;
 	
 	private List<Call> curcalls = new ArrayList<Call>();
+	private List<Member> userstate = new ArrayList<Member>();
 
 	@Autowired
 	public QuoteTelStatusService(MessageSendingOperations<String> messagingTemplate, SimpMessagingTemplate msgTemplate) {
@@ -79,13 +80,19 @@ public class QuoteTelStatusService implements ApplicationListener<BrokerAvailabi
 		uc = new UcServer("14.63.171.190", 31001, 1, ByteOrder.BIG_ENDIAN);
 		uc.HaveGotUcMessageEventHandler.addEventHandler(this);
 		uc.regist();
-		
-		try {
-			Thread.sleep(500);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+
+		this.InitializeUserState();
+	}
+	
+	private void InitializeUserState() {
+		userstate = memberMapper.getUserState();
+/*		
+		int i = 0;
+		for (Member m : userstate) {
+			System.err.println(">> InitializeUserState(), userstate[" + i + "] : " + m.toString());
+			i++;
 		}
+*/
 	}
 	
 	// subscribe extension status
@@ -174,6 +181,8 @@ public class QuoteTelStatusService implements ApplicationListener<BrokerAvailabi
 			case Const4pbx.UC_BUSY_EXT_RES:
 				break;
 			case Const4pbx.UC_REPORT_EXT_STATE:
+			case Const4pbx.UC_REPORT_SRV_STATE:
+			case Const4pbx.UC_REPORT_WAITING_COUNT:
 				this.PassReportExtState(data);
 				break;
 			default:
@@ -387,9 +396,6 @@ public class QuoteTelStatusService implements ApplicationListener<BrokerAvailabi
 				// this.messagingTemplate.convertAndSend("/topic/ext.state." + data.getExtension(), payload);
 				break;
 			default:
-				// 
-				//Member member = memberMapper.selectByExt(data.getExtension());
-				//this.msgTemplate.convertAndSendToUser(member.getUsername(), "/queue/ext.status", payload);
 				this.messagingTemplate.convertAndSend("/topic/ext.state." + data.getExtension(), payload);
 				break;
 		}

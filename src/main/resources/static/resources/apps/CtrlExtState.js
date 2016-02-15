@@ -17,7 +17,7 @@
 			                status: -1
 			              };
 			     	stompClient.send("/app/traders", {}, JSON.stringify(trade));
-		        	console.log("전화하기: " + angular.toJson(item.entity));
+		        	// console.log("전화하기: " + angular.toJson(item.entity));
 		        }]
 		        ,['당겨 받기', function () {
 					trade = {
@@ -29,7 +29,7 @@
 			                status: -1
 			              };
 			     	stompClient.send("/app/traders", {}, JSON.stringify(trade));
-		        	console.log("당겨받기: " + angular.toJson(item.entity));
+		        	// console.log("당겨받기: " + angular.toJson(item.entity));
 		        }]
 	            ,['돌려 주기', function () {
 	    	        trade = {
@@ -43,9 +43,9 @@
 			     	stompClient.send("/app/traders", {}, JSON.stringify(trade));
 		        	console.log("돌려주기: " + angular.toJson(item.entity));
 		        }]
-	            ,['청취', function () {
+/*	            ,['청취', function () {
 		        	console.log("청취: " + angular.toJson(item.entity));
-		        }]
+		        }]*/
 		    ];
 		};
 
@@ -58,16 +58,16 @@
 			var extitem = angular.fromJson(jsonData);
 			
 			var item = $scope.gridOptions.data.find(function(element, index){
-				
+/*				
 				if (crmidentity.ext != element.innertel) {
 					switch (element.status) {
 						case '미등록':
 							extstatecount.unreg++;
 							break;
-						case '대기중':
+						case '온라인':
 							extstatecount.idle++;
 							break;
-						case '통화시도':
+						case '연결중':
 							extstatecount.invite++;
 							break;
 						case '전화울림':
@@ -78,26 +78,26 @@
 							break;
 					}					
 				}
-				
+*/
 				return element.extension === extitem.extension;
 			});
 			
 			if (item) {
 				switch (extitem.status) {
 					case UC_CALL_STATE_UNREG:
-						item.status = '미등록';
+						item.state = '미등록';
 						break;
 					case UC_CALL_STATE_IDLE:
-						item.status = '대기중';
+						item.state = '온라인';
 						break;
 					case UC_CALL_STATE_INVITING:
-						item.status = '통화시도';
+						item.state = '연결중';
 						break;
 					case UC_CALL_STATE_RINGING:
-						item.status = '전화울림';
+						item.state = '전화울림';
 						break;
 					case UC_CALL_STATE_BUSY:
-						item.status = '통화중';
+						item.state = '통화중';
 						break;
 				}
 			}
@@ -110,11 +110,11 @@
 		$scope.gridOptions = {
 				enableSorting: false,
 				showGridFooter: false,
+				rowTemplate: '<div ng-repeat="col in colContainer.renderedColumns track by col.colDef.name" class="ui-grid-cell" ui-grid-cell context-menu="grid.appScope.menuOptions(row)"></div>', 
 				columnDefs: [
 				 		      { displayName: '내선번호', field: 'extension', headerCellClass: 'white', cellClass: 'grid-cell' },
-				 		      { displayName: '상태', field: 'status', headerCellClass:'white', cellClass: 'grid-cell' },
-				 		      { displayName: '기타', field: 'etc', headerCellClass:'white', cellClass: 'grid-cell-align',
-				 		    	  cellTemplate: '<button class="btn btn-primary btn-xs">청취</button>' }
+				 		      { displayName: '상태', field: 'state', headerCellClass:'white', cellClass: 'grid-cell' }
+				 		      // { displayName: '기타', field: 'etc', headerCellClass:'white', cellClass: 'grid-cell-align', cellTemplate: '<button class="btn btn-primary btn-xs">청취</button>' }
 				 		    ],
 			    groupHeaders: false,
 		        enableColResize: false,
@@ -128,10 +128,9 @@
 			    }
 		};
 		
-		$scope.gridOptions.rowTemplate = '<div ng-repeat="col in colContainer.renderedColumns track by col.colDef.name" class="ui-grid-cell" ui-grid-cell context-menu="grid.appScope.menuOptions(row)"></div>';
-	
-		$http.get('/extension/get/all/0/0')
+		$http.get('/extstate/get/all')
 			.success(function(data) {
+				console.log('/extstate/get/all/ : ' + angular.toJson(data));
 				$scope.gridOptions.data = data;
 			}
 		);

@@ -45,6 +45,6 @@ public class Member {
 	@Override
 	public String toString() {
 		return "Member [username=" + username + ", uname=" + uname + ", posi=" + posi + ", tel=" + tel + ""
-				+ ", cellular=" + cellular + ", extension=" + extension + ", role=" + role + ", enabled=" + enabled + "]";
+				+ ", cellular=" + cellular + ", extension=" + extension + ", role=" + role + ", state=" + state + ", enabled=" + enabled + "]";
 	}
 }
