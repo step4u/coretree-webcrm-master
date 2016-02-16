@@ -16,11 +16,34 @@
 						    </span>
 						</div>
 						<input type='text' id='txtcallsearch' class='form-control' placeholder="전화번호 / 휴대전화" style="margin-left: 10px; max-width: 11em;" />
-						<button type='button' for='txtsearch' class="btn btn-info btn-sm" id="btnCallSearch">검색</button>
+						<button type='button' for='txtcallsearch' class="btn btn-info btn-sm" id="btnCallSearch">검색</button>
 						<button type="button" class="btn btn-warning btn-sm" style="float: right;" id="btnCallDel">삭제</button>
 					</div>
 <script>
 	$(document).ready(function(){
+		$("#btnCallSearch").click(function(){
+	    	var scope = angular.element($("#ctrlcalls")).scope();
+		    scope.$apply(function () {
+		    	var searching = {
+			    		idx: 0,
+			    		sdate: $("#datetimepicker1").val(),
+			    		edate: '',
+		    			txt: '',
+		    			curpage: paginationOptions.pageNumber,
+		    			rowsperpage: paginationOptions.pageSize
+		    			
+		    		sdate: ,
+		    		edate: $("#datetimepicker1").val(),
+		    		searchtxt: $("#txtcallsearch")
+		    	}
+		        scope.getPage(searching);
+		    });
+		});
+		
+		$("#btnCallDel").click(function(){
+			
+		});
+		
 	    $('#datetimepicker1').datetimepicker({
 	    	locale: 'ko',
 	    	//format: 'YYYY-MM-DD HH:mm:ss'

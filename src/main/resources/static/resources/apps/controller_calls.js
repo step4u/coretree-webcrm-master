@@ -91,6 +91,11 @@
 	    			curpage: paginationOptions.pageNumber,
 	    			rowsperpage: paginationOptions.pageSize
 	    		}
+			} else {
+		    	val.curpage = paginationOptions.pageNumber;
+		    	val.rowsperpage = paginationOptions.pageSize;
+
+		    	
 			}
 
 			$http({
