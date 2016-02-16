@@ -130,9 +130,9 @@
 			player.load();
 			player.play();
 			
-			player.onprogress = function() {
+/*			player.onprogress = function() {
 				alert("Downloading video");
-			};
+			};*/
 		};
 		
 		$scope.deleteRow = function(row) {
