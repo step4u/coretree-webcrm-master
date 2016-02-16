@@ -104,7 +104,7 @@
 					case WS_VALUE_EXTENSION_STATE_ONLINE:
 						item.state = '온라인';
 						break;
-					case WS_VALUE_EXTENSION_STATE_MOVED:
+					case WS_VALUE_EXTENSION_STATE_LEFT:
 						item.state = '자리비움';
 						break;
 					case WS_VALUE_EXTENSION_STATE_REDIRECTED:
@@ -116,7 +116,7 @@
 					default:
 						switch (extitem.cmd) {
 							case UC_SET_SRV_RES:
-								console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>> UC_SET_SRV_RES");
+								// console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>> UC_SET_SRV_RES");
 								switch (extitem.responseCode) {
 									case UC_SRV_UNCONDITIONAL:
 										item.state = '착신전환';
@@ -127,7 +127,7 @@
 								}
 								break;
 							case UC_CLEAR_SRV_RES:
-								console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>> UC_CLEAR_SRV_RES");
+								// console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>> UC_CLEAR_SRV_RES");
 								switch (extitem.responseCode) {
 									case UC_SRV_UNCONDITIONAL:
 										item.state = '온라인';

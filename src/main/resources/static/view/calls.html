@@ -19,3 +19,24 @@
 						<button type='button' for='txtsearch' class="btn btn-info btn-sm" id="btnCallSearch">검색</button>
 						<button type="button" class="btn btn-warning btn-sm" style="float: right;" id="btnCallDel">삭제</button>
 					</div>
+<script>
+	$(document).ready(function(){
+	    $('#datetimepicker1').datetimepicker({
+	    	locale: 'ko',
+	    	//format: 'YYYY-MM-DD HH:mm:ss'
+	    	format: 'YYYY-MM-DD'
+	    });
+	    $('#datetimepicker2').datetimepicker({
+	    	locale: 'ko',
+	    	//format: 'YYYY-MM-DD HH:mm:ss',
+	    	format: 'YYYY-MM-DD',
+	    	useCurrent: false
+	    });
+	    $("#datetimepicker1").on("dp.change", function (e) {
+	        $('#datetimepicker2').data("DateTimePicker").minDate(e.date);
+	    });
+	    $("#datetimepicker2").on("dp.change", function (e) {
+	        $('#datetimepicker1').data("DateTimePicker").maxDate(e.date);
+	    });
+	});
+</script>

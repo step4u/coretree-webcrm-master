@@ -99,7 +99,7 @@
 				
 				$scope.gridOptions.totalItems = data;
 				
-				$http.get(url)
+				$http.post(url)
 				.success(function(data) {
 					$scope.gridOptions.data = data;
 				});
@@ -134,7 +134,7 @@
 			$("#Modal .modal-title").html("고객 정보");
 			
 			var item = row.entity;
-
+			
 			$("#idx").val(item.idx);
 			$("#depthorder").val('string:' + item.depthorder);
 			$("#uname").val(item.uname);

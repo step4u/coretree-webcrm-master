@@ -1,0 +1,57 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.coretree.defaultconfig.mapper.SmsMapper">
+
+    <resultMap id="Map" type="com.coretree.defaultconfig.mapper.Sms">
+        <id     property="idx"    		column="idx" />
+        <result property="custs_idx"	column="custs_idx" />
+        <result property="custs_tel"   	column="cust_tel" />
+        <result property="contents"     column="contents" />
+        <result property="result"     	column="result" />
+        <result property="regdate"      column="regdate" />
+        <result property="sdate"      column="sdate" />
+        <result property="edate"      column="edate" />
+    </resultMap>
+    
+    <select id="count" resultType="java.lang.Long">
+    	select count(idx) from sms where regdate=current_timestamp
+    </select>
+    
+    <select id="getAll" resultMap="Map">
+    	select first #{rowsperpage} skip ((#{curpage} - 1) * #{rowsperpage})
+			idx, custs_idx, custs_tel, contents, result, regdate
+			from sms
+			where 1=1
+			<if test="sdate == null or edate == null">
+				and cast(regdate as date)=cast(current_timestamp as date)
+			</if>
+			<if test="sdate != null and edate != null">
+				and regdate between cast(#{sdate} as timestamp) and cast(#{edate} as timestamp)
+			</if>
+			order by regdate desc
+    </select>
+    
+    <select id="getByIdx" resultMap="Map">
+    	select idx, custs_idx, custs_tel, contents, result, regdate
+			from sms
+			where idx=#{idx}
+			order by regdate desc
+    </select>
+    
+    <select id="getByTxt" resultMap="Map">
+    	select idx, custs_idx, custs_tel, contents, result, regdate
+			from sms
+			where cust_tel like #{txt}
+			order by regdate desc
+    </select>
+    
+    <select id="del">
+		delete from sms where idx=#{idx}
+    </select>
+
+    <select id="delAll" parameterType="java.util.List">
+		delete from sms where
+		<foreach collection="list" item="item" separator=",">
+			 idx=#{item.idx}
+		</foreach>
+    </select>    
+</mapper>
