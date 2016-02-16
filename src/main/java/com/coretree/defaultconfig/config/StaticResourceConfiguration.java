@@ -21,7 +21,7 @@ public class StaticResourceConfiguration extends WebMvcConfigurerAdapter {
 	        LOG.info("Serving static content from " + staticPath);
 	        registry.addResourceHandler("/media/**").addResourceLocations(staticPath);
 	        
-	        super.addResourceHandlers(registry);
+	        // super.addResourceHandlers(registry);
 	    }
 	 }
 
