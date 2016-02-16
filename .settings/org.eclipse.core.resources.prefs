@@ -1,5 +1,4 @@
 eclipse.preferences.version=1
-encoding//src/main/java=UTF-8
 encoding//src/main/resources=UTF-8
 encoding//src/main/resources/static/view/ModalCustomer.html=UTF-8
 encoding//src/main/resources/static/view/addr.html=UTF-8
@@ -11,4 +10,3 @@ encoding//src/main/resources/static/view/login.html=UTF-8
 encoding//src/main/resources/static/view/records.html=UTF-8
 encoding//src/main/resources/static/view/smses.html=UTF-8
 encoding//src/test/java=UTF-8
-encoding/<project>=UTF-8

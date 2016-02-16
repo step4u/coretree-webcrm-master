@@ -262,7 +262,6 @@
 	/*** script for address book ***/
 	function SaveCust() {
 		var obj = {
-			idx: $("#addCustomer #idx").val(),
 			depthorder: $("#addCustomer #maingroup").val() + $("#addCustomer #subgroup").val(),
 			username: crmidentity.username,
 			uname: $("#addCustomer #uname").val(),
@@ -312,12 +311,12 @@
 			url = "/customer/add/";
 		} else if (custbhv == bhv.modi) {
 			url = "/customer/modi/";
+			obj.idx = $("#addCustomer #idx").val();
 		}
 		
-		console.log(JSON.stringify(obj));
+		// console.log(JSON.stringify(obj));
 		
 		$.post(url, obj, function(response){
-			// console.log("cust bhv: " + bhv + ", response: " + response + ", response.data: " + response.data);
 			$('#addCustomer').modal("hide");
 			
 	    	var scope = angular.element($("#ctrlcustomers")).scope();
@@ -511,17 +510,25 @@
 								}
 								break;
 							case UC_CALL_STATE_RINGING:
-								var msg = "전화가 왔습니다. " + item.callername + " (" + item.caller + ")";
-								$("#mainalert").html(msg);
-								if (item.callername == '') {
+								console.log("UC_CALL_STATE_RINGING : " + JSON.stringify(item));
+								console.log("typeof(item.callername) : " + typeof(item.callername));
+								console.log("typeof(item.callername) : " + item.callername);
+								
+								var msg;
+								
+								if (item.callername == '' || typeof(item.callername) == 'undefined' || item.callername == null) {
 									custbhv = bhv.add;
-									$("#addCustomer .modal-title").html("고객 등록");
+									msg = "전화가 왔습니다. ( " + item.caller + " )";
+									$("#addCustomer #mainalert").html(msg);
+									
+									$("#addCustomer .modal-title").html("고객  등록");
 									$("#addCustomer #btnMemo").css("display", "inline");
 									$("#tel").val(item.caller);
 								} else {
+									custbhv = bhv.modi;
+									msg = "전화가 왔습니다. " + item.callername + " ( " + item.caller + " )";
+									$("#addCustomer #mainalert").html(msg);
 									$.get("/customer/get/idx/" + item.cust_idx, function(response){
-										
-										custbhv = bhv.modi;
 										$("#addCustomer .modal-title").html("고객 정보");
 										$("#addCustomer #btnMemo").css("display", "inline");
 										

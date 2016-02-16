@@ -24,19 +24,13 @@
 		$("#btnCallSearch").click(function(){
 	    	var scope = angular.element($("#ctrlcalls")).scope();
 		    scope.$apply(function () {
-		    	var searching = {
-			    		idx: 0,
-			    		sdate: $("#datetimepicker1").val(),
-			    		edate: '',
-		    			txt: '',
-		    			curpage: paginationOptions.pageNumber,
-		    			rowsperpage: paginationOptions.pageSize
-		    			
-		    		sdate: ,
-		    		edate: $("#datetimepicker1").val(),
-		    		searchtxt: $("#txtcallsearch")
+		    	var searchcondition = {
+		    		idx: 0,
+		    		sdate: $("#datetimepicker1").val(),
+		    		edate: $("#datetimepicker2").val(),
+	    			txt: $("#txtcallsearch").val()
 		    	}
-		        scope.getPage(searching);
+		        scope.getPage(searchcondition);
 		    });
 		});
 		

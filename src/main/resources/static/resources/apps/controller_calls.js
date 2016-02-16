@@ -94,8 +94,6 @@
 			} else {
 		    	val.curpage = paginationOptions.pageNumber;
 		    	val.rowsperpage = paginationOptions.pageSize;
-
-		    	
 			}
 
 			$http({

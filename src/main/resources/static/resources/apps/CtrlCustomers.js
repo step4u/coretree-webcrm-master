@@ -146,11 +146,12 @@
 				if ($scope.gridOptions.totalItems != data) {
 					paginationOptions.pageNumber = 1;
 				}
-				
 				$scope.gridOptions.totalItems = data;
 				
+				console.log(">>>>>>>>>>>> : " + url);
 				$http.get(url)
 				.success(function(data) {
+					console.log("/customer/get/count/ : data : " + angular.toJson(data));
 					$scope.gridOptions.data = data;
 				});
 			});

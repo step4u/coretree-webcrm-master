@@ -57,8 +57,6 @@ public class CustomerController {
 	
 	@RequestMapping(path="/customer/add/", method=RequestMethod.POST)
 	public void add(Customer cust, Principal principal) {
-		//System.err.print(cust.toString());
-		//System.err.print(principal.getName());
 		mapper.add(cust);
 	}
 	
