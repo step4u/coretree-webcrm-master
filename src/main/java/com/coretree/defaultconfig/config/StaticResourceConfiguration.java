@@ -12,7 +12,8 @@ public class StaticResourceConfiguration extends WebMvcConfigurerAdapter {
 	private static final Logger LOG = LoggerFactory.getLogger(StaticResourceConfiguration.class);
 	// private String staticPath = "file:///D:/spring_boot_test/";
 	// private String staticPath = "file:///D:/dev/test/Java/";
-	private String staticPath = "/home/webcrm/media";
+	// private String staticPath = "/home/webcrm/media";
+	private String staticPath = "/opt/webcrm/media/";
 	
 	@Override
 	 public void addResourceHandlers(ResourceHandlerRegistry registry) {
