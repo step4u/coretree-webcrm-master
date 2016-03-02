@@ -5,13 +5,9 @@ import java.nio.ByteOrder;
 import java.security.Principal;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.NoSuchElementException;
-import java.util.Set;
 import java.util.TimerTask;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -29,8 +25,6 @@ import org.springframework.messaging.simp.broker.BrokerAvailabilityEvent;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.coretree.defaultconfig.domain.QuoteTelStatus;
-import com.coretree.defaultconfig.domain.QuoteTelStatus.TelStatus;
 import com.coretree.defaultconfig.mapper.Call;
 import com.coretree.defaultconfig.mapper.CallMapper;
 import com.coretree.defaultconfig.mapper.Customer;
@@ -44,8 +38,6 @@ import com.coretree.models.GroupWareData;
 import com.coretree.models.UcMessage;
 import com.coretree.socket.*;
 import com.coretree.util.Const4pbx;
-
-import scala.collection.immutable.Stream.Cons;
 
 @Service
 @RestController

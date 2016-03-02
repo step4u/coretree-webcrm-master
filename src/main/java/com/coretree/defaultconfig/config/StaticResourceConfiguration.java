@@ -10,7 +10,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 @Configuration
 public class StaticResourceConfiguration extends WebMvcConfigurerAdapter {
 	private static final Logger LOG = LoggerFactory.getLogger(StaticResourceConfiguration.class);
-	// private String staticPath = "file:///D:/spring_boot_test/";
 	// private String staticPath = "file:///D:/dev/test/Java/";
 	// private String staticPath = "file:///home/webcrm/media/";
 	private String staticPath = "file:///opt/webcrm/media/";

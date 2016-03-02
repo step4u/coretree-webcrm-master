@@ -21,7 +21,7 @@
     </select>
     
     <select id="findAll" resultMap="resMap">
-    	{call GET_CUSTLIST( #{curpage, mode=IN, jdbcType=INTEGER}, #{rowsperpage, mode=IN, jdbcType=INTEGER}, #{group}, #{username} )}
+    	{call GET_CUSTLIST( #{curpage, mode=IN, jdbcType=INTEGER}, #{rowsperpage, mode=IN, jdbcType=INTEGER}, #{group, mode=IN, jdbcType=VARCHAR}, #{username, mode=IN, jdbcType=VARCHAR} )}
     </select>
     
     <select id="selectByIdx" resultMap="resMap">
@@ -57,7 +57,10 @@
     </select>
     
     <insert id="add">
-    	insert into customers (depthorder, username, firm, uname, posi, tel, cellular, extension, email) values (#{depthorder}, #{username}, #{firm}, #{uname}, #{posi}, #{tel}, #{cellular}, #{extension}, #{email})
+    	insert into customers
+    		(depthorder, username, firm, uname, posi, tel, cellular, extension, email)
+    		values
+   			(#{depthorder, mode=IN, jdbcType=VARCHAR}, #{username, mode=IN, jdbcType=VARCHAR}, #{firm}, #{uname, mode=IN, jdbcType=VARCHAR}, #{posi, mode=IN, jdbcType=VARCHAR}, #{tel, mode=IN, jdbcType=VARCHAR}, #{cellular, mode=IN, jdbcType=VARCHAR}, #{extension, mode=IN, jdbcType=VARCHAR}, #{email, mode=IN, jdbcType=VARCHAR})
     </insert>
 
     <select id="chkById" resultType="java.lang.Integer">

@@ -1,5 +1,9 @@
 eclipse.preferences.version=1
+encoding//src/main/java/com/coretree/defaultconfig/controller/CustomerController.java=UTF-8
+encoding//src/main/java/com/coretree/defaultconfig/mapper/Customer.java=UTF-8
+encoding//src/main/java/com/coretree/defaultconfig/mapper/CustomerMapper.java=UTF-8
 encoding//src/main/resources=UTF-8
+encoding//src/main/resources/static=UTF-8
 encoding//src/main/resources/static/view/ModalCustomer.html=UTF-8
 encoding//src/main/resources/static/view/addr.html=UTF-8
 encoding//src/main/resources/static/view/calls.html=UTF-8

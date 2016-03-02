@@ -319,10 +319,12 @@
 		$.post(url, obj, function(response){
 			$('#addCustomer').modal("hide");
 			
-	    	var scope = angular.element($("#ctrlcustomers")).scope();
-		    scope.$apply(function () {
-		        scope.getPage('');
-		    });
+			if ($("#ctrlcustomers").length) {
+		    	var scope = angular.element($("#ctrlcustomers")).scope();
+			    scope.$apply(function () {
+			        scope.getPage('');
+			    });				
+			}
 			
 			custbhv = bhv.none;
 		});
