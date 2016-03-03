@@ -37,7 +37,7 @@ angular.module('app', ['ui.router', 'ui.bootstrap', 'ui.grid', 'ui.grid.selectio
       })
       .state('addr', {
         parent: 'site',
-        url: '/addr/:param',
+        url: '/addr/:maingroup/:subgroup',
         data: {
           roles: ['User', 'Admin']
         },

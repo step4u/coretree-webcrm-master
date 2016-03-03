@@ -85,13 +85,13 @@
                         </a>
                         <ul class="hoe-sub-menu">
                             <li>
-                                <a href="#/addr/11">
+                                <a href="#/addr/1/0">
                                     <span class="menu-text">공용 주소록</span>
                                     <span class="selected"></span>
                                 </a>
                             </li>
                             <li>
-                                <a href="#/addr/21">
+                                <a href="#/addr/2/0">
                                     <span class="menu-text">개인 주소록</span>
                                     <span class="selected"></span>
                                 </a>
@@ -220,6 +220,7 @@
 									<button type="button" class="btn btn-primary btn-sm" id='btn_dismissdnd'>Dismiss DnD</button>
 									<button type="button" class="btn btn-primary btn-sm" id='btn_reqredirect'>Request Redirect</button>
 									<button type="button" class="btn btn-primary btn-sm" id='btn_dismissredirect'>Dismiss Redirect</button>
+									<button type="button" class="btn btn-primary btn-sm" id='btn_answer'>Answer</button>
 						        </div>
                             </div>
 						</div>
@@ -426,9 +427,15 @@
 			</form>
       		</div>
       		<div class="modal-footer">
-        		<button type="button" class="btn btn-primary" id="btnMemo" style="display: none;">메모</button>
-        		<button type="button" class="btn btn-primary" id="btnSave">저장</button>
-        		<button type="button" class="btn btn-default" id="btnClose">닫기</button>
+      			<div class="col-sm-12">
+					<button type="button" class="btn btn-primary" id="btnMemoTake">전화받기</button>
+      				<button type="button" class="btn btn-primary" id="btnMemoRedirect">돌려주기</button>
+      				<button type="button" class="btn btn-warning" id="btnMemoHold">보류</button>
+      				<button type="button" class="btn btn-danger" id="btnMemoHangup">끊기</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	        		<button type="button" class="btn btn-primary" id="btnMemo" style="display: none;">메모</button>
+	        		<button type="button" class="btn btn-primary" id="btnSave">저장</button>
+	        		<button type="button" class="btn btn-default" id="btnClose">닫기</button>
+        		</div>
       		</div>
     	</div>
   	</div>
@@ -786,6 +793,27 @@
 	                callee: '',
 	                calleename: '',
 	                responseCode: UC_SRV_UNCONDITIONAL,
+	                unconditional: '',
+	                status: 0
+	              };
+	        
+	     	stompClient.send("/app/traders", {}, JSON.stringify(trade));
+	    });
+	    
+	    $("#btn_answer").click(function(){
+	    	// Requset UC_ANSWER_CALL_REQ
+	    	
+	        trade = {
+	                cmd: UC_ANWSER_CALL_REQ,
+	                direct: UC_DIRECT_INCOMING,
+	                call_idx: 0,
+	                extension: '3001',
+	                cust_idx: 0,
+	                caller: '01045455962',
+	                callername: '',
+	                callee: '',
+	                calleename: '',
+	                responseCode: '',
 	                unconditional: '',
 	                status: 0
 	              };

@@ -116,6 +116,38 @@
 			$("#addCustomer").modal("hide");
 		});
 		
+		$("#btnMemoTake").click(function(){
+	        trade = {
+	                cmd: UC_ANWSER_CALL_REQ,
+	                direct: 0,
+	                call_idx: 0,
+	                extension: crmidentity.ext,
+	                cust_idx: 0,
+	                caller: '',
+	                callername: '',
+	                callee: '',
+	                calleename: '',
+	                responseCode: '',
+	                unconditional: '',
+	                status: 0
+	              };
+	        
+	     	stompClient.send("/app/traders", {}, JSON.stringify(trade));
+		});
+		
+		$("#btnMemoHangup").click(function(){
+	        trade = {
+	                cmd : UC_DROP_CALL_REQ,
+	                extension : crmidentity.ext,
+	                caller : crmidentity.ext,
+	                callee : '01045455962',
+	                unconditional : '',
+	                status: -1
+	              };
+	        
+	     	stompClient.send("/app/traders", {}, JSON.stringify(trade));
+		});
+		
 		$("#btnMemo").click(function(){
 			var memotitle;
 			if (currentCallInfo.callername == '') {
@@ -314,8 +346,6 @@
 			obj.idx = $("#addCustomer #idx").val();
 		}
 		
-		// console.log(JSON.stringify(obj));
-		
 		$.post(url, obj, function(response){
 			$('#addCustomer').modal("hide");
 			
@@ -340,6 +370,11 @@
 		$("#addCustomer #extension").val('');
 		$("#addCustomer #email").val('');
 		$("#addCustomer #btnMemo").css("display", "none");
+		
+		$("#addCustomer #btnMemoTake").css("display", "inline");
+		$("#addCustomer #btnMemoRedirect").css("display", "inline");
+		$("#addCustomer #btnMemoHold").css("display", "inline");
+		$("#addCustomer #btnMemoHangup").css("display", "inline");
 		
 		// $('#addCustomer #subgroup').find('option:not(:first)').remove();
 		// $('#addCustomer #subgroup').empty().append('<option value="0">:: 서브그룹 ::</option>');

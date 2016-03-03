@@ -26,7 +26,7 @@ public class CustomerController {
 		return mapper.count(group, username);
 	}
 	
-	@RequestMapping(path="/customer/get/page/{group}/{curpage}/{rowsperpage}", method=RequestMethod.GET)
+	@RequestMapping(path="/customer/get/page/{maingroup}/{subgroup}/{curpage}/{rowsperpage}", method=RequestMethod.GET)
 	public List<Customer> getAll(@PathVariable("group") String group
 			, @PathVariable("curpage") int curpage
 			, @PathVariable("rowsperpage") int rowsperpage

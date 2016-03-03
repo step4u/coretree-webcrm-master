@@ -130,16 +130,16 @@
 			var url;
 			
 			if (searchtxt == ''){
-				url = '/customer/get/page/' + $stateParams.param + '/' + paginationOptions.pageNumber + '/' + paginationOptions.pageSize;
+				url = '/customer/get/page/' + $stateParams.maingroup + '/' + $stateParams.subgroup + '/' + paginationOptions.pageNumber + '/' + paginationOptions.pageSize;
 			} else {
-				url = '/customer/get/search/' + $stateParams.param + '/' + searchtxt;
+				url = '/customer/get/search/' + $stateParams.maingroup + '/' + $stateParams.subgroup + '/' + searchtxt;
 			}
 			
 			if (typeof(searchtxt) == 'undefined'){
-				url = '/customer/get/page/' + $stateParams.param + '/' + paginationOptions.pageNumber + '/' + paginationOptions.pageSize;
+				url = '/customer/get/page/' + $stateParams.maingroup + '/' + $stateParams.subgroup + '/' + paginationOptions.pageNumber + '/' + paginationOptions.pageSize;
 			}
 
-			var counturl = '/customer/get/count/' + $stateParams.param;
+			var counturl = '/customer/get/count/' + $stateParams.maingroup + '/' + $stateParams.subgroup;
 
 			$http.get(counturl)
 			.success(function(data) {
@@ -149,9 +149,10 @@
 				$scope.gridOptions.totalItems = data;
 				
 				console.log(">>>>>>>>>>>> : " + url);
+				
 				$http.get(url)
 				.success(function(data) {
-					console.log("/customer/get/count/ : data : " + angular.toJson(data));
+					// console.log("/customer/get/count/ : data : " + angular.toJson(data));
 					$scope.gridOptions.data = data;
 				});
 			});
@@ -159,17 +160,13 @@
 		$scope.getPage();
 		
 		$scope.bindSubGroup = function(){
-			//console.log("$stateParams.param.substring(0,1) : " + $stateParams.param.substring(0,1));
-			$http.get('/customer/get/group/' + $stateParams.param.substring(0,1))
+			$http.get('/customer/get/group/' + $stateParams.maingroup)
 			.success(function(response) {
 				$scope.options = response;
 				var item = response.find(function(element, index){
-					//console.log("$stateParams.param.substring(1,2) : " + $stateParams.param.substring(1,2));
-					//console.log("element.subgroup : " + element.subgroup);
-					return element.subgroup == $stateParams.param.substring(1,2);
+					return element.subgroup == $stateParams.subgroup;
 				});
 				
-				// console.log("item : " + angular.toJson(item));
 				if (typeof(item) == 'undefined') {
 					$scope.modeloption = "0";
 				} else {
@@ -225,15 +222,20 @@
 			$("#addCustomer #extension").val(item.extension);
 			$("#addCustomer #email").val(item.email);
 			
+			$("#addCustomer #btnMemoTake").css("display", "none");
+			$("#addCustomer #btnMemoRedirect").css("display", "none");
+			$("#addCustomer #btnMemoHold").css("display", "none");
+			$("#addCustomer #btnMemoHangup").css("display", "none");
+			
 			$("#addCustomer").modal({backdrop: false});
 			
 			SetSubgroups(item.maingroup, item.subgroup);
 			
-			console.log(item.idx + '//' + item.maingroup + '//' + item.subgroup);
+			// console.log(item.idx + '//' + item.maingroup + '//' + item.subgroup);
 		};
 		
 		$scope.getCurrentSelection = function() {
 			  var currentSelection = $scope.gridApi.selection.getSelectedRows();
-			  $log.log(currentSelection);
+			  // $log.log(currentSelection);
 		};
 	}]);
