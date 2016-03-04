@@ -20,19 +20,28 @@ public class CustomerController {
 	@Autowired
 	CustomerMapper mapper;
 	
-	@RequestMapping(path="/customer/get/count/{group}", method=RequestMethod.GET)
-	public int getCount(@PathVariable("group") String group, Principal principal) {
+	@RequestMapping(path="/customer/get/count/{maingroup}", method=RequestMethod.GET)
+	public int getCount(@PathVariable("maingroup") String maingroup, @PathVariable("subgroup") String subgroup, Principal principal) {
 		String username = principal.getName();
+		String group = "0";
+		
+		if (subgroup.equals("0")) {
+			group = maingroup;
+		} else {
+			group = maingroup + subgroup;
+		}
+		
 		return mapper.count(group, username);
 	}
 	
 	@RequestMapping(path="/customer/get/page/{maingroup}/{subgroup}/{curpage}/{rowsperpage}", method=RequestMethod.GET)
-	public List<Customer> getAll(@PathVariable("group") String group
+	public List<Customer> getAll(@PathVariable("maingroup") String maingroup
+			, @PathVariable("subgroup") String subgroup
 			, @PathVariable("curpage") int curpage
 			, @PathVariable("rowsperpage") int rowsperpage
 			, Principal principal) {
 		String username = principal.getName();
-		return mapper.findAll(curpage, rowsperpage, group, username);
+		return mapper.findAll(curpage, rowsperpage, maingroup, subgroup, username);
 	}
 	
 	@RequestMapping(path="/customer/get/idx/{idx}", method=RequestMethod.GET)

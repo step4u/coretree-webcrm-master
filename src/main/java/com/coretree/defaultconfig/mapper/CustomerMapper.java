@@ -11,7 +11,7 @@ import com.coretree.defaultconfig.model.Group;
 @Mapper
 public interface CustomerMapper {
 	int count(@Param("group") String group, @Param("username") String username);
-	List<Customer> findAll(@Param("curpage") int curpage, @Param("rowsperpage") int rowsperpage, @Param("group") String group, @Param("username") String username);
+	List<Customer> findAll(@Param("curpage") int curpage, @Param("rowsperpage") int rowsperpage, @Param("maingroup") String maingroup, @Param("subgroup") String subgroup, @Param("username") String username);
 	List<Customer> findByTxt(@Param("searchtxt") String searchtxt);
 	Customer findByIdx(@Param("idx") long idx);
 	Customer findByExt(@Param("telnum") String telnum);

@@ -21,7 +21,7 @@
     </select>
     
     <select id="findAll" resultMap="resMap" statementType = "CALLABLE">
-    	{call GET_CUSTLIST ( #{curpage, mode=IN, jdbcType=INTEGER}, #{rowsperpage, mode=IN, jdbcType=INTEGER}, #{group, mode=IN, jdbcType=VARCHAR}, #{username, mode=IN, jdbcType=VARCHAR} )}
+    	{call GET_CUSTLIST ( #{curpage, mode=IN, jdbcType=INTEGER}, #{rowsperpage, mode=IN, jdbcType=INTEGER}, #{maingroup, mode=IN, jdbcType=VARCHAR}, #{subgroup, mode=IN, jdbcType=VARCHAR}, #{username, mode=IN, jdbcType=VARCHAR} )}
     </select>
     
     <select id="selectByIdx" resultMap="resMap">
