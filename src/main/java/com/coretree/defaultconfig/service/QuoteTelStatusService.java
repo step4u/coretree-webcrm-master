@@ -330,7 +330,7 @@ public class QuoteTelStatusService implements ApplicationListener<BrokerAvailabi
 									}
 								}
 								this.messagingTemplate.convertAndSend("/topic/ext.state." + data.getExtension(), payload);
-								System.err.println("IDLE curcalls.size(): " + curcalls.size());
+								// System.err.println("IDLE curcalls.size(): " + curcalls.size());
 							}
 							break;
 						case Const4pbx.UC_CALL_STATE_INVITING:
@@ -360,7 +360,7 @@ public class QuoteTelStatusService implements ApplicationListener<BrokerAvailabi
 								call.setStatus(data.getStatus());
 								callMapper.modiStatus(call);
 								this.messagingTemplate.convertAndSend("/topic/ext.state." + data.getExtension(), payload);
-								System.err.println("BUSY curcalls.size(): " + curcalls.size());
+								// System.err.println("BUSY curcalls.size(): " + curcalls.size());
 							}
 							break;
 					}
@@ -461,7 +461,7 @@ public class QuoteTelStatusService implements ApplicationListener<BrokerAvailabi
 						
 						Member member = memberMapper.selectByExt(data.getExtension());
 						if (member != null) {
-							Customer cust = custMapper.findByExt(data.getCaller());
+							Customer cust = custMapper.findByExt(data.getCallee());
 							
 							if (cust != null) {
 								payload.calleename = cust.getUname();

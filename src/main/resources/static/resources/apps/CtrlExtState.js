@@ -82,7 +82,7 @@
 				return element.extension == extitem.extension;
 			});
 			
-			console.log(">>>>>>>>>>>>>>>>> log : " + extitem.status);
+			// console.log(">>>>>>>>>>>>>>>>> log : " + extitem.status);
 			
 			if (item) {
 				switch (extitem.status) {

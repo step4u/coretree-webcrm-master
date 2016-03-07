@@ -9,10 +9,12 @@
         unconditional : '',
         status: -1
 	};
+    
 	
 	var currentCallInfo = {
 		cmd: 0,
 		call_idx: 0,
+		direct: 10,
 		extension: '',
 		cust_idx: 0,
 		caller: '',
@@ -532,13 +534,18 @@
 					$("#call_idx").val(currentCallInfo.call_idx);
 				}
 				
+				console.log("item.direct: " + item.direct + ", item.status: " + item.status + ", item.callername: " + item.callername);
+				console.log("currentCallInfo.direct: " + currentCallInfo.direct + ", currentCallInfo.status: " + currentCallInfo.status + ", currentCallInfo.callername: " + currentCallInfo.callername);
+
+				var msg = "";
+				
 				switch (item.direct) {
 					case UC_DIRECT_INCOMING:
 						
 						switch (item.status) {
 							case UC_CALL_STATE_IDLE:
 								if (currentCallInfo.status == UC_CALL_STATE_RINGING || currentCallInfo.status == UC_CALL_STATE_BUSY) {
-									var msg = "온라인...";
+									msg = "온라인...";
 									$("#mainalert").html(msg);
 									
 									currentCallInfo.status = UC_CALL_STATE_IDLE;
@@ -547,16 +554,16 @@
 								}
 								break;
 							case UC_CALL_STATE_RINGING:
+/*
 								console.log("UC_CALL_STATE_RINGING : " + JSON.stringify(item));
 								console.log("typeof(item.callername) : " + typeof(item.callername));
 								console.log("typeof(item.callername) : " + item.callername);
-								
-								var msg;
-								
+*/								
+							
 								if (item.callername == '' || typeof(item.callername) == 'undefined' || item.callername == null) {
 									custbhv = bhv.add;
 									msg = "전화가 왔습니다. ( " + item.caller + " )";
-									$("#addCustomer #mainalert").html(msg);
+									$("#mainalert").html(msg);
 									
 									$("#addCustomer .modal-title").html("고객  등록");
 									$("#addCustomer #btnMemo").css("display", "inline");
@@ -564,7 +571,7 @@
 								} else {
 									custbhv = bhv.modi;
 									msg = "전화가 왔습니다. " + item.callername + " ( " + item.caller + " )";
-									$("#addCustomer #mainalert").html(msg);
+									$("#mainalert").html(msg);
 									$.get("/customer/get/idx/" + item.cust_idx, function(response){
 										$("#addCustomer .modal-title").html("고객 정보");
 										$("#addCustomer #btnMemo").css("display", "inline");
@@ -573,7 +580,6 @@
 	
 										$("#addCustomer #idx").val(itm.idx);
 										$("#addCustomer #maingroup").val(itm.maingroup);
-										// $("#addCustomer #subgroup").val(itm.subgroup);
 										$("#addCustomer #uname").val(itm.uname);
 										$("#addCustomer #firm").val(itm.firm);
 										$("#addCustomer #posi").val(itm.posi);
@@ -598,14 +604,80 @@
 								currentCallInfo.status = UC_CALL_STATE_RINGING;
 								break;
 							case UC_CALL_STATE_BUSY:
-								var msg = "통화중..." + item.callername + " (" + item.caller + ")";
+								msg = "통화중... " + item.callername + " (" + item.caller + ")";
 								$("#mainalert").html(msg);
-								
 								currentCallInfo.status = UC_CALL_STATE_BUSY;
 								break;
 						}
 						break;
 					case UC_DIRECT_OUTGOING:
+						switch (item.status) {
+						case UC_CALL_STATE_IDLE:
+							if (currentCallInfo.status == UC_CALL_STATE_RINGING || currentCallInfo.status == UC_CALL_STATE_BUSY) {
+								msg = "온라인...";
+								$("#mainalert").html(msg);
+								
+								currentCallInfo.status = UC_CALL_STATE_IDLE;
+								currentCallInfo.cmd = 0;
+								currentCallInfo.call_idx = 0;
+							}
+							break;
+						case UC_CALL_STATE_INVITING:
+							if (item.calleename == '' || typeof(item.calleename) == 'undefined' || item.calleename == null) {
+								msg = "전화를 거는 중... ( " + item.callee + " )";
+							} else {
+								msg = "전화가 거는 중... " + item.calleename + " ( " + item.callee + " )";
+							}
+							$("#mainalert").html(msg);
+							break;
+						case UC_CALL_STATE_BUSY:
+							if (item.calleename == '' || typeof(item.calleename) == 'undefined' || item.calleename == null) {
+								custbhv = bhv.add;
+								
+								msg = "통화중... (" + item.callee + ")";
+								$("#mainalert").html(msg);
+								
+								$("#addCustomer .modal-title").html("고객  등록");
+								$("#addCustomer #btnMemo").css("display", "inline");
+								$("#tel").val(item.caller);
+							} else {
+								custbhv = bhv.modi;
+								
+								msg = "통화중... " + item.calleename + " (" + item.callee + ")";
+								$("#mainalert").html(msg);
+								
+								$.get("/customer/get/idx/" + item.cust_idx, function(response){
+									$("#addCustomer .modal-title").html("고객 정보");
+									$("#addCustomer #btnMemo").css("display", "inline");
+									
+									var itm = response;
+
+									$("#addCustomer #idx").val(itm.idx);
+									$("#addCustomer #maingroup").val(itm.maingroup);
+									$("#addCustomer #uname").val(itm.uname);
+									$("#addCustomer #firm").val(itm.firm);
+									$("#addCustomer #posi").val(itm.posi);
+									$("#addCustomer #tel").val(itm.tel);
+									$("#addCustomer #cellular").val(itm.cellular);
+									$("#addCustomer #extension").val(itm.extension);
+									$("#addCustomer #email").val(itm.email);
+									
+									SetSubgroups(itm.maingroup, itm.subgroup);
+								});
+							}
+							
+							$("#addCustomer").modal({backdrop: false});
+							
+							if ($("#ctrlcalls").length) {
+						    	var scope = angular.element($("#ctrlcalls")).scope();
+							    scope.$apply(function () {
+							        scope.getPage();
+							    });
+							}
+							
+							currentCallInfo.status = UC_CALL_STATE_RINGING;
+							break;
+					}
 						break;
 					default:
 						break;
