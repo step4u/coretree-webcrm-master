@@ -100,6 +100,75 @@
 			ClearForm();
     	});
 		
+		$("#ModalTransfer").on('shown.bs.modal', function () {
+			$("#ModalTransfer #txtnumber").focus();
+			$("#ModalTransfer #txtnumber").select();
+    	});
+		
+		$("#ModalTransfer").on('hidden.bs.modal', function () {
+			
+    	});
+		
+		$("#ModalTransfer #btnTransferClose").click(function(){
+			$("#ModalTransfer").modal("hide");
+		});
+		
+		$("#ModalTransfer #btnTransferSend").click(function(){
+	        trade = {
+	                cmd : UC_TRANSFER_CALL_REQ,
+	                extension : currentCallInfo.extension,
+	                caller : currentCallInfo.caller,
+	                callee : currentCallInfo.callee,
+	                unconditional : $("#ModalTransfer #txtnumber").val(),
+	                status: -1
+	              };
+	        
+	     	stompClient.send("/app/traders", {}, JSON.stringify(trade));
+	     	$("#ModalTransfer").modal("hide");
+		});
+		
+		$("#ModalTransfer #txtnumber").keyup(function(event){
+			if (event.keyCode != 13) return;
+			
+	        trade = {
+	                cmd : UC_TRANSFER_CALL_REQ,
+	                extension : currentCallInfo.extension,
+	                caller : currentCallInfo.caller,
+	                callee : currentCallInfo.callee,
+	                unconditional : $("#ModalTransfer #txtnumber").val(),
+	                status: -1
+	              };
+	        
+	     	stompClient.send("/app/traders", {}, JSON.stringify(trade));
+	     	$("#ModalTransfer").modal("hide");
+		});
+		
+		$("#btnMemoHold").click(function(){
+			var tmptxt = $(this).html();
+			
+			if (tmptxt == '보류') {
+		        trade = {
+		                cmd : UC_HOLD_CALL_REQ,
+		                extension : currentCallInfo.extension,
+		                caller : currentCallInfo.caller,
+		                callee : currentCallInfo.callee,
+		                unconditional : '',
+		                status: -1
+		              };
+			} else {
+		        trade = {
+		                cmd : UC_ACTIVE_CALL_REQ,
+		                extension : currentCallInfo.extension,
+		                caller : currentCallInfo.caller,
+		                callee : currentCallInfo.callee,
+		                unconditional : '',
+		                status: -1
+		              };
+			}
+			
+	        stompClient.send("/app/traders", {}, JSON.stringify(trade));
+		});
+		
 		$("#Memo").draggable({
 		      handle: ".modal-header"
 		});
@@ -123,7 +192,7 @@
 	                cmd: UC_ANWSER_CALL_REQ,
 	                direct: 0,
 	                call_idx: 0,
-	                extension: crmidentity.ext,
+	                extension: currentCallInfo.extension,
 	                cust_idx: 0,
 	                caller: '',
 	                callername: '',
@@ -137,12 +206,16 @@
 	     	stompClient.send("/app/traders", {}, JSON.stringify(trade));
 		});
 		
+		$("#btnMemoRedirect").click(function(){
+			$("#ModalTransfer").modal("show");
+		});
+		
 		$("#btnMemoHangup").click(function(){
 	        trade = {
 	                cmd : UC_DROP_CALL_REQ,
-	                extension : crmidentity.ext,
-	                caller : crmidentity.ext,
-	                callee : '01045455962',
+	                extension : currentCallInfo.extension,
+	                caller : currentCallInfo.caller,
+	                callee : currentCallInfo.callee,
 	                unconditional : '',
 	                status: -1
 	              };
@@ -196,7 +269,7 @@
 		$("#btnCall").click(function(){
 			var btnval = $(this).val();
 			trade = {
-                cmd: 74,
+                cmd: UC_MAKE_CALL_REQ,
                 extension: crmidentity.ext,
                 caller: crmidentity.ext,
                 callee: $("#callnumber").val(),
@@ -222,7 +295,7 @@
 			var numval = $("#callnumber").val();
 			if (numval == '') {
 		        trade = {
-		            cmd: 80,
+		            cmd: UC_PICKUP_CALL_REQ,
 		            extension: crmidentity.ext,
 		            caller: '',
 		            callee: '*98',
@@ -231,7 +304,7 @@
 		        };
 			} else {
 		        trade = {
-		            cmd: 80,
+		            cmd: UC_PICKUP_CALL_REQ,
 		            extension: crmidentity.ext,
 		            caller: '',
 		            callee: numval,
@@ -245,7 +318,7 @@
 		
 		$("#btnTransfer").click(function(){
 	        trade = {
-                cmd: 86,
+                cmd: UC_TRANSFER_CALL_REQ,
                 extension: crmidentity.ext,
                 caller: currentCallInfo.caller,
                 callee: currentCallInfo.callee,
@@ -253,6 +326,21 @@
                 status: -1
 	        };
 	        
+	     	stompClient.send("/app/traders", {}, JSON.stringify(trade));
+		});
+		
+		$("#callnumber").keyup(function(event){
+			if (event.keyCode != 13) return;
+			
+	        trade = {
+                cmd: UC_TRANSFER_CALL_REQ,
+                extension: crmidentity.ext,
+                caller: currentCallInfo.caller,
+                callee: currentCallInfo.callee,
+                unconditional: $("#callnumber").val(),
+                status: -1
+	        };
+		        
 	     	stompClient.send("/app/traders", {}, JSON.stringify(trade));
 		});
 		
@@ -407,57 +495,53 @@
 	/*** script for set main message ***/
 	
 	function SetMyState(extitem, statecount) {
-		// console.log("set my state: " + extitem.status + ", statecount.ring: " + statecount.ring);
+		console.log("set my state: " + extitem.status + ", statecount.ring: " + statecount.ring);
 		
 		switch (extitem.state) {
 			case UC_CALL_STATE_UNREG:
 				MyState = crmstate.unreg;
 				
-				$("#btnCall").addClass("disabled");
-				$("#btnPickup").addClass("disabled");
-				$("#btnTransfer").addClass("disabled");
-				$("#btnHold").addClass("disabled");
+				if (!$("#btnCall").hasClass("disabled")) $("#btnCall").addClass("disabled");
+				if (!$("#btnPickup").hasClass("disabled")) $("#btnPickup").addClass("disabled");
+				if (!$("#btnTransfer").hasClass("disabled")) $("#btnTransfer").addClass("disabled");
+				if (!$("#btnHold").hasClass("disabled")) $("#btnHold").addClass("disabled");
 				break;
 			case UC_CALL_STATE_IDLE:
 				MyState = crmstate.idle;
 				
 				if ($("#callnumber").val() == '') {
-					$("#btnCall").addClass("disabled");
+					if (!$("#btnCall").hasClass("disabled")) $("#btnCall").addClass("disabled");
 				} else {
-					$("#btnCall").removeClass("disabled");
+					if (!$("#btnCall").hasClass("disabled")) $("#btnCall").removeClass("disabled");
 				}
-//				if (statecount.ring > 0){
-//					$("#btnPickup").removeClass("disabled");
-//				} else {
-//					$("#btnPickup").addClass("disabled");
-//				}
-				$("#btnPickup").removeClass("disabled");
-				$("#btnTransfer").addClass("disabled");
-				$("#btnHold").addClass("disabled");
+
+				if (!$("#btnPickup").hasClass("disabled")) $("#btnPickup").removeClass("disabled");
+				if (!$("#btnTransfer").hasClass("disabled")) $("#btnTransfer").addClass("disabled");
+				if (!$("#btnHold").hasClass("disabled")) $("#btnHold").addClass("disabled");
 				break;
 			case UC_CALL_STATE_INVITING:
 				MyState = crmstate.invite;
 				
-				$("#btnCall").addClass("disabled");
-				$("#btnPickup").addClass("disabled");
-				$("#btnTransfer").addClass("disabled");
-				$("#btnHold").addClass("disabled");
+				if (!$("#btnCall").hasClass("disabled")) $("#btnCall").addClass("disabled");
+				if (!$("#btnPickup").hasClass("disabled")) $("#btnPickup").addClass("disabled");
+				if (!$("#btnTransfer").hasClass("disabled")) $("#btnTransfer").addClass("disabled");
+				if (!$("#btnHold").hasClass("disabled")) $("#btnHold").addClass("disabled");
 				break;
 			case UC_CALL_STATE_RINGING:
 				MyState = crmstate.ring;
 				
-				$("#btnCall").addClass("disabled");
-				$("#btnPickup").addClass("disabled");
-				$("#btnTransfer").addClass("disabled");
-				$("#btnHold").addClass("disabled");
+				if (!$("#btnCall").hasClass("disabled")) $("#btnCall").addClass("disabled");
+				if (!$("#btnPickup").hasClass("disabled")) $("#btnPickup").addClass("disabled");
+				if (!$("#btnTransfer").hasClass("disabled")) $("#btnTransfer").addClass("disabled");
+				if (!$("#btnHold").hasClass("disabled")) $("#btnHold").addClass("disabled");
 				break;
 			case UC_CALL_STATE_BUSY:
 				MyState = crmstate.busy;
 				
-				$("#btnCall").addClass("disabled");
-				$("#btnPickup").addClass("disabled");
-				$("#btnTransfer").removeClass("disabled");
-				$("#btnHold").removeClass("disabled");
+				if (!$("#btnCall").hasClass("disabled")) $("#btnCall").addClass("disabled");
+				if (!$("#btnPickup").hasClass("disabled")) $("#btnPickup").addClass("disabled");
+				if (!$("#btnTransfer").hasClass("disabled")) $("#btnTransfer").removeClass("disabled");
+				if (!$("#btnHold").hasClass("disabled")) $("#btnHold").removeClass("disabled");
 				break;
 		}
 /*		
@@ -521,8 +605,16 @@
 			case UC_PICKUP_CALL_REQ:
 				break;
 			case UC_HOLD_CALL_RES:
+				if (item.status == UC_STATUS_SUCCESS){
+					$("#btnHold").html("활성");
+					$("#btnMemoHold").html("활성");
+				}
 				break;
 			case UC_ACTIVE_CALL_RES:
+				if (item.status == UC_STATUS_SUCCESS){
+					$("#btnHold").html("보류");
+					$("#btnMemoHold").html("보류");
+				}
 				break;
 			case WS_RES_EXTENSION_STATE:
 				update_ext_status(item);

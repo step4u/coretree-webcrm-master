@@ -188,10 +188,10 @@
 					                        <br />
 					                    </div>
 					                    <div class="col-md-6">
-					                    	<input type="text" class="form-control" id="callnumber" placeholder="전화번호" style="margin-bottom: 5px; width: 265px;">
-					                    	<button type="button" class="btn btn-primary disabled btn-sm" id="btnCall">전화걸기</button>
-					                    	<button type="button" class="btn btn-primary btn-sm" id="btnPickup">당겨받기</button>
-					                    	<button type="button" class="btn btn-primary disabled btn-sm" id="btnTransfer">돌려주기</button>
+					                    	<input type="text" class="form-control" id="callnumber" placeholder="전화번호" style="margin-bottom: 5px; width: 191px;">
+					                    	<button type="button" class="btn btn-primary disabled btn-sm" id="btnCall">통화</button>
+					                    	<button type="button" class="btn btn-primary btn-sm" id="btnPickup">당김</button>
+					                    	<button type="button" class="btn btn-primary disabled btn-sm" id="btnTransfer">전환</button>
 					                    	<button type="button" class="btn btn-primary disabled btn-sm" id="btnHold">보류</button>
 					                    </div>
 				                    </div>
@@ -413,7 +413,7 @@
 			    			<label for="posi">직급</label>
 			    		</div>
 			    		<div class="col-sm-4">
-			    			<input type=text class="form-control" id="posi" placeholder="직급">
+			    			<input type="text" class="form-control" id="posi" placeholder="직급">
 			    		</div>
 				  	</div>
 				  	<div class="form-group">
@@ -436,6 +436,27 @@
 	        		<button type="button" class="btn btn-primary" id="btnSave">저장</button>
 	        		<button type="button" class="btn btn-default" id="btnClose">닫기</button>
         		</div>
+      		</div>
+    	</div>
+  	</div>
+</div>
+
+<!-- Transfer Modal -->
+<div class="modal fade" id="ModalTransfer" role="dialog">
+	<div class="modal-dialog modal-sm">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">전환 전화번호</h4>
+			</div>
+			<div class="modal-body">
+				<div class="form-group">
+					<input type="text" class="form-control" id="txtnumber">
+				</div>
+      		</div>
+      		<div class="modal-footer">
+        		<button type="button" class="btn btn-primary" id="btnTransferSend">전환</button>
+        		<button type="button" class="btn btn-default" id="btnTransferClose">닫기</button>
       		</div>
     	</div>
   	</div>
