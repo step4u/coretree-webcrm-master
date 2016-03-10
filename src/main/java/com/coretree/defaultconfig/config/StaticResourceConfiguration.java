@@ -13,13 +13,14 @@ public class StaticResourceConfiguration extends WebMvcConfigurerAdapter {
 	// private String staticPath = "file:///D:/dev/test/Java/";
 	// private String staticPath = "file:///home/webcrm/media/";
 	private String staticPath = "file:///opt/webcrm/media/";
+	// private String staticPath = "/opt/webcrm/media/";
 	
 	@Override
 	 public void addResourceHandlers(ResourceHandlerRegistry registry) {
-	    if(staticPath != null) {
+	    // if(staticPath != null) {
 	        LOG.info("Serving static content from " + staticPath);
 	        registry.addResourceHandler("/media/**").addResourceLocations(staticPath);
-	    }
+	    // }
 	 }
 
 	 // see https://stackoverflow.com/questions/27381781/java-spring-boot-how-to-map-my-my-app-root-to-index-html

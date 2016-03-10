@@ -130,6 +130,8 @@
 			player.load();
 			player.play();
 			
+			console.log("Player.src: " + player.src);
+			
 /*			player.onprogress = function() {
 				alert("Downloading video");
 			};*/

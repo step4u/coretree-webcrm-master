@@ -7,6 +7,7 @@ public class SearchConditions {
 	private String txt;
 	private int curpage;
 	private int rowsperpage;
+	private String username;
 	
 	public long getIdx() { return this.idx; }
 	public void setIdx(long idx) { this.idx = idx; }
@@ -40,4 +41,7 @@ public class SearchConditions {
 	
 	public int getRowsperpage() { return this.rowsperpage; }
 	public void setRowsperpage(int rowsperpage) { this.rowsperpage = rowsperpage; }
+	
+	public String getUsername() { return this.username; }
+	public void setUsername(String username) { this.username = username; }
 }

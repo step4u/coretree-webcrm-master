@@ -20,7 +20,7 @@ public class CustomerController {
 	@Autowired
 	CustomerMapper mapper;
 	
-	@RequestMapping(path="/customer/get/count/{maingroup}", method=RequestMethod.GET)
+	@RequestMapping(path="/customer/get/count/{maingroup}/{subgroup}", method=RequestMethod.GET)
 	public int getCount(@PathVariable("maingroup") String maingroup, @PathVariable("subgroup") String subgroup, Principal principal) {
 		String username = principal.getName();
 		String group = "0";
@@ -49,7 +49,7 @@ public class CustomerController {
 		return mapper.findByIdx(idx);
 	}
 	
-	@RequestMapping(path="/customer/get/search/{group}/{searchtxt}", method=RequestMethod.GET)
+	@RequestMapping(path="/customer/get/search/{maingroup}/{subgroup}/{searchtxt}", method=RequestMethod.GET)
 	public List<Customer> getByTxt(@PathVariable("searchtxt") String searchtxt, Principal principal) {
 		return mapper.findByTxt("%" + searchtxt + "%");
 	}

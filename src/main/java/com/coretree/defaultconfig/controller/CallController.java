@@ -22,19 +22,14 @@ public class CallController {
 	CallMapper mapper;
 	
 	@RequestMapping(path="/call/get/count", method=RequestMethod.POST)
-	public int getCount(Principal principal) {
-		return mapper.count();
+	public int getCount(@RequestBody SearchConditions condition, Principal principal) {
+		condition.setUsername(principal.getName());
+		return mapper.count(condition);
 	}
-	
-/*	@RequestMapping(path="/call/get/all/{curpage}/{rowsperpage}", method=RequestMethod.GET)
-	public List<Call> getAll(@PathVariable("curpage") int curpage
-			, @PathVariable("rowsperpage") int rowsperpage
-			, Principal principal) {
-		return mapper.selectAll(curpage, rowsperpage);
-	}*/
 	
 	@RequestMapping(path="/call/get/all", method=RequestMethod.POST)
 	public List<Call> getAll(@RequestBody SearchConditions condition, Principal principal) {
+		condition.setUsername(principal.getName());
 		return mapper.selectAll(condition);
 	}
 	

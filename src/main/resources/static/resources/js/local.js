@@ -40,6 +40,16 @@
 		del: 3
 	}
 	
+	var btnbhv = {
+		none: 0,
+		call: 1,
+		redirect: 2,
+		pickup: 3,
+		hold: 4,
+		drop: 5
+	}
+	var btnbehavoir = btnbhv.none;
+	
 	var crmstate = {
 		unreg: 0,
 		idle: 1,
@@ -55,7 +65,7 @@
 		directed: 3,
 		dnd: 4
 	}
-	var mystate = state.online;
+	// var mystate = state.online;
 	
 	// 고객 등록, 수정, 삭제 시 사용
 	var custbhv = bhv.none;
@@ -82,14 +92,11 @@
 	    crmidentity = JSON.parse(tmpidentity);
 	    
 	    
-	    
-	    
-	    
 		/*** set systeminfo ***/
 		$("#systeminfo").html("시스템 정상 (" + crmidentity.ext + ")");
 		
 		$("#addCustomer").draggable({
-		      handle: ".modal-header"
+			handle: ".modal-header"
 		});
 		
 		$("#addCustomer").on('shown.bs.modal', function () {
@@ -106,7 +113,7 @@
     	});
 		
 		$("#ModalTransfer").on('hidden.bs.modal', function () {
-			
+			btnbehavoir = btnbhv.none;
     	});
 		
 		$("#ModalTransfer #btnTransferClose").click(function(){
@@ -114,33 +121,13 @@
 		});
 		
 		$("#ModalTransfer #btnTransferSend").click(function(){
-	        trade = {
-	                cmd : UC_TRANSFER_CALL_REQ,
-	                extension : currentCallInfo.extension,
-	                caller : currentCallInfo.caller,
-	                callee : currentCallInfo.callee,
-	                unconditional : $("#ModalTransfer #txtnumber").val(),
-	                status: -1
-	              };
-	        
-	     	stompClient.send("/app/traders", {}, JSON.stringify(trade));
-	     	$("#ModalTransfer").modal("hide");
+			TelePhoneFunction();
 		});
 		
 		$("#ModalTransfer #txtnumber").keyup(function(event){
 			if (event.keyCode != 13) return;
 			
-	        trade = {
-	                cmd : UC_TRANSFER_CALL_REQ,
-	                extension : currentCallInfo.extension,
-	                caller : currentCallInfo.caller,
-	                callee : currentCallInfo.callee,
-	                unconditional : $("#ModalTransfer #txtnumber").val(),
-	                status: -1
-	              };
-	        
-	     	stompClient.send("/app/traders", {}, JSON.stringify(trade));
-	     	$("#ModalTransfer").modal("hide");
+			TelePhoneFunction();
 		});
 		
 		$("#btnMemoHold").click(function(){
@@ -148,22 +135,22 @@
 			
 			if (tmptxt == '보류') {
 		        trade = {
-		                cmd : UC_HOLD_CALL_REQ,
-		                extension : currentCallInfo.extension,
-		                caller : currentCallInfo.caller,
-		                callee : currentCallInfo.callee,
-		                unconditional : '',
-		                status: -1
-		              };
+	                cmd : UC_HOLD_CALL_REQ,
+	                extension : currentCallInfo.extension,
+	                caller : currentCallInfo.caller,
+	                callee : currentCallInfo.callee,
+	                unconditional : '',
+	                status: -1
+		        };
 			} else {
 		        trade = {
-		                cmd : UC_ACTIVE_CALL_REQ,
-		                extension : currentCallInfo.extension,
-		                caller : currentCallInfo.caller,
-		                callee : currentCallInfo.callee,
-		                unconditional : '',
-		                status: -1
-		              };
+	                cmd : UC_ACTIVE_CALL_REQ,
+	                extension : currentCallInfo.extension,
+	                caller : currentCallInfo.caller,
+	                callee : currentCallInfo.callee,
+	                unconditional : '',
+	                status: -1
+	        	};
 			}
 			
 	        stompClient.send("/app/traders", {}, JSON.stringify(trade));
@@ -189,19 +176,19 @@
 		
 		$("#btnMemoTake").click(function(){
 	        trade = {
-	                cmd: UC_ANWSER_CALL_REQ,
-	                direct: 0,
-	                call_idx: 0,
-	                extension: currentCallInfo.extension,
-	                cust_idx: 0,
-	                caller: '',
-	                callername: '',
-	                callee: '',
-	                calleename: '',
-	                responseCode: '',
-	                unconditional: '',
-	                status: 0
-	              };
+                cmd: UC_ANWSER_CALL_REQ,
+                direct: 0,
+                call_idx: 0,
+                extension: currentCallInfo.extension,
+                cust_idx: 0,
+                caller: '',
+                callername: '',
+                callee: '',
+                calleename: '',
+                responseCode: '',
+                unconditional: '',
+                status: 0
+	        };
 	        
 	     	stompClient.send("/app/traders", {}, JSON.stringify(trade));
 		});
@@ -212,13 +199,13 @@
 		
 		$("#btnMemoHangup").click(function(){
 	        trade = {
-	                cmd : UC_DROP_CALL_REQ,
-	                extension : currentCallInfo.extension,
-	                caller : currentCallInfo.caller,
-	                callee : currentCallInfo.callee,
-	                unconditional : '',
-	                status: -1
-	              };
+                cmd : UC_DROP_CALL_REQ,
+                extension : currentCallInfo.extension,
+                caller : currentCallInfo.caller,
+                callee : currentCallInfo.callee,
+                unconditional : '',
+                status: -1
+	        };
 	        
 	     	stompClient.send("/app/traders", {}, JSON.stringify(trade));
 		});
@@ -265,70 +252,59 @@
 
 		
         /*** script for my call button ***/
-		
-		$("#btnCall").click(function(){
-			var btnval = $(this).val();
-			trade = {
-                cmd: UC_MAKE_CALL_REQ,
-                extension: crmidentity.ext,
-                caller: crmidentity.ext,
-                callee: $("#callnumber").val(),
-                unconditional: '',
-                status: -1
-			};
-			
-			switch (btnval) {
-				case '전화하기':
-					break;
-				default:
-					//trade.cmd = 76;
-					break;
-			}
-	        
-			// console.log("makecall: " + JSON.stringify(trade));
-	     	stompClient.send("/app/traders", {}, JSON.stringify(trade));
-	     	
-			makecall = true;
-		});
-		
-		$("#btnPickup").click(function(){
-			var numval = $("#callnumber").val();
-			if (numval == '') {
-		        trade = {
-		            cmd: UC_PICKUP_CALL_REQ,
-		            extension: crmidentity.ext,
-		            caller: '',
-		            callee: '*98',
-		            unconditional: '',
-		            status: -1
-		        };
+		$("#btnCall").click(function() {
+			if ($(this).html() == '통화') {
+				btnbehavoir = btnbhv.call;
+				$("#ModalTransfer").modal("show");
 			} else {
 		        trade = {
-		            cmd: UC_PICKUP_CALL_REQ,
-		            extension: crmidentity.ext,
-		            caller: '',
-		            callee: numval,
-		            unconditional: '',
-		            status: -1
+	                cmd : UC_DROP_CALL_REQ,
+	                extension : currentCallInfo.extension,
+	                caller : currentCallInfo.caller,
+	                callee : currentCallInfo.callee,
+	                unconditional : '',
+	                status: -1
 		        };
+			        
+	        	stompClient.send("/app/traders", {}, JSON.stringify(trade));
 			}
-			
-			stompClient.send("/app/traders", {}, JSON.stringify(trade));
 		});
 		
 		$("#btnTransfer").click(function(){
-	        trade = {
-                cmd: UC_TRANSFER_CALL_REQ,
-                extension: crmidentity.ext,
-                caller: currentCallInfo.caller,
-                callee: currentCallInfo.callee,
-                unconditional: $("#callnumber").val(),
-                status: -1
-	        };
+			btnbehavoir = btnbhv.redirect;
+			$("#ModalTransfer").modal("show");
+		});
+		
+		$("#btnPickup").click(function(){
+			btnbehavoir = btnbhv.pickup;
+			$("#ModalTransfer").modal("show");
+		});
+		
+		$("#btnHold").click(function(){
+			if ($(this).html() == '보류') {
+		        trade = {
+	                cmd : UC_HOLD_CALL_REQ,
+	                extension : currentCallInfo.extension,
+	                caller : currentCallInfo.caller,
+	                callee : currentCallInfo.callee,
+	                unconditional : '',
+	                status: -1
+		        };
+			} else {
+		        trade = {
+	                cmd : UC_ACTIVE_CALL_REQ,
+	                extension : currentCallInfo.extension,
+	                caller : currentCallInfo.caller,
+	                callee : currentCallInfo.callee,
+	                unconditional : '',
+	                status: -1
+		        };
+			}
 	        
 	     	stompClient.send("/app/traders", {}, JSON.stringify(trade));
 		});
-		
+
+		// isn't used
 		$("#callnumber").keyup(function(event){
 			if (event.keyCode != 13) return;
 			
@@ -344,19 +320,7 @@
 	     	stompClient.send("/app/traders", {}, JSON.stringify(trade));
 		});
 		
-		$("#btnHold").click(function(){
-	        trade = {
-	                cmd: 82,
-	                extension: crmidentity.ext,
-	                caller: currentCallInfo.caller,
-	                callee: currentCallInfo.callee,
-	                unconditional: '',
-	                status: -1
-	              };
-	        
-	     	stompClient.send("/app/traders", {}, JSON.stringify(trade));
-		});
-
+		// isn't used
 		$("#callnumber").on("keyup", function(e){
 			// console.log("input ...." + e.type + '//' + e.which + ', MyState=' + MyState);
 			if (MyState == crmstate.idle) {
@@ -368,7 +332,6 @@
 				}
 			}
 		});
-		
         /*** script for my call button ***/
 		
 	    if (crmidentity.role === "ROLE_ADMIN") {
@@ -395,11 +358,6 @@
 			email: $("#addCustomer #email").val()
 		};
 			
-/*		if (obj.depthorder == "") {
-			$("#alertcust").html("<strong>필수입력</strong> 그룹을 선택하세요.").css('display', 'block');
-			$("#depthorder").focus();
-			return;
-		}*/
 		if ($("#addCustomer #maingroup").val() === "0") {
 			$("#addCustomer #alertcust").html("<strong>필수입력</strong> 메인그룹을 선택하세요.").css('display', 'block');
 			$("#addCustomer #maingroup").focus();
@@ -466,15 +424,18 @@
 		$("#addCustomer #btnMemoHold").css("display", "inline");
 		$("#addCustomer #btnMemoHangup").css("display", "inline");
 		
+		if ($("#btnMemoHangup").hasClass("disabled")) $("#btnMemoHangup").removeClass("disabled");
+		$("#phonebtns").css("display","none");
+		
 		// $('#addCustomer #subgroup').find('option:not(:first)').remove();
 		// $('#addCustomer #subgroup').empty().append('<option value="0">:: 서브그룹 ::</option>');
 		// $('#addCustomer #subgroup').find('option:not(:first)').remove();
 	}
 	
 	function SetSubgroups(maingroup, subgroup) {
-		$('#addCustomer #subgroup').find('option:not(:first)').remove();
-		
 		$.get("/customer/get/group/" + maingroup, function(response){
+			$('#addCustomer #subgroup').find('option:not(:first)').remove();
+			
 			var itm = response;
 			$(itm).each(function(i, v){ 
 				$("#addCustomer #subgroup").append($("<option>", { value: v.subgroup, html: v.txt }));
@@ -483,7 +444,6 @@
 			if (subgroup) {
 				$("#addCustomer #subgroup").val(subgroup);				
 			}
-			// console.log("SetSubgroups : entered");
 		});
 	}
 	/*** script for address book ***/
@@ -544,263 +504,4 @@
 				if (!$("#btnHold").hasClass("disabled")) $("#btnHold").removeClass("disabled");
 				break;
 		}
-/*		
-		extstatecount.unreg = 0;
-		extstatecount.idle = 0;
-		extstatecount.invite = 0;
-		extstatecount.ring = 0;
-		extstatecount.busy = 0;*/
-	}
-	
-	function SetCallState(data) {
-    	var scope0 = angular.element($("#ctrlcallstatus")).scope();
-
-		var scope1 = angular.element($("#ctrlextstatus")).scope();
-		scope1.$apply(function () {
-	    	var values = scope1.gridOptions.data.filter(function(element, index){
-	    		return element.state == '온라인';
-	    	});
-	    	scope0.gridOptions.data[0].count = values.length;
-	    	
-	    	values = scope1.gridOptions.data.filter(function(element, index){
-	    		return element.state == '연결중';
-	    	});
-	    	scope0.gridOptions.data[1].count = values.length;
-	    	
-	    	values = scope1.gridOptions.data.filter(function(element, index){
-	    		return element.state == '통화중';
-	    	});
-	    	scope0.gridOptions.data[2].count = values.length;
-	    	
-	    	values = scope1.gridOptions.data.filter(function(element, index){
-	    		return element.state == '자리비움';
-	    	});
-	    	scope0.gridOptions.data[3].count = values.length;
-	    	
-	    	values = scope1.gridOptions.data.filter(function(element, index){
-	    		return element.state == '착신전환';
-	    	});
-	    	scope0.gridOptions.data[4].count = values.length;
-	    	
-	    	if (data.cmd == UC_REPORT_WAITING_COUNT) {
-	    		scope0.gridOptions.data[5].count = data.responseCode;
-	    	}
-	    });
-	}
-	
-	var makecall = false;
-	function TreatMySelf(item) {
-		// console.log("TreatMySelf: " + item.cmd + " // " + item.direct + " // " + item.status);
-		
-		switch (item.cmd) {
-			case UC_MAKE_CALL_RES:
-				if (item.status == UC_STATUS_SUCCESS) {
-					$("#btnCall").val("전화끊기");
-				} else {
-					
-				}
-				break;
-			case UC_DROP_CALL_RES:
-				break;
-			case UC_PICKUP_CALL_REQ:
-				break;
-			case UC_HOLD_CALL_RES:
-				if (item.status == UC_STATUS_SUCCESS){
-					$("#btnHold").html("활성");
-					$("#btnMemoHold").html("활성");
-				}
-				break;
-			case UC_ACTIVE_CALL_RES:
-				if (item.status == UC_STATUS_SUCCESS){
-					$("#btnHold").html("보류");
-					$("#btnMemoHold").html("보류");
-				}
-				break;
-			case WS_RES_EXTENSION_STATE:
-				update_ext_status(item);
-				SetCallState(item);
-				break;
-			case UC_REPORT_EXT_STATE:
-				if (currentCallInfo.cmd == 0) {
-					currentCallInfo = item;
-					$("#call_idx").val(currentCallInfo.call_idx);
-				}
-				
-				console.log("item.direct: " + item.direct + ", item.status: " + item.status + ", item.callername: " + item.callername);
-				console.log("currentCallInfo.direct: " + currentCallInfo.direct + ", currentCallInfo.status: " + currentCallInfo.status + ", currentCallInfo.callername: " + currentCallInfo.callername);
-
-				var msg = "";
-				
-				switch (item.direct) {
-					case UC_DIRECT_INCOMING:
-						
-						switch (item.status) {
-							case UC_CALL_STATE_IDLE:
-								if (currentCallInfo.status == UC_CALL_STATE_RINGING || currentCallInfo.status == UC_CALL_STATE_BUSY) {
-									msg = "온라인...";
-									$("#mainalert").html(msg);
-									
-									currentCallInfo.status = UC_CALL_STATE_IDLE;
-									currentCallInfo.cmd = 0;
-									currentCallInfo.call_idx = 0;
-								}
-								break;
-							case UC_CALL_STATE_RINGING:
-/*
-								console.log("UC_CALL_STATE_RINGING : " + JSON.stringify(item));
-								console.log("typeof(item.callername) : " + typeof(item.callername));
-								console.log("typeof(item.callername) : " + item.callername);
-*/								
-							
-								if (item.callername == '' || typeof(item.callername) == 'undefined' || item.callername == null) {
-									custbhv = bhv.add;
-									msg = "전화가 왔습니다. ( " + item.caller + " )";
-									$("#mainalert").html(msg);
-									
-									$("#addCustomer .modal-title").html("고객  등록");
-									$("#addCustomer #btnMemo").css("display", "inline");
-									$("#tel").val(item.caller);
-								} else {
-									custbhv = bhv.modi;
-									msg = "전화가 왔습니다. " + item.callername + " ( " + item.caller + " )";
-									$("#mainalert").html(msg);
-									$.get("/customer/get/idx/" + item.cust_idx, function(response){
-										$("#addCustomer .modal-title").html("고객 정보");
-										$("#addCustomer #btnMemo").css("display", "inline");
-										
-										var itm = response;
-	
-										$("#addCustomer #idx").val(itm.idx);
-										$("#addCustomer #maingroup").val(itm.maingroup);
-										$("#addCustomer #uname").val(itm.uname);
-										$("#addCustomer #firm").val(itm.firm);
-										$("#addCustomer #posi").val(itm.posi);
-										$("#addCustomer #tel").val(itm.tel);
-										$("#addCustomer #cellular").val(itm.cellular);
-										$("#addCustomer #extension").val(itm.extension);
-										$("#addCustomer #email").val(itm.email);
-										
-										SetSubgroups(itm.maingroup, itm.subgroup);
-									});
-								}
-								
-								$("#addCustomer").modal({backdrop: false});
-								
-								if ($("#ctrlcalls").length) {
-							    	var scope = angular.element($("#ctrlcalls")).scope();
-								    scope.$apply(function () {
-								        scope.getPage();
-								    });
-								}
-								
-								currentCallInfo.status = UC_CALL_STATE_RINGING;
-								break;
-							case UC_CALL_STATE_BUSY:
-								msg = "통화중... " + item.callername + " (" + item.caller + ")";
-								$("#mainalert").html(msg);
-								currentCallInfo.status = UC_CALL_STATE_BUSY;
-								break;
-						}
-						break;
-					case UC_DIRECT_OUTGOING:
-						switch (item.status) {
-						case UC_CALL_STATE_IDLE:
-							if (currentCallInfo.status == UC_CALL_STATE_RINGING || currentCallInfo.status == UC_CALL_STATE_BUSY) {
-								msg = "온라인...";
-								$("#mainalert").html(msg);
-								
-								currentCallInfo.status = UC_CALL_STATE_IDLE;
-								currentCallInfo.cmd = 0;
-								currentCallInfo.call_idx = 0;
-							}
-							break;
-						case UC_CALL_STATE_INVITING:
-							if (item.calleename == '' || typeof(item.calleename) == 'undefined' || item.calleename == null) {
-								msg = "전화를 거는 중... ( " + item.callee + " )";
-							} else {
-								msg = "전화가 거는 중... " + item.calleename + " ( " + item.callee + " )";
-							}
-							$("#mainalert").html(msg);
-							break;
-						case UC_CALL_STATE_BUSY:
-							if (item.calleename == '' || typeof(item.calleename) == 'undefined' || item.calleename == null) {
-								custbhv = bhv.add;
-								
-								msg = "통화중... (" + item.callee + ")";
-								$("#mainalert").html(msg);
-								
-								$("#addCustomer .modal-title").html("고객  등록");
-								$("#addCustomer #btnMemo").css("display", "inline");
-								$("#tel").val(item.caller);
-							} else {
-								custbhv = bhv.modi;
-								
-								msg = "통화중... " + item.calleename + " (" + item.callee + ")";
-								$("#mainalert").html(msg);
-								
-								$.get("/customer/get/idx/" + item.cust_idx, function(response){
-									$("#addCustomer .modal-title").html("고객 정보");
-									$("#addCustomer #btnMemo").css("display", "inline");
-									
-									var itm = response;
-
-									$("#addCustomer #idx").val(itm.idx);
-									$("#addCustomer #maingroup").val(itm.maingroup);
-									$("#addCustomer #uname").val(itm.uname);
-									$("#addCustomer #firm").val(itm.firm);
-									$("#addCustomer #posi").val(itm.posi);
-									$("#addCustomer #tel").val(itm.tel);
-									$("#addCustomer #cellular").val(itm.cellular);
-									$("#addCustomer #extension").val(itm.extension);
-									$("#addCustomer #email").val(itm.email);
-									
-									SetSubgroups(itm.maingroup, itm.subgroup);
-								});
-							}
-							
-							$("#addCustomer").modal({backdrop: false});
-							
-							if ($("#ctrlcalls").length) {
-						    	var scope = angular.element($("#ctrlcalls")).scope();
-							    scope.$apply(function () {
-							        scope.getPage();
-							    });
-							}
-							
-							currentCallInfo.status = UC_CALL_STATE_RINGING;
-							break;
-					}
-						break;
-					default:
-						break;
-				}
-				break;
-		}
-	}
-
-	// 내선 상태 초기화 최초 한번
-	function InitializeExts() {
-        trade = {
-                cmd: 64,
-                extension: '',
-                caller: '',
-                callee: '',
-                unconditional: '',
-                status: -1
-              };
-        
-     	stompClient.send("/app/traders", {}, JSON.stringify(trade));
-	}
-	
-	function RequestExtState() {
-		trade = {
-                cmd: WS_REQ_EXTENSION_STATE,
-                extension: '',
-                caller: '',
-                callee: '',
-                unconditional: '',
-                status: -1
-              };
-        
-     	stompClient.send("/app/traders", {}, JSON.stringify(trade));
 	}

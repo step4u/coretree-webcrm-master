@@ -19,7 +19,7 @@
 	            ,null
 		        ,['전화하기 : ' + itm.tel, function () {
 					trade = {
-			                cmd: 74,
+			                cmd: UC_MAKE_CALL_REQ,
 			                extension: crmidentity.ext,
 			                caller: crmidentity.ext,
 			                callee: itm.tel,
@@ -31,7 +31,7 @@
 		        }]
 	            ,['전화하기 : ' + itm.cellular, function () {
 					trade = {
-			                cmd: 74,
+			                cmd: UC_MAKE_CALL_REQ,
 			                extension: crmidentity.ext,
 			                caller: crmidentity.ext,
 			                callee: itm.cellular,
@@ -148,7 +148,7 @@
 				}
 				$scope.gridOptions.totalItems = data;
 				
-				console.log(">>>>>>>>>>>> : " + url);
+				// console.log(">>>>>>>>>>>> : " + url);
 				
 				$http.get(url)
 				.success(function(data) {

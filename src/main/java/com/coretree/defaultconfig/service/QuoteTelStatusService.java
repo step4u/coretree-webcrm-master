@@ -336,11 +336,14 @@ public class QuoteTelStatusService implements ApplicationListener<BrokerAvailabi
 						case Const4pbx.UC_CALL_STATE_INVITING:
 						case Const4pbx.UC_CALL_STATE_RINGING:
 							if (call == null) {
+								Member member = memberMapper.selectByExt(data.getExtension());
+								
 								call = new Call();
 								call.setExtension(data.getExtension());
 								call.setCust_tel(data.getCaller());
 								call.setStatus(data.getStatus());
 								call.setDirect(data.getDirect());
+								call.setUsername(member.getUsername());
 								
 								w.lock();
 								try {
@@ -427,12 +430,15 @@ public class QuoteTelStatusService implements ApplicationListener<BrokerAvailabi
 							break;
 						case Const4pbx.UC_CALL_STATE_INVITING:
 							if (call == null) {
+								Member member = memberMapper.selectByExt(data.getExtension());
+								
 								call = new Call();
 								call.setExtension(data.getExtension());
 								call.setCust_tel(data.getCallee());
 								call.setStartdate(new Timestamp(System.currentTimeMillis()));
 								call.setStatus(data.getStatus());
 								call.setDirect(data.getDirect());
+								call.setUsername(member.getUsername());
 								
 								w.lock();
 								try {

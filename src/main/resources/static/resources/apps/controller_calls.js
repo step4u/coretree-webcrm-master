@@ -103,8 +103,6 @@
 			}).then(function(response){
 				var data = response.data;
 				
-				// console.log("calls count: " + data);
-				
 				if ($scope.gridOptions.totalItems != data) {
 					paginationOptions.pageNumber = 1;
 				}

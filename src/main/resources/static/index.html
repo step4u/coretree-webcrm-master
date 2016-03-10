@@ -188,11 +188,15 @@
 					                        <br />
 					                    </div>
 					                    <div class="col-md-6">
-					                    	<input type="text" class="form-control" id="callnumber" placeholder="전화번호" style="margin-bottom: 5px; width: 191px;">
-					                    	<button type="button" class="btn btn-primary disabled btn-sm" id="btnCall">통화</button>
-					                    	<button type="button" class="btn btn-primary btn-sm" id="btnPickup">당김</button>
-					                    	<button type="button" class="btn btn-primary disabled btn-sm" id="btnTransfer">전환</button>
-					                    	<button type="button" class="btn btn-primary disabled btn-sm" id="btnHold">보류</button>
+					                    	<!-- <input type="text" class="form-control" id="callnumber" placeholder="전화번호" style="margin-bottom: 5px; width: 191px;"> -->
+					                    	<div>
+					                    		<button type="button" class="btn btn-primary btn-sm" id="btnCall">통화</button>
+					                    		<button type="button" class="btn btn-primary btn-sm disabled" id="btnTransfer" style="margin-left: 8px;">전환</button>
+					                    	</div>
+					                    	<div style="margin-top: 9px;">
+					                    		<button type="button" class="btn btn-primary btn-sm" id="btnPickup">당김</button>
+					                    		<button type="button" class="btn btn-warning btn-sm disabled" id="btnHold" style="margin-left: 8px;">보류</button>
+					                    	</div>
 					                    </div>
 				                    </div>
 				                    <div class="row clearfix">
@@ -206,7 +210,7 @@
 									<div ng-controller="CtrlTelStatus" style="margin-top: 15px;" id="ctrlextstatus">
 										<div ui-grid="gridOptions" class="grid_tels"></div>
 									</div>
-				
+<!-- 
 									<button type="button" class="btn btn-primary btn-sm" id='btn_connect'>Connect</button>
 									<button type="button" class="btn btn-primary btn-sm" id='btn_disconnect'>Disconnect</button>
 									<button type="button" class="btn btn-primary btn-sm" id='btn_makecall'>MakeCall</button>
@@ -221,6 +225,7 @@
 									<button type="button" class="btn btn-primary btn-sm" id='btn_reqredirect'>Request Redirect</button>
 									<button type="button" class="btn btn-primary btn-sm" id='btn_dismissredirect'>Dismiss Redirect</button>
 									<button type="button" class="btn btn-primary btn-sm" id='btn_answer'>Answer</button>
+ -->
 						        </div>
                             </div>
 						</div>
@@ -428,13 +433,17 @@
       		</div>
       		<div class="modal-footer">
       			<div class="col-sm-12">
-					<button type="button" class="btn btn-primary" id="btnMemoTake">통화</button>
-      				<button type="button" class="btn btn-primary" id="btnMemoRedirect">전환</button>
-      				<button type="button" class="btn btn-warning" id="btnMemoHold">보류</button>
-      				<button type="button" class="btn btn-danger" id="btnMemoHangup">종료</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-	        		<button type="button" class="btn btn-primary" id="btnMemo" style="display: none;">메모</button>
-	        		<button type="button" class="btn btn-primary" id="btnSave">저장</button>
-	        		<button type="button" class="btn btn-default" id="btnClose">닫기</button>
+      				<span id="phonebtns" style="float: left; display: none;">
+						<button type="button" class="btn btn-primary" id="btnMemoTake">받기</button>
+	      				<button type="button" class="btn btn-primary disabled" id="btnMemoRedirect">전환</button>
+	      				<button type="button" class="btn btn-warning disabled" id="btnMemoHold">보류</button>
+	      				<button type="button" class="btn btn-danger" id="btnMemoHangup">종료</button>
+      				</span>
+      				<span style="float: right;">
+		        		<button type="button" class="btn btn-primary" id="btnMemo" style="display: inline;">메모</button>
+		        		<button type="button" class="btn btn-primary" id="btnSave">저장</button>
+		        		<button type="button" class="btn btn-default" id="btnClose">닫기</button>
+	        		</span>
         		</div>
       		</div>
     	</div>
@@ -447,7 +456,7 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4 class="modal-title">전환 전화번호</h4>
+				<h4 class="modal-title">전화번호</h4>
 			</div>
 			<div class="modal-body">
 				<div class="form-group">
@@ -455,7 +464,7 @@
 				</div>
       		</div>
       		<div class="modal-footer">
-        		<button type="button" class="btn btn-primary" id="btnTransferSend">전환</button>
+        		<button type="button" class="btn btn-primary" id="btnTransferSend">확인</button>
         		<button type="button" class="btn btn-default" id="btnTransferClose">닫기</button>
       		</div>
     	</div>
@@ -528,6 +537,7 @@
 <link rel="stylesheet" href="/resources/css/main.css" />
 <script src="/resources/js/MessageValues.js"></script>
 <script src="/resources/js/local.js"></script>
+<script src="/resources/js/funcs.js"></script>
 
 <script src="/resources/apps/controller_callstatus.js"></script>
 <script src="/resources/apps/CtrlExtState.js"></script>

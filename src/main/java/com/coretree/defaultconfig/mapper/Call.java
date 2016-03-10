@@ -18,6 +18,7 @@ public class Call {
 	private int count = 0;
 	private String extension;
 	private byte direct;
+	private String username;
 	
 	public long getIdx() { return this.idx; }
 	public void setIdx(long idx) { this.idx = idx; }
@@ -62,6 +63,9 @@ public class Call {
 	
 	public byte getDirect() { return this.direct; }
 	public void setDirect(byte direct) { this.direct = direct; }
+	
+	public String getUsername() { return this.username; }
+	public void setUsername(String username) { this.username = username; }
 	
 	
 	@Override

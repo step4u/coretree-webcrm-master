@@ -11,13 +11,14 @@
         <result property="status"      	column="status" />
         <result property="statustxt"    column="statustxt" />
         <result property="direct"      	column="direct" />
+        <result property="username"     column="username" />
     </resultMap>
     
     <select id="count" resultType="java.lang.Integer">
     	select count(a.idx)
 			from calls a join customers b
 				on a.custs_idx=b.idx
-			where 1=1
+			where 1=1 and a.username=#{username}
 			<if test="sdate != null and edate != null">
 				and cast(a.regdate as date) between cast(#{sdate} as date) and cast(#{edate} as date)
 			</if>
@@ -38,7 +39,7 @@
 			, case when a.status=113 then '부재중' else '완료' end statustxt
 			from calls a join customers b
 				on a.custs_idx=b.idx
-			where 1=1
+			where 1=1 and a.username=#{username}
 			<if test="sdate != null and edate != null">
 				and cast(a.regdate as date) between cast(#{sdate} as date) and cast(#{edate} as date)
 			</if>
@@ -75,9 +76,9 @@
     
     <insert id="add" useGeneratedKeys="true" keyProperty="idx" keyColumn="idx">
     	insert into calls
-    		(direction, cust_tel, status, startdate)
+    		(direction, cust_tel, status, startdate, username)
     		values
-    		(#{direct}, #{cust_tel}, #{status}, #{startdate})
+    		(#{direct}, #{cust_tel}, #{status}, #{startdate}, #{username})
     </insert>
     
     <update id="modiStatus">

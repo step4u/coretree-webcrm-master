@@ -142,9 +142,11 @@
 				}
 			}
 
+/*
 			if (crmidentity.ext == extitem.extension) {
 				SetMyState(extitem, extstatecount);
 			}
+*/
 		};
 		
 		$scope.gridOptions = {
