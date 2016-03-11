@@ -751,19 +751,19 @@
 	    	// Requset DnD
 	    	
 	        trade = {
-	                cmd: UC_SET_SRV_REQ,
-	                direct: 0,
-	                call_idx: 0,
-	                extension: '3001',
-	                cust_idx: 0,
-	                caller: '',
-	                callername: '',
-	                callee: '',
-	                calleename: '',
-	                responseCode: UC_SRV_DND,
-	                unconditional: '',
-	                status: 0
-	              };
+                cmd: UC_SET_SRV_REQ,
+                direct: 0,
+                call_idx: 0,
+                extension: '3001',
+                cust_idx: 0,
+                caller: '',
+                callername: '',
+                callee: '',
+                calleename: '',
+                responseCode: UC_SRV_DND,
+                unconditional: '',
+                status: 0
+			};
 	        
 	     	stompClient.send("/app/traders", {}, JSON.stringify(trade));
 	    });
@@ -772,19 +772,19 @@
 	    	// Dismiss DnD
 	    	
 	        trade = {
-	                cmd: UC_CLEAR_SRV_REQ,
-	                direct: 0,
-	                call_idx: 0,
-	                extension: '3001',
-	                cust_idx: 0,
-	                caller: '',
-	                callername: '',
-	                callee: '',
-	                calleename: '',
-	                responseCode: UC_SRV_DND,
-	                unconditional: '',
-	                status: 0
-	              };
+                cmd: UC_CLEAR_SRV_REQ,
+                direct: 0,
+                call_idx: 0,
+                extension: '3001',
+                cust_idx: 0,
+                caller: '',
+                callername: '',
+                callee: '',
+                calleename: '',
+                responseCode: UC_SRV_DND,
+                unconditional: '',
+                status: 0
+			};
 	        
 	     	stompClient.send("/app/traders", {}, JSON.stringify(trade));
 	    });
@@ -793,19 +793,19 @@
 	    	// Requset Redirect
 	    	
 	        trade = {
-	                cmd: UC_SET_SRV_REQ,
-	                direct: 0,
-	                call_idx: 0,
-	                extension: '3001',
-	                cust_idx: 0,
-	                caller: '',
-	                callername: '',
-	                callee: '',
-	                calleename: '',
-	                responseCode: UC_SRV_UNCONDITIONAL,
-	                unconditional: '3002',
-	                status: 0
-	              };
+                cmd: UC_SET_SRV_REQ,
+                direct: 0,
+                call_idx: 0,
+                extension: '3001',
+                cust_idx: 0,
+                caller: '',
+                callername: '',
+                callee: '',
+                calleename: '',
+                responseCode: UC_SRV_UNCONDITIONAL,
+                unconditional: '3002',
+                status: 0
+			};
 	        
 	     	stompClient.send("/app/traders", {}, JSON.stringify(trade));
 	    });
@@ -814,19 +814,19 @@
 	    	// Requset Redirect
 	    	
 	        trade = {
-	                cmd: UC_CLEAR_SRV_REQ,
-	                direct: 0,
-	                call_idx: 0,
-	                extension: '3001',
-	                cust_idx: 0,
-	                caller: '',
-	                callername: '',
-	                callee: '',
-	                calleename: '',
-	                responseCode: UC_SRV_UNCONDITIONAL,
-	                unconditional: '',
-	                status: 0
-	              };
+                cmd: UC_CLEAR_SRV_REQ,
+                direct: 0,
+                call_idx: 0,
+                extension: '3001',
+                cust_idx: 0,
+                caller: '',
+                callername: '',
+                callee: '',
+                calleename: '',
+                responseCode: UC_SRV_UNCONDITIONAL,
+                unconditional: '',
+                status: 0
+			};
 	        
 	     	stompClient.send("/app/traders", {}, JSON.stringify(trade));
 	    });
@@ -835,19 +835,19 @@
 	    	// Requset UC_ANSWER_CALL_REQ
 	    	
 	        trade = {
-	                cmd: UC_ANWSER_CALL_REQ,
-	                direct: UC_DIRECT_INCOMING,
-	                call_idx: 0,
-	                extension: '3001',
-	                cust_idx: 0,
-	                caller: '01045455962',
-	                callername: '',
-	                callee: '',
-	                calleename: '',
-	                responseCode: '',
-	                unconditional: '',
-	                status: 0
-	              };
+                cmd: UC_ANWSER_CALL_REQ,
+                direct: UC_DIRECT_INCOMING,
+                call_idx: 0,
+                extension: '3001',
+                cust_idx: 0,
+                caller: '01045455962',
+                callername: '',
+                callee: '',
+                calleename: '',
+                responseCode: '',
+                unconditional: '',
+                status: 0
+			};
 	        
 	     	stompClient.send("/app/traders", {}, JSON.stringify(trade));
 	    });
