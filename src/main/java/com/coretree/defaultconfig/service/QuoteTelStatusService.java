@@ -31,6 +31,8 @@ import com.coretree.defaultconfig.mapper.Customer;
 import com.coretree.defaultconfig.mapper.CustomerMapper;
 import com.coretree.defaultconfig.mapper.Member;
 import com.coretree.defaultconfig.mapper.MemberMapper;
+import com.coretree.defaultconfig.model.WorkTime;
+import com.coretree.defaultconfig.model.WorkTimes;
 import com.coretree.event.HaveGotUcMessageEventArgs;
 import com.coretree.event.IEventHandler;
 import com.coretree.interfaces.IQuoteTelStatusService;
