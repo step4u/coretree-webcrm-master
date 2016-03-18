@@ -206,7 +206,7 @@ public class QuoteTelStatusService implements ApplicationListener<BrokerAvailabi
  
 	@Override
 	public void eventReceived(Object sender, HaveGotUcMessageEventArgs e) {
-		// when a message have been arrived from the groupware socket 31001, a event raise.
+		// when a message have been arrived from the groupware socket 31001, an event raise.
 		// DB
 		GroupWareData data = e.getItem();
 		System.out.println(">>> " + data.toString());
