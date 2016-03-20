@@ -6,6 +6,8 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.boot.mybatis.autoconfigure.Mapper;
 
+import com.coretree.defaultconfig.model.SearchConditions;
+
 @Mapper
 public interface CallMapper {
 	int count(SearchConditions conditions);

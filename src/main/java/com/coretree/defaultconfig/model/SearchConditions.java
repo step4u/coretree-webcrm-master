@@ -1,4 +1,4 @@
-package com.coretree.defaultconfig.mapper;
+package com.coretree.defaultconfig.model;
 
 public class SearchConditions {
 	private long idx;

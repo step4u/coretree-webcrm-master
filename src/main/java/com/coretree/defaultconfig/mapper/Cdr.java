@@ -1,20 +1,10 @@
-package com.coretree.defaultconfig.model;
+package com.coretree.defaultconfig.mapper;
 
 import java.lang.String;
-import java.sql.Connection;
 import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.util.List;
-
-import com.coretree.sql.DBConnection;
-import com.coretree.util.Finalvars;
-import com.coretree.util.Util;
 
 public class Cdr {
-	private List<Cdr> lists;	
-	
-	private int idx;
+	private long idx;
 	private String username;
 	private String office_name;
 	private Date startdate;
@@ -35,8 +25,8 @@ public class Cdr {
 	private int seq;
 	private int tsecs;
 	
-	public void setIdx(int idx) { this.idx = idx; }
-	public int getIdx() { return this.idx; }
+	public void setIdx(long idx) { this.idx = idx; }
+	public long getIdx() { return this.idx; }
 	
 	public void setUsername(String username) { this.username = username; }
 	public String getUsername() { return this.username; }
@@ -94,36 +84,4 @@ public class Cdr {
 	
 	public void setTsecs(int tsecs) { this.tsecs = tsecs; }
 	public int getTsecs() { return this.tsecs; }
-	
-	public Cdr() {
-		try {
-			String sql = "insert into recinfo "
-					+ " ( extension, peernum, filename )"
-					+ " values "
-					+ " ( ?, ?, ? )";
-			
-			try(Connection con = DBConnection.getConnection();
-					PreparedStatement stmt = con.prepareStatement(sql)) {
-				con.setAutoCommit(true);
-				
-				stmt.setString(1, ext);
-				stmt.setString(2, peer);
-				stmt.setString(3, filename);
-				
-				stmt.executeUpdate();
-			} catch (SQLException ex) {
-				ex.printStackTrace();
-			} finally {
-				System.out.println(String.format("stream end event insert db : sql: %s", sql));
-			}
-		} catch (NullPointerException | UnsupportedOperationException e1) {
-			Util.WriteLog(String.format(Finalvars.ErrHeader, 1002, e1.getMessage()), 1);
-		} finally {
-			System.out.println(String.format("stream end event : ext: %s, peer: %s, filename: %s", ext, peer, filename));
-		}
-	}
-	
-	public List<Cdr> Get() {
-		return lists;
-	}
 }

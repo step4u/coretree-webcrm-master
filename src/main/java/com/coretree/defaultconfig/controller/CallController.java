@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.coretree.defaultconfig.mapper.Call;
 import com.coretree.defaultconfig.mapper.CallMapper;
-import com.coretree.defaultconfig.mapper.SearchConditions;
+import com.coretree.defaultconfig.model.SearchConditions;
 
 @RestController
 public class CallController {
