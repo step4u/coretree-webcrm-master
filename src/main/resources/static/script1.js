@@ -4,9 +4,7 @@ angular.module('app', ['ui.router', 'ui.bootstrap', 'ui.grid', 'ui.grid.selectio
   .controller('HomeCtrl', ['$scope', '$state', function($scope, $state) {
 
       $scope.signout = function() {
-        // principal.authenticate(null);
-        disconnect();
-        // $state.go('signin');
+    	  disconnect();
       };
     }
   ])
@@ -16,129 +14,142 @@ angular.module('app', ['ui.router', 'ui.bootstrap', 'ui.grid', 'ui.grid.selectio
       $urlRouterProvider.otherwise('/calls');
 
       $stateProvider.state('site', {
-        'abstract': true,
+    	  'abstract': true,
       })
       .state('home', {
-        parent: 'site',
-        url: '/home',
-        data: {
-          roles: ['User', 'Admin']
-        },
-        views: {
-          'content@': {
-            templateUrl: 'view/addr.html',
-            controller: 'CtrlCustomer'
-          }/*,
-          'maincontent@home': {
-              templateUrl: 'view/addr.html',
-              controller: 'CtrlCustomer'
-          }*/
-        }
+    	  parent: 'site',
+    	  url: '/home',
+    	  data: {
+    		  roles: ['User', 'Admin']
+    	  },
+    	  views: {
+    		  'content@': {
+    			  templateUrl: 'view/addr.html',
+    			  controller: 'CtrlCustomer'
+    		  }/*,
+		'maincontent@home': {
+			templateUrl: 'view/addr.html',
+	          controller: 'CtrlCustomer'
+	  	}*/
+    	  }
       })
       .state('addr', {
-        parent: 'site',
-        url: '/addr/:maingroup/:subgroup',
-        data: {
-          roles: ['User', 'Admin']
-        },
-        views: {
-          'content@': {
-              templateUrl: 'view/addr.html',
-              controller: 'CtrlCustomer'
-          }
-        }
+    	  parent: 'site',
+    	  url: '/addr/:maingroup/:subgroup',
+    	  data: {
+    		  roles: ['User', 'Admin']
+    	  },
+    	  views: {
+    		  'content@': {
+    			  templateUrl: 'view/addr.html',
+    			  controller: 'CtrlCustomer'
+    		  }
+    	  }
       })
       .state('calls', {
-        parent: 'site',
-        url: '/calls',
-        data: {
-          roles: ['User', 'Admin']
-        },
-        views: {
-          'content@': {
-              templateUrl: 'view/calls.html',
-              controller: 'CtrlCall'
-          }
-        }
+    	  parent: 'site',
+    	  url: '/calls',
+    	  data: {
+    		  roles: ['User', 'Admin']
+    	  },
+    	  views: {
+    		  'content@': {
+    			  templateUrl: 'view/calls.html',
+    			  controller: 'CtrlCall'
+    		  }
+    	  }
       })
       .state('smses', {
-        parent: 'site',
-        url: '/smses',
-        data: {
-          roles: ['User', 'Admin']
-        },
-        views: {
-          'content@': {
-              templateUrl: 'view/smses.html',
-              controller: 'CtrlSms'
-          }
-        }
+    	  parent: 'site',
+    	  url: '/smses',
+    	  data: {
+    		  roles: ['User', 'Admin']
+    	  },
+    	  views: {
+    		  'content@': {
+    			  templateUrl: 'view/smses.html',
+    			  controller: 'CtrlSms'
+    		  }
+    	  }
       })
       .state('records', {
-        parent: 'site',
-        url: '/records',
-        data: {
-          roles: ['Admin']
-        },
-        views: {
-          'content@': {
-              templateUrl: 'view/records.html',
-              controller: 'CtrlRecords'
-          }
-        }
+    	  parent: 'site',
+    	  url: '/records',
+    	  data: {
+    		  roles: ['Admin']
+    	  },
+    	  views: {
+    		  'content@': {
+    			  templateUrl: 'view/records.html',
+    			  controller: 'CtrlRecords'
+    		  }
+    	  }
       })
       .state('extensions', {
-        parent: 'site',
-        url: '/exts',
-        data: {
-          roles: ['Admin']
-        },
-        views: {
-          'content@': {
-              templateUrl: 'view/exts.html',
-              controller: 'CtrlExts'
-          }
-        }
+    	  parent: 'site',
+    	  url: '/exts',
+    	  data: {
+    		  roles: ['Admin']
+    	  },
+    	  views: {
+    		  'content@': {
+    			  templateUrl: 'view/exts.html',
+    			  controller: 'CtrlExts'
+    		  }
+    	  }
       })
       .state('counsellors', {
-        parent: 'site',
-        url: '/counsellors',
-        data: {
-          roles: ['Admin']
-        },
-        views: {
-          'content@': {
-              templateUrl: 'view/counsellors.html',
-              controller: 'CtrlCounsellors'
-          }
-        }
+    	  parent: 'site',
+    	  url: '/counsellors',
+    	  data: {
+    		  roles: ['Admin']
+    	  },
+    	  views: {
+    		  'content@': {
+    			  templateUrl: 'view/counsellors.html',
+    			  controller: 'CtrlCounsellors'
+    		  }
+    	  }
       })
       // 개별 상담원 시간별 통화 내역
-      .state('statistics0', {
-        parent: 'site',
-        url: '/statis0',
-        data: {
-          roles: ['Admin']
-        },
-        views: {
-          'content@': {
-              templateUrl: 'view/statistics0.html',
-              controller: 'CtrlStatistics0'
-          }
-        }
+      .state('statistics01', {
+    	  parent: 'site',
+    	  url: '/statistics01',
+    	  data: {
+    		  roles: ['Admin']
+    	  },
+    	  views: {
+    		  'content@': {
+    			  templateUrl: 'view/statistics01.html',
+    			  controller: 'CtrlStatistics01'
+    		  }
+    	  }
       })
-      .state('statistics1', {
-        parent: 'site',
-        url: '/statis1',
-        data: {
-          roles: ['Admin']
-        },
-        views: {
-          'content@': {
-              templateUrl: 'view/statistics1.html',
-              controller: 'CtrlStatistics1'
-          }
-        }
+      .state('statistics02', {
+    	  parent: 'site',
+    	  url: '/statistics02',
+    	  data: {
+    		  roles: ['Admin']
+    	  },
+    	  views: {
+    		  'content@': {
+    			  templateUrl: 'view/statistics02.html',
+    			  controller: 'CtrlStatistics02'
+    		  }
+    	  }
+      })
+      .state('statistics03', {
+    	  parent: 'site',
+    	  url: '/statistics03',
+    	  data: {
+    		  roles: ['Admin']
+    	  },
+    	  views: {
+    		  'content@': {
+    			  templateUrl: 'view/statistics03.html',
+    			  controller: 'CtrlStatistics03'
+    		  }
+    	  }
       })
 //      .state('login', {
 //        parent: 'site',
@@ -166,16 +177,16 @@ angular.module('app', ['ui.router', 'ui.bootstrap', 'ui.grid', 'ui.grid.selectio
 //        }
 //      })
       .state('accessdenied', {
-        parent: 'site',
-        url: '/denied',
-        data: {
-          roles: []
-        },
-        views: {
-          'content@': {
-            templateUrl: 'denied.html'
-          }
-        }
+    	  parent: 'site',
+    	  url: '/denied',
+    	  data: {
+    		  roles: []
+    	  },
+    	  views: {
+    		  'content@': {
+    			  templateUrl: 'denied.html'
+    		  }
+    	  }
       });
     }
   ])

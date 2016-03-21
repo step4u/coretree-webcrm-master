@@ -1,5 +1,5 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.coretree.defaultconfig.mapper.CdrMapper">
+<mapper namespace="com.coretree.defaultconfig.mapper.StatisticsMapper">
 
     <resultMap id="Map" type="com.coretree.defaultconfig.mapper.Cdr">
         <id     property="idx"						column="idx" />
@@ -25,7 +25,7 @@
     </resultMap>
     
     <select id="getAll" resultMap="Map" statementType="CALLABLE">
-    	{call GET_CDR_LIST_BY_DATE2(#{sdate, mode=IN, jdbcType=DATE}, #{edate, mode=IN, jdbcType=DATE}, #{username, mode=IN, jdbcType=VARCHAR})}
+    	{call GET_CDR_LIST_BY_DATE2(#{sdate, mode=IN, jdbcType=VARCHAR}, #{edate, mode=IN, jdbcType=VARCHAR}, #{username, mode=IN, jdbcType=VARCHAR})}
     </select>
     
 </mapper>

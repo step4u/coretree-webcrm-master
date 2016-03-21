@@ -13,7 +13,13 @@
     </resultMap>
     
     <select id="count" resultType="java.lang.Long">
-    	select count(idx) from sms where regdate=current_timestamp
+    	select count(idx) from sms where 1=1
+		<if test="sdate == null and edate == null">
+			and cast(regdate as date)=cast(current_timestamp as date)
+		</if>
+		<if test="sdate != null and edate != null">
+			and regdate between cast(#{sdate} as timestamp) and cast(#{edate} as timestamp)
+		</if>
     </select>
     
     <select id="getAll" resultMap="Map">
@@ -30,12 +36,11 @@
 			order by regdate desc
     </select>
     
-    <select id="getByIdx" resultMap="Map">
+<!--     <select id="getByIdx" resultMap="Map">
     	select idx, custs_idx, custs_tel, contents, result, regdate
 			from sms
 			where idx=#{idx}
-			order by regdate desc
-    </select>
+    </select> -->
     
     <select id="getByTxt" resultMap="Map">
     	select idx, custs_idx, custs_tel, contents, result, regdate
@@ -53,5 +58,13 @@
 		<foreach collection="list" item="item" separator=",">
 			 idx=#{item.idx}
 		</foreach>
-    </select>    
+    </select>
+    
+    <insert id="add">
+    	insert into sms ( cust_tel, contents, result ) values (
+		<foreach collection="custs_tel" item="item" separator=",">
+			#{item}, #{contents}, #{result} 
+		</foreach>
+		)
+    </insert>
 </mapper>

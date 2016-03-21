@@ -4,7 +4,11 @@
 	<title>CRM with IPCC - Coretree</title>
   	<meta charset="utf-8">
   	<meta name="viewport" content="width=device-width, initial-scale=1">
-  	
+
+	<script src="/resources/js/MessageValues.js"></script>
+	<script src="/resources/jquery/jquery.min.js"></script>
+
+    <link rel="stylesheet" href="/resources/css/main.css" />  	
     <link href="/resources/hoe/css/font-awesome.min.css" rel="stylesheet">
     <link href="http://fonts.googleapis.com/css?family=Lato:100italic,100,300italic,300,400italic,400,700italic,700,900italic,900" rel="stylesheet" type="text/css">
     <link href="/resources/hoe/css/hoe.css" rel="stylesheet">
@@ -14,6 +18,61 @@
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
+    
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+	
+	<link rel="stylesheet" href="/resources/jquery-ui-1.11.4.custom/jquery-ui.min.css" />
+	<script src="/resources/jquery-ui-1.11.4.custom/jquery-ui.min.js"></script>
+
+	<link rel="stylesheet" href="/resources/bootstrap/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="resources/bootstrap/css/bootstrap-theme.min.css" />
+	<script src="/resources/bootstrap/js/bootstrap.min.js"></script>
+	<script src="/resources/hoe/js/hoe.js"></script>
+	
+	<script src="/resources/moment/moment-with-locales.min.js"></script>
+	<link rel="stylesheet" href="/resources/eonasdan-bootstrap-datetimepicker/bootstrap-datetimepicker.min.css" />
+	<script src="/resources/eonasdan-bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
+	
+	<script src="https://code.angularjs.org/1.4.8/angular.min.js"></script>
+	<script src="https://code.angularjs.org/1.4.8/angular-touch.min.js"></script>
+	<script src="https://code.angularjs.org/1.4.8/angular-animate.min.js"></script>
+	<script src="https://code.angularjs.org/1.4.8/angular-route.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.8/angular-cookies.min.js"></script>
+	   
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/1.1.2/ui-bootstrap-tpls.min.js"></script>
+	<script src="http://angular-ui.github.io/ui-router/release/angular-ui-router.js"></script>
+	
+	<script src="/resources/angularjs/grid-ui/grunt-scripts/csv.js"></script>
+	<script src="/resources/angularjs/grid-ui/grunt-scripts/pdfmake.js"></script>
+	<script src="/resources/angularjs/grid-ui/grunt-scripts/vfs_fonts.js"></script>
+	   
+	<script src="/resources/angularjs/grid-ui/3.0.7/ui-grid.min.js"></script>
+	<link rel="stylesheet" href="/resources/angularjs/grid-ui/3.0.7/ui-grid.min.css" />
+	
+	<!-- <link rel="stylesheet" href="/resources/css/simple-sidebar.css" /> -->
+	
+	<script src="script1.js"></script>
+	<script src="/resources/js/contextMenu.js"></script>
+	
+	<script src="/resources/js/sockjs-0.3.4.js"></script>
+	<script src="/resources/js/stomp.js"></script>
+	
+	<script src="/resources/js/local.js"></script>
+	<script src="/resources/js/funcs.js"></script>
+	
+	<script src="/resources/apps/controller_callstatus.js"></script>
+	<script src="/resources/apps/CtrlExtState.js"></script>
+	<script src="/resources/apps/CtrlCustomers.js"></script>
+	<script src="/resources/apps/controller_calls.js"></script>
+	<script src="/resources/apps/CtrlSms.js"></script>
+	<script src="/resources/apps/CtrlRecords.js"></script>
+	<script src="/resources/apps/CtrlExts.js"></script>
+	<script src="/resources/apps/CtrlCounsellors.js"></script>
+	<script src="/resources/apps/CtrlGroups.js"></script>
+	<script src="/resources/apps/CtrlEmptyExtensions.js"></script>
+	<script src="/resources/apps/CtrlStatistics01.js"></script>
+	<script src="/resources/apps/CtrlStatistics02.js"></script>
+	<script src="/resources/apps/CtrlStatistics03.js"></script>
 </head>
 <body hoe-navigation-type="vertical-compact" hoe-nav-placement="left" theme-layout="wide-layout" theme-bg="bg1">
 	<div id="hoeapp-wrapper" class="hoe-hide-lpanel" hoe-device-type="desktop">
@@ -29,7 +88,7 @@
 					<li class="dropdown hoe-rheader-submenu hoe-header-profile">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 							<i class=" fa fa-thumbs-o-up fa-fw"></i>
-                            <span><b>시스템 상태 (3001)</b><i class=" fa fa-angle-down fa-fw"></i></span>
+                            <span><b id="systeminfo"></b><i class=" fa fa-angle-down fa-fw"></i></span>
 						</a>
 						<ul class="dropdown-menu">
 							<li><a href="#">디스크 용량 <span class="badge badge-danger">3,123,123</span></a></li>
@@ -112,29 +171,29 @@
                             <span class="selected"></span>
                         </a>
                     </li>
-                    <li>
+                    <li class="nav-level foradmin">관리자</li>
+                    <li class="foradmin">
                         <a href="#/records">
                             <i class="fa fa-microphone fa-fw"></i>
                             <span class="menu-text">녹취 내역</span>
                             <span class="selected"></span>
                         </a>
                     </li>
-                    <li class="nav-level">관리자</li>
-                    <li>
+                    <li class="foradmin">
                         <a href="#/exts">
                         	<i class="fa fa-phone-square fa-fw"></i>
                             <span class="menu-text">내선 관리</span>
                             <span class="selected"></span>
                         </a>
                     </li>
-                    <li>
+                    <li class="foradmin">
                         <a href="#/counsellors">
                         	<i class="fa fa-headphones fa-fw"></i>
                             <span class="menu-text">상담원 관리</span>
                             <span class="selected"></span>
                         </a>
                     </li>
-					<li class="hoe-has-menu">
+					<li class="hoe-has-menu foradmin">
                         <a href="javascript:void(0)">
                             <i class="fa fa-bar-chart fa-fw"></i>
                             <span class="menu-text">통계</span>
@@ -142,20 +201,23 @@
                         </a>
                         <ul class="hoe-sub-menu">
 		                    <li>
-		                        <a href="javascript:void(0)">
-		                            <span class="menu-text">상담원별 통화 내역</span>
+		                        <a href="#/statistics01">
+		                            <span class="menu-text">시간별 통화내역</span>
 		                            <span class="selected"></span>
 		                        </a>
 		                    </li>
-<!--
 							<li>
-		                        <a href="javascript:void(0)">
-		                        	<i class="fa fa-tachometer"></i>
-		                            <span class="menu-text">상담원 관리</span>
+		                        <a href="#/statistics02">
+		                            <span class="menu-text">일별 통화내역</span>
 		                            <span class="selected"></span>
 		                        </a>
 		                    </li>
--->
+							<li>
+		                        <a href="#/statistics03">
+		                            <span class="menu-text">월별 통화내역</span>
+		                            <span class="selected"></span>
+		                        </a>
+		                    </li>
                         </ul>
 					</li>
                 </ul>
@@ -492,63 +554,29 @@
     	</div>
   	</div>
 </div>
+
+<!-- Sms Modal -->
+<div class="modal fade" id="ModalSms" role="dialog">
+	<div class="modal-dialog modal-sm">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">SMS</h4>
+			</div>
+			<div class="modal-body">
+				<div class="form-group">
+					<input type="hidden" id="receivephones" />
+					<textarea class="form-control" style="height: 150px;" id="smstxt" maxlength="80"></textarea>
+				</div>
+      		</div>
+      		<div class="modal-footer">
+        		<button type="button" class="btn btn-primary" id="btnSmsSend">보내기</button>
+        		<button type="button" class="btn btn-default" id="btnSmsClose">닫기</button>
+      		</div>
+    	</div>
+  	</div>
+</div>
 <audio controls id="audioplayer" style="display: none;"></audio>
-
-<script src="/resources/jquery/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
-
-<link rel="stylesheet" href="/resources/jquery-ui-1.11.4.custom/jquery-ui.min.css" />
-<script src="/resources/jquery-ui-1.11.4.custom/jquery-ui.min.js"></script>
-   
-<link rel="stylesheet" href="/resources/bootstrap/css/bootstrap.min.css" />
-<link rel="stylesheet" href="resources/bootstrap/css/bootstrap-theme.min.css" />
-<script src="/resources/bootstrap/js/bootstrap.min.js"></script>
-<script src="/resources/hoe/js/hoe.js"></script>
-
-
-<script src="/resources/moment/moment-with-locales.min.js"></script>
-<link rel="stylesheet" href="/resources/eonasdan-bootstrap-datetimepicker/bootstrap-datetimepicker.min.css" />
-<script src="/resources/eonasdan-bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
-
-<script src="https://code.angularjs.org/1.4.8/angular.min.js"></script>
-<script src="https://code.angularjs.org/1.4.8/angular-touch.min.js"></script>
-<script src="https://code.angularjs.org/1.4.8/angular-animate.min.js"></script>
-<script src="https://code.angularjs.org/1.4.8/angular-route.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.8/angular-cookies.min.js"></script>
-   
-<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/1.1.2/ui-bootstrap-tpls.min.js"></script>
-<script src="http://angular-ui.github.io/ui-router/release/angular-ui-router.js"></script>
-
-<script src="/resources/angularjs/grid-ui/grunt-scripts/csv.js"></script>
-<script src="/resources/angularjs/grid-ui/grunt-scripts/pdfmake.js"></script>
-<script src="/resources/angularjs/grid-ui/grunt-scripts/vfs_fonts.js"></script>
-   
-<script src="/resources/angularjs/grid-ui/3.0.7/ui-grid.min.js"></script>
-<link rel="stylesheet" href="/resources/angularjs/grid-ui/3.0.7/ui-grid.min.css" />
-
-<link rel="stylesheet" href="/resources/css/simple-sidebar.css" />
-
-<script src="script1.js"></script>
-<script src="/resources/js/contextMenu.js"></script>
-
-<script src="/resources/js/sockjs-0.3.4.js"></script>
-<script src="/resources/js/stomp.js"></script>
-
-<link rel="stylesheet" href="/resources/css/main.css" />
-<script src="/resources/js/MessageValues.js"></script>
-<script src="/resources/js/local.js"></script>
-<script src="/resources/js/funcs.js"></script>
-
-<script src="/resources/apps/controller_callstatus.js"></script>
-<script src="/resources/apps/CtrlExtState.js"></script>
-<script src="/resources/apps/CtrlCustomers.js"></script>
-<script src="/resources/apps/controller_calls.js"></script>
-<script src="/resources/apps/CtrlSms.js"></script>
-<script src="/resources/apps/CtrlRecords.js"></script>
-<script src="/resources/apps/CtrlExts.js"></script>
-<script src="/resources/apps/CtrlCounsellors.js"></script>
-<script src="/resources/apps/CtrlGroups.js"></script>
-<script src="/resources/apps/CtrlEmptyExtensions.js"></script>
 
 <script>
 /*
@@ -855,17 +883,5 @@
 		connect2();
 	});
 </script>
-<style>
-	.modal-header, h4, .close {
-	    background-color: #3175AF;
-	    color:white !important;
-	    text-align: center;
-	    font-size: 30px;
-	}
-	.modal-footer {
-	    background-color: #f9f9f9;
-	}
-</style>
-            
 </body>
 </html>

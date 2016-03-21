@@ -10,7 +10,7 @@ public class WorkTimes {
 		worktimes = new ArrayList<WorkTime>();
 		for (int i = 0 ; i < 24 ; i++) {
 			WorkTime wt = new WorkTime();
-			wt.setWtime(Integer.toString(i));
+			wt.setWtime(i);
 			wt.setTxt(String.format("%1$02d ~ %2$02d", i, i + 1));
 			worktimes.add(wt);
 		}

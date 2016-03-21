@@ -6,12 +6,15 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.boot.mybatis.autoconfigure.Mapper;
 
+import com.coretree.defaultconfig.model.SearchConditions;
+
 @Mapper
 public interface SmsMapper {
-	long count();
-	List<Sms> getAll(Sms obj);
-	Sms getByIdx(@Param("idx") long idx);
-	List<Sms> getByTxt(@Param("txt") String txt);
+	long count(SearchConditions condition);
+	List<Sms> getAll(SearchConditions condition);
+	// Sms getByIdx(@Param("idx") long idx);
+	List<Sms> getByTxt(String txt);
     void del(long idx);
-    void delAll(@Param("list") ArrayList<Sms> list);
+    void delAll(ArrayList<Sms> list);
+    void add(Sms sms);
 }

@@ -37,6 +37,7 @@ import com.coretree.event.HaveGotUcMessageEventArgs;
 import com.coretree.event.IEventHandler;
 import com.coretree.interfaces.IQuoteTelStatusService;
 import com.coretree.models.GroupWareData;
+import com.coretree.models.SmsMsg;
 import com.coretree.models.UcMessage;
 import com.coretree.socket.*;
 import com.coretree.util.Const4pbx;
@@ -174,6 +175,17 @@ public class QuoteTelStatusService implements ApplicationListener<BrokerAvailabi
 		}
 	}
 	
+	@MessageMapping("/sendmsg")
+	public void executeTrade(SmsMsg message, Principal principal) {
+		switch (message.getCmd()) {
+			case Const4pbx.UC_SMS_SEND_REQ:
+				this.SendSms(message);
+				break;
+			default:
+				break;
+		}
+	}
+	
 /*	private UcMessage GetMessage(Member member, int status) {
 		UcMessage msg;
 		
@@ -208,7 +220,7 @@ public class QuoteTelStatusService implements ApplicationListener<BrokerAvailabi
 	public void eventReceived(Object sender, HaveGotUcMessageEventArgs e) {
 		// when a message have been arrived from the groupware socket 31001, an event raise.
 		// DB
-		GroupWareData data = e.getItem();
+		GroupWareData data = (GroupWareData) e.getItem();
 		System.out.println(">>> " + data.toString());
 
 		if (!this.brokerAvailable.get()) return;
@@ -233,6 +245,26 @@ public class QuoteTelStatusService implements ApplicationListener<BrokerAvailabi
 			case Const4pbx.UC_CLEAR_SRV_RES:
 			case Const4pbx.UC_REPORT_WAITING_COUNT:
 				this.PassReportExtState(data);
+				break;
+			case Const4pbx.UC_SMS_SEND_RES:
+				// SmsMsg smsdata = new SmsMsg();
+				// smsdata.toObject(e.getItem().toBytes());
+
+				System.err.println("UC_SMS_SEND_RES : " + data.toString());
+				//if (data.getStatus() == Const4pbx.UC_STATUS_SUCCESS) {
+					Member smsmem = memberMapper.selectByExt(data.getCaller());
+					
+					if (smsmem.getUsername() == null) return;
+					if (smsmem.getUsername().isEmpty()) return;
+					
+					payload = new UcMessage();
+					payload.cmd = data.getCmd();
+					payload.extension = data.getCaller();
+					payload.caller = data.getCaller();
+					payload.callee = data.getCallee();
+					payload.status = data.getStatus();
+					this.msgTemplate.convertAndSendToUser(smsmem.getUsername(), "/queue/groupware", payload);
+				//}
 				break;
 			default:
 				// System.err.println(String.format("Extension : %s", data.getExtension()));
@@ -502,7 +534,15 @@ public class QuoteTelStatusService implements ApplicationListener<BrokerAvailabi
 		try {
 			uc.Send(msg);
 		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	@Override
+	public void SendSms(SmsMsg msg) {
+		try {
+			uc.Send(msg);
+		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		}
 	}

@@ -2,6 +2,27 @@
 	angular.module('app')
 	.controller('CtrlCall', ['$scope', '$http', '$log', '$timeout', 'uiGridConstants', function ($scope, $http, $log, $timeout, uiGridConstants) {
 
+		// 컨텍스트 메뉴
+		$scope.menuOptions = function (item) {
+			var itm = item.entity;
+		    return [
+	            ['고객  [ ' + itm.cust_name + ' ]', function(){return;}]
+	            ,null
+		        ,['전화하기 : ' + itm.cust_tel, function () {
+					trade = {
+			                cmd: UC_MAKE_CALL_REQ,
+			                extension: crmidentity.ext,
+			                caller: crmidentity.ext,
+			                callee: itm.cust_tel,
+			                unconditional: '',
+			                status: -1
+			              };
+			     	stompClient.send("/app/traders", {}, JSON.stringify(trade));
+		        	console.log("전화하기: " + angular.toJson(item.entity));
+		        }]
+		    ];
+		};
+		
 		var paginationOptions = {
 			    pageNumber: 1,
 			    pageSize: 20,
@@ -23,6 +44,7 @@
 			    useExternalSorting: true,
 				enableSorting: false,
 				showGridFooter: false,
+				rowTemplate: '<div ng-repeat="col in colContainer.renderedColumns track by col.colDef.name" class="ui-grid-cell" ui-grid-cell context-menu="grid.appScope.menuOptions(row)"></div>',
 				columnDefs: [
 			    		      { displayName: '이름', field: 'cust_name', headerCellClass: 'white', cellClass: 'grid-cell', width: 120 },
 			    		      { displayName: '전화번호', field: 'cust_tel', headerCellClass:'white', cellClass: 'grid-cell', width: 120 },
@@ -37,7 +59,8 @@
 			    		    	  headerCellClass: 'white',
 			    		    	  cellClass: 'grid-cell-align',
 			    		    	  width: 180,
-			    		    	  cellTemplate: '<button class="btn btn-primary btn-xs" ng-click="grid.appScope.callRow(row)">전화하기</button> <button class="btn btn-primary btn-xs" ng-click="grid.appScope.viewRow(row)">메모보기</button> <button class="btn btn-warning btn-xs" ng-click="grid.appScope.deleteRow(row)">삭제</button>'
+			    		    	  // cellTemplate: '<button class="btn btn-primary btn-xs" ng-click="grid.appScope.callRow(row)">전화하기</button> <button class="btn btn-primary btn-xs" ng-click="grid.appScope.viewRow(row)">메모보기</button> <button class="btn btn-warning btn-xs" ng-click="grid.appScope.deleteRow(row)">삭제</button>'
+			    		    	  cellTemplate: '<button class="btn btn-primary btn-xs" ng-click="grid.appScope.viewRow(row)">메모보기</button> <button class="btn btn-warning btn-xs" ng-click="grid.appScope.deleteRow(row)">삭제</button>'
 							  }
 			    		    ],
 			    groupHeaders: false,
@@ -112,15 +135,11 @@
 				val.curpage = paginationOptions.pageNumber;
 				val.rowsperpage = paginationOptions.pageSize;
 				
-				// console.log("calls get all before: " + angular.toJson(val));
-				
 				$http({
 					method: "POST",
 					url: "/call/get/all",
 					data: val
 				}).then(function(response){
-					// console.log("calls get all: " + angular.toJson(response.data));
-					
 					$scope.gridOptions.data = response.data;
 				}, function(response){
 					

@@ -10,7 +10,17 @@
         status: -1
 	};
     
-	
+    var smsmsg = {
+		cmd: UC_SMS_SEND_REQ,
+		type: '',
+		from_ext: '',
+		to_ext: '',
+		senderphone: '',
+		receiverphones: '',
+		message: '',
+		reservetime: ''
+    }
+    
 	var currentCallInfo = {
 		cmd: 0,
 		call_idx: 0,
@@ -234,8 +244,8 @@
 				$("#call_idx").val("");
 				$("#Memo").modal("hide");
 				
-				if ($("#ctrlcalls").length) {
-			    	var scope = angular.element($("#ctrlcalls")).scope();
+				if ($("#ctrlsms").length) {
+			    	var scope = angular.element($("#ctrlsms")).scope();
 				    scope.$apply(function () {
 				        scope.getPage();
 				    });
@@ -249,7 +259,50 @@
 			$("#Memo").modal("hide");
 		});
 		/*** script for address book ***/
-
+		
+		/*** script for sms ***/
+/*		
+	    $("#btnSmsPop").click(function(){
+	    	$("#ModalSms").modal("show");
+	    });
+*/
+		
+	    $("#btnSmsSend").click(function(){
+	    	var rphones = $("#receivephones").val();
+	    	var arrrphones = rphones.split(",");
+	        smsmsg = {
+        		cmd: UC_SMS_SEND_REQ,
+        		type: UC_TYPE_GROUPWARE,
+        		from_ext: crmidentity.ext,
+        		to_ext: arrrphones[0],
+        		senderphone: crmidentity.ext,
+        		receiverphones: rphones,
+        		message: $("#smstxt").val(),
+        		reservetime: ''
+            }
+	    	
+	    	stompClient.send("/app/sendmsg", {}, JSON.stringify(smsmsg));
+/*				$('#ModalSms').modal("hide");
+				
+		    	var scope = angular.element($("#ctrlsms")).scope();
+			    scope.$apply(function () {
+			        scope.getPage('');
+			    });*/
+	    });
+	    
+	    $("#btnSmsClose").click(function(){
+	    	$("#ModalSms").modal("hide");
+	    });
+	    
+		$("#ModalSms").on('shown.bs.modal', function () {
+			$("#ModalSms #smstxt").focus();
+			$("#ModalSms #smstxt").select();
+    	});
+		
+		$("#ModalSms").on('hidden.bs.modal', function () {
+			
+    	});
+		/*** script for sms ***/
 		
         /*** script for my call button ***/
 		$("#btnCall").click(function() {
@@ -335,7 +388,7 @@
         /*** script for my call button ***/
 		
 	    if (crmidentity.role === "ROLE_ADMIN") {
-	    	$(".ADMIN").css("display", "inline");
+	    	$(".foradmin").css("visibility", "visible");
 	    }
 	    
 	    $("#logout").click(function(){

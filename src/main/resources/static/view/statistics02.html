@@ -1,24 +1,22 @@
 					<div>
-						<div ui-grid="gridOptions" ui-grid-selection ui-grid-pagination class="grid" id="ctrlsms"></div>
+						<div ui-grid="gridOptions" class="grid" id="ctrlstatistics02"></div>
 					</div>
 					<div class="form-group form-inline" style='margin-top: 10px;'>
 						<div class='input-group date' id='datetimepicker1' style="width: 198px;">
-						    <input type='text' class="form-control" id="sdate"/>
+						    <input type='text' class="form-control" id="sdate" />
 						    <span class="input-group-addon">
 						        <span class="glyphicon glyphicon-calendar"></span>
 						    </span>
 						</div>
 						 -
 						<div class='input-group date' id='datetimepicker2' style="width: 198px;">
-						    <input type='text' class="form-control" id="edate"/>
+						    <input type='text' class="form-control" id="edate" />
 						    <span class="input-group-addon">
 						        <span class="glyphicon glyphicon-calendar"></span>
 						    </span>
 						</div>
-						<input type='text' id='txtsmssearch' class='form-control' placeholder="전화번호 / 휴대전화" style="margin-left: 10px; max-width: 11em;" />
-						<button type='button' for='txtsearch' class="btn btn-info btn-sm" id="btnSmsSearch">검색</button>
-						<!-- <button type="button" class="btn btn-warning btn-sm" style="float: right;" id="btnSmsDel">삭제</button> -->
-						<!-- <button type="button" class="btn btn-primary btn-sm" style="float: right;" id="btnSmsPop">내용작성</button> -->
+						<input type='text' id='txtsearch' class='form-control' placeholder="상담원 아이디" style="margin-left: 10px; max-width: 11em;" />
+						<button type='button' for='txtsearch' class="btn btn-info btn-sm" id="btnSearch">검색</button>
 					</div>
 <script>
 	$(document).ready(function(){
@@ -27,19 +25,26 @@
 		
 	    $('#datetimepicker1').datetimepicker({
 	    	locale: 'ko',
-	    	format: 'YYYY-MM-DD HH:mm:ss',
+	    	format: 'YYYY-MM-DD',
 	    	defaultDate: firstdate
 	    });
 	    $('#datetimepicker2').datetimepicker({
 	    	locale: 'ko',
-	    	format: 'YYYY-MM-DD HH:mm:ss',
+	    	format: 'YYYY-MM-DD',
 	    	defaultDate: newdate
 	    });
-		$("#datetimepicker1").on("dp.change", function (e) {
+	    $("#datetimepicker1").on("dp.change", function (e) {
 	        $('#datetimepicker2').data("DateTimePicker").minDate(e.date);
 	    });
 	    $("#datetimepicker2").on("dp.change", function (e) {
 	        $('#datetimepicker1').data("DateTimePicker").maxDate(e.date);
+	    });
+	    
+	    $("#btnSearch").click(function(){
+	    	var scope = angular.element($("#ctrlstatistics02")).scope();
+		    scope.$apply(function () {
+		        scope.getPage();
+		    });
 	    });
 	});
 </script>

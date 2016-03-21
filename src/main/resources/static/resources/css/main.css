@@ -1,3 +1,15 @@
+.modal-header, h4, .close {
+    background-color: #3175AF;
+    color:white !important;
+    text-align: center;
+    font-size: 30px;
+}
+.modal-footer {
+    background-color: #f9f9f9;
+}
+
+.foradmin { visibility: hidden; }
+
 .grid {
 	width: 100%;
 	height: 700px;

@@ -5,15 +5,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.coretree.defaultconfig.mapper.Record;
-import com.coretree.defaultconfig.mapper.RecordMapper;
 import com.coretree.defaultconfig.mapper.Sms;
 import com.coretree.defaultconfig.mapper.SmsMapper;
+import com.coretree.defaultconfig.model.SearchConditions;
 
 @RestController
 public class SmsController {
@@ -21,28 +20,33 @@ public class SmsController {
 	@Autowired
 	SmsMapper mapper;
 	
-	@RequestMapping(path="/sms/get/count", method=RequestMethod.GET)
-	public long getCount(Principal principal) {
-		return mapper.count();
+	@RequestMapping(path="/sms/get/count", method=RequestMethod.POST)
+	public long getCount(@RequestBody SearchConditions condition, Principal principal) {
+		return mapper.count(condition);
 	}
 	
 	@RequestMapping(path="/sms/get/all", method=RequestMethod.POST)
-	public List<Sms> getAll(Sms obj, Principal principal) {
-		return mapper.getAll(obj);
+	public List<Sms> getAll(@RequestBody SearchConditions condition, Principal principal) {
+		return mapper.getAll(condition);
 	}
 	
-	@RequestMapping(path="/sms/get/search/{txt}", method=RequestMethod.GET)
-	public List<Sms> getByTxt(@PathVariable("txt") String txt, Principal principal) {
-		return mapper.getByTxt("%" + txt + "%");
+	@RequestMapping(path="/sms/get/search", method=RequestMethod.POST)
+	public List<Sms> getByTxt(@RequestBody SearchConditions condition, Principal principal) {
+		return mapper.getByTxt("%" + condition.getTxt() + "%");
 	}
 
-	@RequestMapping(path="/sms/del/{idx}", method=RequestMethod.GET)
-	public void remove(@PathVariable("idx") long idx, Principal principal) {
-		mapper.del(idx);
+	@RequestMapping(path="/sms/del", method=RequestMethod.POST)
+	public void remove(@RequestBody SearchConditions condition, Principal principal) {
+		mapper.del(condition.getIdx());
 	}
 	
 	@RequestMapping(path="/sms/del/all", method=RequestMethod.POST)
 	public void removeAll(ArrayList<Sms> list, Principal principal) {
 		mapper.delAll(list);
+	}
+	
+	@RequestMapping(path="/sms/add/msg", method=RequestMethod.POST)
+	public void addMsg(@RequestBody Sms sms, Principal principal) {
+		mapper.add(sms);
 	}
 }

@@ -14,34 +14,89 @@
 		// 컨텍스트 메뉴
 		$scope.menuOptions = function (item) {
 			var itm = item.entity;
-		    return [
-	            ['고객  [ ' + itm.uname + ' ]', function(){return;}]
-	            ,null
-		        ,['전화하기 : ' + itm.tel, function () {
-					trade = {
-			                cmd: UC_MAKE_CALL_REQ,
-			                extension: crmidentity.ext,
-			                caller: crmidentity.ext,
-			                callee: itm.tel,
-			                unconditional: '',
-			                status: -1
-			              };
-			     	stompClient.send("/app/traders", {}, JSON.stringify(trade));
-		        	console.log("전화하기: " + angular.toJson(item.entity));
-		        }]
-	            ,['전화하기 : ' + itm.cellular, function () {
-					trade = {
-		                cmd: UC_MAKE_CALL_REQ,
-		                extension: crmidentity.ext,
-		                caller: crmidentity.ext,
-		                callee: itm.cellular,
-		                unconditional: '',
-		                status: -1
-					};
-			     	stompClient.send("/app/traders", {}, JSON.stringify(trade));
-		        	console.log("전화하기: " + angular.toJson(item.entity));
-		        }]
-		    ];
+			
+			var popupcontents = '';
+			var selectedRows = $scope.gridApi.selection.getSelectedRows();
+			
+			// console.log("selectedRows.length : " + selectedRows.length);
+			
+			if (selectedRows.length > 1) {
+				popupcontents = [
+				 	            ['고객  [ ' + itm.uname + ' ]', function(){return;}]
+					            ,null
+						        ,['전화하기 : ' + itm.tel, function () {
+									trade = {
+							                cmd: UC_MAKE_CALL_REQ,
+							                extension: crmidentity.ext,
+							                caller: crmidentity.ext,
+							                callee: itm.tel,
+							                unconditional: '',
+							                status: -1
+							              };
+							     	stompClient.send("/app/traders", {}, JSON.stringify(trade));
+						        	console.log("전화하기: " + angular.toJson(item.entity));
+						        }]
+					            ,['전화하기 : ' + itm.cellular, function () {
+									trade = {
+						                cmd: UC_MAKE_CALL_REQ,
+						                extension: crmidentity.ext,
+						                caller: crmidentity.ext,
+						                callee: itm.cellular,
+						                unconditional: '',
+						                status: -1
+									};
+							     	stompClient.send("/app/traders", {}, JSON.stringify(trade));
+						        	console.log("전화하기: " + angular.toJson(item.entity));
+						        }]
+					            ,['SMS 한번에 보내기', function () {
+					            	var receivephones = '';
+					    			$.each(selectedRows, function (index, item){
+					    				if (receivephones === '') 
+					    					receivephones = item.cellular;
+					    				else
+					    					receivephones += ',' + item.cellular;
+					    			});
+					    			$("#receivephones").val(receivephones);
+					            	$("#ModalSms").modal("show");
+					            	// console.log(receivephones);
+						        }]
+						    ];
+			} else {
+				popupcontents = [
+					 	            ['고객  [ ' + itm.uname + ' ]', function(){return;}]
+						            ,null
+							        ,['전화하기 : ' + itm.tel, function () {
+										trade = {
+								                cmd: UC_MAKE_CALL_REQ,
+								                extension: crmidentity.ext,
+								                caller: crmidentity.ext,
+								                callee: itm.tel,
+								                unconditional: '',
+								                status: -1
+								              };
+								     	stompClient.send("/app/traders", {}, JSON.stringify(trade));
+							        	console.log("전화하기: " + angular.toJson(item.entity));
+							        }]
+						            ,['전화하기 : ' + itm.cellular, function () {
+										trade = {
+							                cmd: UC_MAKE_CALL_REQ,
+							                extension: crmidentity.ext,
+							                caller: crmidentity.ext,
+							                callee: itm.cellular,
+							                unconditional: '',
+							                status: -1
+										};
+								     	stompClient.send("/app/traders", {}, JSON.stringify(trade));
+							        	console.log("전화하기: " + angular.toJson(item.entity));
+							        }]
+						            ,['SMS 보내기 : ' + itm.cellular, function () {
+						            	$("#receivephones").val(itm.cellular);
+						            	$("#ModalSms").modal("show");
+							        }]
+							    ];
+			}
+			
+		    return popupcontents;
 		};
 		
 		// 고객리스트
@@ -107,18 +162,18 @@
 			    	});
 			    	
 			    	gridApi.selection.on.rowSelectionChanged($scope,function(row){
-			            var msg = 'row selected ' + row.isSelected;
-			            $log.log(msg);
+			            //var msg = 'row selected ' + row.isSelected + '//' + row.entity.uname;
+			            //$log.log(msg);
 			    	});
 	
 					gridApi.selection.on.rowSelectionChangedBatch($scope,function(rows){
-						var msg = 'rows changed ' + rows.length;
-						$log.log(msg);
+						//var msg = 'rows changed ' + rows.length;
+						//$log.log(msg);
 
 						$scope.gridOptions.selectedItems = rows;
 /*						
 						$.each($scope.gridOptions.selectedItems, function (index, value){
-							console.log( index + ": " + value );
+							console.log( index + ": " + value.isSelected );
 						});
 */
 						// $scope.selectedItems = rows;

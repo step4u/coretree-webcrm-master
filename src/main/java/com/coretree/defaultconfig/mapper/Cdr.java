@@ -2,6 +2,7 @@ package com.coretree.defaultconfig.mapper;
 
 import java.lang.String;
 import java.sql.Date;
+import java.util.Calendar;
 
 public class Cdr {
 	private long idx;
@@ -36,6 +37,20 @@ public class Cdr {
 	
 	public void setStartdate(Date startdate) { this.startdate = startdate; }
 	public Date getStartdate() { return this.startdate; }
+	
+	public Calendar getSdate() {
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(getStartdate());
+		
+		return calendar;
+	}
+	
+	public Calendar getEdate() {
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(getEnddate());
+		
+		return calendar;
+	}
 	
 	public void setEnddate(Date enddate) { this.enddate = enddate; }
 	public Date getEnddate() { return this.enddate; }

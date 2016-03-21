@@ -78,6 +78,7 @@
 		};
 		
 		$scope.getPage = function(txt) {
+/*
 			var url;
 			
 			if (txt == ''){
@@ -103,6 +104,42 @@
 				.success(function(data) {
 					$scope.gridOptions.data = data;
 				});
+			});
+*/			
+			
+			var condition = {
+		    		idx: 0,
+		    		sdate: $("#sdate").val(),
+		    		edate: $("#edate").val(),
+	    			txt: txt,
+	    			curpage: paginationOptions.pageNumber,
+	    			rowsperpage: paginationOptions.pageSize
+    			};
+
+			$http({
+				method: "POST",
+				url: "/sms/get/count",
+				data: condition
+			}).then(function(response){
+				var data = response.data;
+				
+				if ($scope.gridOptions.totalItems != data) {
+					paginationOptions.pageNumber = 1;
+				}
+				
+				$scope.gridOptions.totalItems = data;
+				
+				$http({
+					method: "POST",
+					url: "/sms/get/all",
+					data: condition
+				}).then(function(response){
+					$scope.gridOptions.data = response.data;
+				}, function(response){
+					
+				});
+			}, function(){
+				
 			});
 		}
 		
