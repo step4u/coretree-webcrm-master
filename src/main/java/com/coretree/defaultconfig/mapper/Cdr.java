@@ -24,7 +24,7 @@ public class Cdr {
 	private String callee_human_name;
 	private int result;
 	private int seq;
-	private int tsecs;
+	private int totalsecs;
 	
 	public void setIdx(long idx) { this.idx = idx; }
 	public long getIdx() { return this.idx; }
@@ -97,6 +97,6 @@ public class Cdr {
 	public void setSeq(int seq) { this.seq = seq; }
 	public int getSeq() { return this.seq; }
 	
-	public void setTsecs(int tsecs) { this.tsecs = tsecs; }
-	public int getTsecs() { return this.tsecs; }
+	public void setTotalsecs(int totalsecs) { this.totalsecs = totalsecs; }
+	public int getTotalsecs() { return this.totalsecs; }
 }

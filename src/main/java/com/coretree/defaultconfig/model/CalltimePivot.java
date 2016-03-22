@@ -45,4 +45,11 @@ public class CalltimePivot {
     
     public void setColavg(long colavg) { this.colavg = colavg; }
     public long getColavg() { return this.colavg; }
+    
+	@Override
+	public String toString() {
+		return "CalltimePivot [timerange=" + getTimerange() + ", totalnum=" + getTotalnum() + ", col30=" + getCol30() + ", col60=" + getCol60() 
+				+ ", col180=" + getCol180() + ", col300=" + getCol300() + ", col600=" + getCol600() + ", col1800=" + getCol1800() + ", col3600=" + getCol3600()
+				+ ", colall=" + getColall() + ", colall=" + getColavg() + "]";
+	}
 }

@@ -41,10 +41,24 @@
 			    }
 		};
 		
+		$scope.getLastDayOfMonth = function(val) {
+			var arr;
+			if (val != '') {
+				arr = val.split('-');
+			}
+			
+			var d = new Date(parseInt(arr[0]), parseInt(arr[1]), 0);
+			
+			return d;
+		}
+		
 		$scope.getPage = function() {
+
+			var d = $scope.getLastDayOfMonth($("#edate").val());
+			
 	    	var scondition = {
 	    		sdate: $("#sdate").val() + "-01",
-	    		edate: $("#edate").val() + "-01",
+	    		edate: $("#edate").val() + "-" + d.getDate(),
     			username: $("#txtsearch").val()
 			}
 			
@@ -60,6 +74,7 @@
 		}
 		
 		$scope.getPage();
+		
 		
 		$scope.getCurrentSelection = function() {
 			var currentSelection = $scope.gridApi.selection.getSelectedRows();

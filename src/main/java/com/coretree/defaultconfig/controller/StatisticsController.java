@@ -36,18 +36,19 @@ public class StatisticsController {
 		for (WorkTime wt : worktimes.Get()) {
 			CalltimePivot cp = new CalltimePivot();
 			cp.setTimerange(wt.getTxt());
-			cp.setTotalnum(cdrs.stream().filter( x -> x.getSdate().get(Calendar.HOUR_OF_DAY) == wt.getWtime() ).mapToLong(x -> x.getTsecs()).sum());
-			cp.setCol30(cdrs.stream().filter( x -> (x.getTsecs() > 0 && x.getTsecs() <= 30 && x.getSdate().get(Calendar.HOUR_OF_DAY) == wt.getWtime()) ).count());
-			cp.setCol60(cdrs.stream().filter( x -> (x.getTsecs() > 30 && x.getTsecs() <= 60 && x.getSdate().get(Calendar.HOUR_OF_DAY) == wt.getWtime()) ).count());
-			cp.setCol180(cdrs.stream().filter( x -> (x.getTsecs() > 60 && x.getTsecs() <= 180 && x.getSdate().get(Calendar.HOUR_OF_DAY) == wt.getWtime()) ).count());
-			cp.setCol300(cdrs.stream().filter( x -> (x.getTsecs() > 180 && x.getTsecs() <= 300 && x.getSdate().get(Calendar.HOUR_OF_DAY) == wt.getWtime()) ).count());
-			cp.setCol600(cdrs.stream().filter( x -> (x.getTsecs() > 300 && x.getTsecs() <= 600 && x.getSdate().get(Calendar.HOUR_OF_DAY) == wt.getWtime()) ).count());
-			cp.setCol1800(cdrs.stream().filter( x -> (x.getTsecs() > 600 && x.getTsecs() <= 1800 && x.getSdate().get(Calendar.HOUR_OF_DAY) == wt.getWtime()) ).count());
-			cp.setCol3600(cdrs.stream().filter( x -> (x.getTsecs() > 1800 && x.getTsecs() <= 3600 && x.getSdate().get(Calendar.HOUR_OF_DAY) == wt.getWtime()) ).count());
-			cp.setColall(cdrs.stream().filter( x -> (x.getTsecs() > 3600 && x.getSdate().get(Calendar.HOUR_OF_DAY) == wt.getWtime()) ).count());
+			//cp.setTotalnum(cdrs.stream().filter( x -> x.getSdate().get(Calendar.HOUR_OF_DAY) == wt.getWtime() ).mapToLong(x -> x.getTotalsecs()).sum());
+			cp.setTotalnum(cdrs.stream().filter( x -> x.getTotalsecs() > 0 && x.getSdate().get(Calendar.HOUR_OF_DAY) == wt.getWtime() ).count());
+			cp.setCol30(cdrs.stream().filter( x -> (x.getTotalsecs() > 0 && x.getTotalsecs() <= 30 && x.getSdate().get(Calendar.HOUR_OF_DAY) == wt.getWtime()) ).count());
+			cp.setCol60(cdrs.stream().filter( x -> (x.getTotalsecs() > 30 && x.getTotalsecs() <= 60 && x.getSdate().get(Calendar.HOUR_OF_DAY) == wt.getWtime()) ).count());
+			cp.setCol180(cdrs.stream().filter( x -> (x.getTotalsecs() > 60 && x.getTotalsecs() <= 180 && x.getSdate().get(Calendar.HOUR_OF_DAY) == wt.getWtime()) ).count());
+			cp.setCol300(cdrs.stream().filter( x -> (x.getTotalsecs() > 180 && x.getTotalsecs() <= 300 && x.getSdate().get(Calendar.HOUR_OF_DAY) == wt.getWtime()) ).count());
+			cp.setCol600(cdrs.stream().filter( x -> (x.getTotalsecs() > 300 && x.getTotalsecs() <= 600 && x.getSdate().get(Calendar.HOUR_OF_DAY) == wt.getWtime()) ).count());
+			cp.setCol1800(cdrs.stream().filter( x -> (x.getTotalsecs() > 600 && x.getTotalsecs() <= 1800 && x.getSdate().get(Calendar.HOUR_OF_DAY) == wt.getWtime()) ).count());
+			cp.setCol3600(cdrs.stream().filter( x -> (x.getTotalsecs() > 1800 && x.getTotalsecs() <= 3600 && x.getSdate().get(Calendar.HOUR_OF_DAY) == wt.getWtime()) ).count());
+			cp.setColall(cdrs.stream().filter( x -> (x.getTotalsecs() > 3600 && x.getSdate().get(Calendar.HOUR_OF_DAY) == wt.getWtime()) ).count());
 			long avg = 0;
 			if (cdrs.size() > 0) {
-				avg = cdrs.stream().filter( x -> x.getSdate().get(Calendar.HOUR_OF_DAY) == wt.getWtime() ).mapToLong(x -> x.getTsecs()).sum() / cdrs.size();
+				avg = cdrs.stream().filter( x -> x.getSdate().get(Calendar.HOUR_OF_DAY) == wt.getWtime() ).mapToLong(x -> x.getTotalsecs()).sum() / cdrs.size();
 			}
 			cp.setColavg(avg);
 			
@@ -106,18 +107,19 @@ public class StatisticsController {
 			dateFormat.setTimeZone(sc.getTimeZone());
 			cp.setTimerange(dateFormat.format(sc.getTime()));
 
-			cp.setTotalnum(cdrs.stream().filter( x -> dateFormat.format(x.getSdate().getTime()).equals(cp.getTimerange()) ).mapToLong(x -> x.getTsecs()).sum());
-			cp.setCol30(cdrs.stream().filter( x -> (x.getTsecs() > 0 && x.getTsecs() <= 30 && dateFormat.format(x.getSdate().getTime()).equals(cp.getTimerange())) ).count());
-			cp.setCol60(cdrs.stream().filter( x -> (x.getTsecs() > 30 && x.getTsecs() <= 60 && dateFormat.format(x.getSdate().getTime()).equals(cp.getTimerange())) ).count());
-			cp.setCol180(cdrs.stream().filter( x -> (x.getTsecs() > 60 && x.getTsecs() <= 180 && dateFormat.format(x.getSdate().getTime()).equals(cp.getTimerange())) ).count());
-			cp.setCol300(cdrs.stream().filter( x -> (x.getTsecs() > 180 && x.getTsecs() <= 300 && dateFormat.format(x.getSdate().getTime()).equals(cp.getTimerange())) ).count());
-			cp.setCol600(cdrs.stream().filter( x -> (x.getTsecs() > 300 && x.getTsecs() <= 600 && dateFormat.format(x.getSdate().getTime()).equals(cp.getTimerange())) ).count());
-			cp.setCol1800(cdrs.stream().filter( x -> (x.getTsecs() > 600 && x.getTsecs() <= 1800 && dateFormat.format(x.getSdate().getTime()).equals(cp.getTimerange())) ).count());
-			cp.setCol3600(cdrs.stream().filter( x -> (x.getTsecs() > 1800 && x.getTsecs() <= 3600 && dateFormat.format(x.getSdate().getTime()).equals(cp.getTimerange())) ).count());
-			cp.setColall(cdrs.stream().filter( x -> (x.getTsecs() > 3600 && dateFormat.format(x.getSdate().getTime()).equals(cp.getTimerange())) ).count());
+			//cp.setTotalnum(cdrs.stream().filter( x -> dateFormat.format(x.getSdate().getTime()).equals(cp.getTimerange()) ).mapToLong(x -> x.getTotalsecs()).sum());
+			cp.setTotalnum(cdrs.stream().filter( x -> x.getTotalsecs() > 0 && dateFormat.format(x.getSdate().getTime()).equals(cp.getTimerange()) ).count());
+			cp.setCol30(cdrs.stream().filter( x -> (x.getTotalsecs() > 0 && x.getTotalsecs() <= 30 && dateFormat.format(x.getSdate().getTime()).equals(cp.getTimerange())) ).count());
+			cp.setCol60(cdrs.stream().filter( x -> (x.getTotalsecs() > 30 && x.getTotalsecs() <= 60 && dateFormat.format(x.getSdate().getTime()).equals(cp.getTimerange())) ).count());
+			cp.setCol180(cdrs.stream().filter( x -> (x.getTotalsecs() > 60 && x.getTotalsecs() <= 180 && dateFormat.format(x.getSdate().getTime()).equals(cp.getTimerange())) ).count());
+			cp.setCol300(cdrs.stream().filter( x -> (x.getTotalsecs() > 180 && x.getTotalsecs() <= 300 && dateFormat.format(x.getSdate().getTime()).equals(cp.getTimerange())) ).count());
+			cp.setCol600(cdrs.stream().filter( x -> (x.getTotalsecs() > 300 && x.getTotalsecs() <= 600 && dateFormat.format(x.getSdate().getTime()).equals(cp.getTimerange())) ).count());
+			cp.setCol1800(cdrs.stream().filter( x -> (x.getTotalsecs() > 600 && x.getTotalsecs() <= 1800 && dateFormat.format(x.getSdate().getTime()).equals(cp.getTimerange())) ).count());
+			cp.setCol3600(cdrs.stream().filter( x -> (x.getTotalsecs() > 1800 && x.getTotalsecs() <= 3600 && dateFormat.format(x.getSdate().getTime()).equals(cp.getTimerange())) ).count());
+			cp.setColall(cdrs.stream().filter( x -> (x.getTotalsecs() > 3600 && dateFormat.format(x.getSdate().getTime()).equals(cp.getTimerange())) ).count());
 			long avg = 0;
 			if (cdrs.size() > 0) {
-				avg = cdrs.stream().filter( x -> dateFormat.format(x.getSdate().getTime()).equals(cp.getTimerange()) ).mapToLong(x -> x.getTsecs()).sum() / cdrs.size();
+				avg = cdrs.stream().filter( x -> dateFormat.format(x.getSdate().getTime()).equals(cp.getTimerange()) ).mapToLong(x -> x.getTotalsecs()).sum() / cdrs.size();
 			}
 			cp.setColavg(avg);
 			
@@ -178,19 +180,20 @@ public class StatisticsController {
 			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM");
 			dateFormat.setTimeZone(sc.getTimeZone());
 			cp.setTimerange(dateFormat.format(sc.getTime()));
-
-			cp.setTotalnum(cdrs.stream().filter( x -> dateFormat.format(x.getSdate().getTime()).equals(cp.getTimerange()) ).mapToLong(x -> x.getTsecs()).sum());
-			cp.setCol30(cdrs.stream().filter( x -> (x.getTsecs() > 0 && x.getTsecs() <= 30 && dateFormat.format(x.getSdate().getTime()).equals(cp.getTimerange())) ).count());
-			cp.setCol60(cdrs.stream().filter( x -> (x.getTsecs() > 30 && x.getTsecs() <= 60 && dateFormat.format(x.getSdate().getTime()).equals(cp.getTimerange())) ).count());
-			cp.setCol180(cdrs.stream().filter( x -> (x.getTsecs() > 60 && x.getTsecs() <= 180 && dateFormat.format(x.getSdate().getTime()).equals(cp.getTimerange())) ).count());
-			cp.setCol300(cdrs.stream().filter( x -> (x.getTsecs() > 180 && x.getTsecs() <= 300 && dateFormat.format(x.getSdate().getTime()).equals(cp.getTimerange())) ).count());
-			cp.setCol600(cdrs.stream().filter( x -> (x.getTsecs() > 300 && x.getTsecs() <= 600 && dateFormat.format(x.getSdate().getTime()).equals(cp.getTimerange())) ).count());
-			cp.setCol1800(cdrs.stream().filter( x -> (x.getTsecs() > 600 && x.getTsecs() <= 1800 && dateFormat.format(x.getSdate().getTime()).equals(cp.getTimerange())) ).count());
-			cp.setCol3600(cdrs.stream().filter( x -> (x.getTsecs() > 1800 && x.getTsecs() <= 3600 && dateFormat.format(x.getSdate().getTime()).equals(cp.getTimerange())) ).count());
-			cp.setColall(cdrs.stream().filter( x -> (x.getTsecs() > 3600 && dateFormat.format(x.getSdate().getTime()).equals(cp.getTimerange())) ).count());
+			
+			// cp.setTotalnum(cdrs.stream().filter( x -> dateFormat.format(x.getSdate().getTime()).equals(cp.getTimerange()) ).mapToLong(x -> x.getTotalsecs()).sum());
+			cp.setTotalnum(cdrs.stream().filter( x -> x.getTotalsecs() > 0 && dateFormat.format(x.getSdate().getTime()).equals(cp.getTimerange()) ).count());
+			cp.setCol30(cdrs.stream().filter( x -> (x.getTotalsecs() > 0 && x.getTotalsecs() <= 30 && dateFormat.format(x.getSdate().getTime()).equals(cp.getTimerange())) ).count());
+			cp.setCol60(cdrs.stream().filter( x -> (x.getTotalsecs() > 30 && x.getTotalsecs() <= 60 && dateFormat.format(x.getSdate().getTime()).equals(cp.getTimerange())) ).count());
+			cp.setCol180(cdrs.stream().filter( x -> (x.getTotalsecs() > 60 && x.getTotalsecs() <= 180 && dateFormat.format(x.getSdate().getTime()).equals(cp.getTimerange())) ).count());
+			cp.setCol300(cdrs.stream().filter( x -> (x.getTotalsecs() > 180 && x.getTotalsecs() <= 300 && dateFormat.format(x.getSdate().getTime()).equals(cp.getTimerange())) ).count());
+			cp.setCol600(cdrs.stream().filter( x -> (x.getTotalsecs() > 300 && x.getTotalsecs() <= 600 && dateFormat.format(x.getSdate().getTime()).equals(cp.getTimerange())) ).count());
+			cp.setCol1800(cdrs.stream().filter( x -> (x.getTotalsecs() > 600 && x.getTotalsecs() <= 1800 && dateFormat.format(x.getSdate().getTime()).equals(cp.getTimerange())) ).count());
+			cp.setCol3600(cdrs.stream().filter( x -> (x.getTotalsecs() > 1800 && x.getTotalsecs() <= 3600 && dateFormat.format(x.getSdate().getTime()).equals(cp.getTimerange())) ).count());
+			cp.setColall(cdrs.stream().filter( x -> (x.getTotalsecs() > 3600 && dateFormat.format(x.getSdate().getTime()).equals(cp.getTimerange())) ).count());
 			long avg = 0;
 			if (cdrs.size() > 0) {
-				avg = cdrs.stream().filter( x -> dateFormat.format(x.getSdate().getTime()).equals(cp.getTimerange()) ).mapToLong(x -> x.getTsecs()).sum() / cdrs.size();
+				avg = cdrs.stream().filter( x -> dateFormat.format(x.getSdate().getTime()).equals(cp.getTimerange()) ).mapToLong(x -> x.getTotalsecs()).sum() / cdrs.size();
 			}
 			cp.setColavg(avg);
 			

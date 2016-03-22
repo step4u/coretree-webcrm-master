@@ -31,7 +31,7 @@ public class Cdrs {
 				while (rs.next()) {
 					Cdr cdr = new Cdr();
 					cdr.setIdx(rs.getLong(0));
-					cdr.setTsecs(rs.getInt(1));
+					cdr.setTotalsecs(rs.getInt(1));
 					
 					this.lists.add(cdr);
 			    }

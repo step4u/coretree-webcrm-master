@@ -51,7 +51,6 @@ public class QuoteTelStatusService implements ApplicationListener<BrokerAvailabi
 	private AtomicBoolean brokerAvailable = new AtomicBoolean();
 	// private final StockQuoteGenerator quoteGenerator = new StockQuoteGenerator();
 	
-
 	@Autowired
 	private MemberMapper memberMapper;
 	@Autowired
