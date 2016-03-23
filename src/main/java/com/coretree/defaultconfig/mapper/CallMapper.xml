@@ -36,7 +36,7 @@
 			, b.uname as cust_name
 			, a.custs_idx, a.direction, a.cust_tel, a.startdate, a.enddate, a.memo, a.regdate
 			, iif(datediff(second from a.startdate to a.enddate) is null, 0, datediff(second from a.startdate to a.enddate)) diff
-			, case when a.status=113 then '부재중' else '완료' end statustxt
+			, case when a.status=112 then '부재중' else '완료' end statustxt
 			from calls a left join customers b
 				on a.custs_idx=b.idx
 			where 1=1 and a.username=#{username}
@@ -76,9 +76,9 @@
     
     <insert id="add" useGeneratedKeys="true" keyProperty="idx" keyColumn="idx">
     	insert into calls
-    		(direction, cust_tel, status, startdate, username)
+    		(direction, cust_tel, status, username)
     		values
-    		(#{direct}, #{cust_tel}, #{status}, #{startdate}, #{username})
+    		(#{direct}, #{cust_tel}, #{status}, #{username})
     </insert>
     
     <update id="modiStatus">

@@ -72,6 +72,7 @@
 				}
 				break;
 			case UC_SMS_SEND_RES:
+/*				
 			    var smsinfo = {
 					idx: -1,
 					custs_idx: '',
@@ -106,7 +107,7 @@
 			    		
 			    	}
 			    });
-			    
+*/
 /*			    $.post("/sms/add/msg", smsinfo, function(response){
 					$("#ModalSms").modal("hide");
 					
@@ -138,6 +139,7 @@
 						$("#btnCall").addClass("btn-primary");
 						$("#btnCall").html("통화");
 					}
+					if ($("#btnCall").hasClass("disabled")) $("#btnCall").removeClass("disabled");
 					if (!$("#btnTransfer").hasClass("disabled")) $("#btnTransfer").addClass("disabled");
 					if ($("#btnPickup").hasClass("disabled")) $("#btnPickup").removeClass("disabled");
 					if (!$("#btnHold").hasClass("disabled")) $("#btnHold").addClass("disabled");
@@ -151,6 +153,8 @@
 					if (!$("#btnPickup").hasClass("disabled")) $("#btnPickup").addClass("disabled");
 				}
 				if (item.status == UC_CALL_STATE_BUSY) {
+					if (!$("#btnCall").hasClass("disabled")) $("#btnCall").addClass("disabled");
+					if (!$("#btnMemoTake").hasClass("disabled")) $("#btnMemoTake").addClass("disabled");
 					if ($("#btnTransfer").hasClass("disabled")) $("#btnTransfer").removeClass("disabled");
 					if ($("#btnHold").hasClass("disabled")) $("#btnHold").removeClass("disabled");
 					

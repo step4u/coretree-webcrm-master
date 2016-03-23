@@ -250,20 +250,23 @@ public class QuoteTelStatusService implements ApplicationListener<BrokerAvailabi
 				// smsdata.toObject(e.getItem().toBytes());
 
 				System.err.println("UC_SMS_SEND_RES : " + data.toString());
-				//if (data.getStatus() == Const4pbx.UC_STATUS_SUCCESS) {
-					Member smsmem = memberMapper.selectByExt(data.getCaller());
+				if (data.getStatus() == Const4pbx.UC_STATUS_SUCCESS) {
 					
-					if (smsmem.getUsername() == null) return;
-					if (smsmem.getUsername().isEmpty()) return;
-					
-					payload = new UcMessage();
-					payload.cmd = data.getCmd();
-					payload.extension = data.getCaller();
-					payload.caller = data.getCaller();
-					payload.callee = data.getCallee();
-					payload.status = data.getStatus();
-					this.msgTemplate.convertAndSendToUser(smsmem.getUsername(), "/queue/groupware", payload);
-				//}
+				}
+
+				
+				Member smsmem = memberMapper.selectByExt(data.getCaller());
+				
+				if (smsmem.getUsername() == null) return;
+				if (smsmem.getUsername().isEmpty()) return;
+				
+				payload = new UcMessage();
+				payload.cmd = data.getCmd();
+				payload.extension = data.getCaller();
+				payload.caller = data.getCaller();
+				payload.callee = data.getCallee();
+				payload.status = data.getStatus();
+				this.msgTemplate.convertAndSendToUser(smsmem.getUsername(), "/queue/groupware", payload);
 				break;
 			default:
 				// System.err.println(String.format("Extension : %s", data.getExtension()));
