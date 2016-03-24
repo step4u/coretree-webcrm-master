@@ -63,12 +63,14 @@
 				if (item.status == UC_STATUS_SUCCESS){
 					$("#btnHold").html("활성");
 					$("#btnMemoHold").html("활성");
+					if (!$("#btnMemoRedirect").hasClass("disabled")) $("#btnMemoRedirect").addClass("disabled");
 				}
 				break;
 			case UC_ACTIVE_CALL_RES:
 				if (item.status == UC_STATUS_SUCCESS){
 					$("#btnHold").html("보류");
 					$("#btnMemoHold").html("보류");
+					if ($("#btnMemoRedirect").hasClass("disabled")) $("#btnMemoRedirect").removeClass("disabled");
 				}
 				break;
 			case UC_SMS_SEND_RES:

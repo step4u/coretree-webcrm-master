@@ -25,6 +25,7 @@ import org.springframework.messaging.simp.broker.BrokerAvailabilityEvent;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.coretree.defaultconfig.config.Configurations;
 import com.coretree.defaultconfig.mapper.Call;
 import com.coretree.defaultconfig.mapper.CallMapper;
 import com.coretree.defaultconfig.mapper.Customer;
@@ -42,6 +43,8 @@ import com.coretree.models.UcMessage;
 import com.coretree.socket.*;
 import com.coretree.util.Const4pbx;
 
+import ch.qos.logback.core.joran.util.ConfigurationWatchListUtil;
+
 @Service
 @RestController
 public class QuoteTelStatusService implements ApplicationListener<BrokerAvailabilityEvent>, IEventHandler<HaveGotUcMessageEventArgs>, IQuoteTelStatusService {
@@ -58,6 +61,9 @@ public class QuoteTelStatusService implements ApplicationListener<BrokerAvailabi
 	@Autowired
 	private CallMapper callMapper;
 	
+	@Autowired
+	private Configurations configs;
+	
 	private List<Call> curcalls = new ArrayList<Call>();
 	private List<Member> userstate = new ArrayList<Member>();
 
@@ -73,9 +79,12 @@ public class QuoteTelStatusService implements ApplicationListener<BrokerAvailabi
 	public void onApplicationEvent(BrokerAvailabilityEvent event) {
 		this.brokerAvailable.set(event.isBrokerAvailable());
 		
+		
+		
 		// uc = new UcServer("14.63.171.190", 31001, 1, ByteOrder.BIG_ENDIAN);
-		uc = new UcServer("14.63.168.129", 31001, 1, ByteOrder.BIG_ENDIAN);
+		// uc = new UcServer("14.63.168.129", 31001, 1, ByteOrder.BIG_ENDIAN);
 		// uc = new UcServer("127.0.0.1", 31001, 1, ByteOrder.BIG_ENDIAN);
+		uc = new UcServer(configs.getPbxip(), 31001, 1, ByteOrder.BIG_ENDIAN);
 		uc.HaveGotUcMessageEventHandler.addEventHandler(this);
 		uc.regist();
 
