@@ -1,6 +1,11 @@
 	
 	function SetCallState(data) {
+		// Right top current state
 		var scope0 = angular.element($("#ctrlcallstatus")).scope();
+    	if (data.cmd == UC_REPORT_WAITING_COUNT) {
+    		scope0.gridOptions.data[5].count = data.responseCode;
+    		return;
+    	}
 	
 		var scope1 = angular.element($("#ctrlextstatus")).scope();
 		scope1.$apply(function () {
@@ -28,10 +33,6 @@
 	    		return element.state == '착신전환';
 	    	});
 	    	scope0.gridOptions.data[4].count = values.length;
-	    	
-	    	if (data.cmd == UC_REPORT_WAITING_COUNT) {
-	    		scope0.gridOptions.data[5].count = data.responseCode;
-	    	}
 	    });
 	}
 	

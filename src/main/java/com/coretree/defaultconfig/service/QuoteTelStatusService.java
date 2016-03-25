@@ -60,7 +60,6 @@ public class QuoteTelStatusService implements ApplicationListener<BrokerAvailabi
 	private CustomerMapper custMapper;
 	@Autowired
 	private CallMapper callMapper;
-	
 	@Autowired
 	private Configurations configs;
 	

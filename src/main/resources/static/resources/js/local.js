@@ -6,6 +6,7 @@
         extension : '3001',
         caller : '',
         callee : '',
+        responseCode : -1,
         unconditional : '',
         status: -1
 	};
@@ -387,6 +388,43 @@
 		});
         /*** script for my call button ***/
 		
+		
+		/*** set MyStatus right top ***/
+		$(".mystatus").click(function(){
+	        trade = {
+                cmd: 0,
+                extension: crmidentity.ext,
+                caller: '',
+                callee: '',
+                responseCode: -1,
+                unconditional: '',
+                status: -1
+        	};
+		
+			var msidx = $(".mystatus").index(this);
+			
+			switch (msidx) {
+				case 0:
+					// online
+					trade.cmd = UC_CLEAR_SRV_REQ;
+					break;
+				case 1:
+					trade.cmd = UC_SET_SRV_REQ;
+					trade
+					// left
+					break;
+				case 2:
+					// dnd
+					break;
+				case 3:
+					// redirected
+					break;
+			}
+			
+			stompClient.send("/app/traders", {}, JSON.stringify(trade));
+		});
+		/*** set MyStatus right top ***/
+		
 	    if (crmidentity.role === "ROLE_ADMIN") {
 	    	$(".foradmin").css("visibility", "visible");
 	    }
@@ -508,7 +546,7 @@
 	/*** script for set main message ***/
 	
 	function SetMyState(extitem, statecount) {
-		console.log("set my state: " + extitem.status + ", statecount.ring: " + statecount.ring);
+		// console.log("set my state: " + extitem.status + ", statecount.ring: " + statecount.ring);
 		
 		switch (extitem.state) {
 			case UC_CALL_STATE_UNREG:
