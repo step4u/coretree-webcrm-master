@@ -273,7 +273,7 @@
 									<div ng-controller="CtrlTelStatus" style="margin-top: 15px;" id="ctrlextstatus">
 										<div ui-grid="gridOptions" class="grid_tels"></div>
 									</div>
-<!-- 
+
 									<button type="button" class="btn btn-primary btn-sm" id='btn_connect'>Connect</button>
 									<button type="button" class="btn btn-primary btn-sm" id='btn_disconnect'>Disconnect</button>
 									<button type="button" class="btn btn-primary btn-sm" id='btn_makecall'>MakeCall</button>
@@ -288,7 +288,11 @@
 									<button type="button" class="btn btn-primary btn-sm" id='btn_reqredirect'>Request Redirect</button>
 									<button type="button" class="btn btn-primary btn-sm" id='btn_dismissredirect'>Dismiss Redirect</button>
 									<button type="button" class="btn btn-primary btn-sm" id='btn_answer'>Answer</button>
- -->
+									<button type="button" class="btn btn-primary btn-sm" id='btn_set_left'>Set Left</button>
+									<button type="button" class="btn btn-primary btn-sm" id='btn_set_dnd'>Set Dnd</button>
+									<button type="button" class="btn btn-primary btn-sm" id='btn_set_redirected'>Set Redirected</button>
+									<button type="button" class="btn btn-primary btn-sm" id='btn_clear_set'>ClearSet</button>
+									
 						        </div>
                             </div>
 						</div>
@@ -879,6 +883,25 @@
 			};
 	        
 	     	stompClient.send("/app/traders", {}, JSON.stringify(trade));
+	    });
+	    
+	    $("#btn_set_left").click(function(){
+	        trade = {
+	                cmd: UC_SET_SRV_REQ,
+	                direct: UC_DIRECT_INCOMING,
+	                call_idx: 0,
+	                extension: '3001',
+	                cust_idx: 0,
+	                caller: '01045455962',
+	                callername: '',
+	                callee: '',
+	                calleename: '',
+	                responseCode: '',
+	                unconditional: '',
+	                status: 0
+				};
+		        
+		     	stompClient.send("/app/traders", {}, JSON.stringify(trade));
 	    });
 	    
 		connect2();

@@ -12,6 +12,7 @@ public class Member {
 	private int state;
 	private short enabled = 1;
 	private int tempval = 0;
+	private String tempstr;
 	
 	public String getUsername() { return username; }
 	public void setUsername(String username) { this.username = username; }
@@ -45,6 +46,9 @@ public class Member {
 	
 	public int getTempval() { return tempval; }
 	public void setTempval(int tempval) { this.tempval = tempval; }
+	
+	public String getTempstr() { return this.tempstr; }
+	public void setTempstr(String tempstr) { this.tempstr = tempstr; }
 	
 	@Override
 	public String toString() {

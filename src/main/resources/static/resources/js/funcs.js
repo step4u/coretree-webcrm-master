@@ -389,6 +389,9 @@
 			        };
 				}
 				break;
+			case btnbhv.redirected:
+				trade.unconditional = $("#ModalTransfer #txtnumber").val();
+				break;
 			case btnbhv.none:
 			default:
 		        trade = {

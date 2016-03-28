@@ -57,7 +57,8 @@
 		redirect: 2,
 		pickup: 3,
 		hold: 4,
-		drop: 5
+		drop: 5,
+		redirected: 6
 	}
 	var btnbehavoir = btnbhv.none;
 	
@@ -71,17 +72,17 @@
 	}
 	
 	var state = {
-		online: 1,
-		left: 2,
-		directed: 3,
-		dnd: 4
+		online: 0,
+		left: 1,
+		dnd: 2,
+		directed: 3
 	}
-	// var mystate = state.online;
+	var userstate = state.online;
 	
 	// 고객 등록, 수정, 삭제 시 사용
 	var custbhv = bhv.none;
 	// crm 상태 구분할 때 사용
-	var MyState = crmstate.idle; 
+	var MyState = crmstate.idle;
 	
 	$(document).ready(function(){
 		$('[data-toggle="tooltip"]').tooltip();
@@ -391,34 +392,47 @@
 		
 		/*** set MyStatus right top ***/
 		$(".mystatus").click(function(){
-	        trade = {
-                cmd: 0,
-                extension: crmidentity.ext,
-                caller: '',
-                callee: '',
-                responseCode: -1,
-                unconditional: '',
-                status: -1
-        	};
-		
+			if (typeof(trade) == 'undefined') {
+		        trade = {
+	                cmd: 0,
+	                extension: crmidentity.ext,
+	                caller: '',
+	                callee: '',
+	                responseCode: -1,
+	                unconditional: '',
+	                status: -1
+	        	};
+			} else {
+				trade.extension = crmidentity.ext,
+			}
+
 			var msidx = $(".mystatus").index(this);
 			
 			switch (msidx) {
 				case 0:
 					// online
-					trade.cmd = UC_CLEAR_SRV_REQ;
+					trade.cmd = WS_VALUE_EXTENSION_STATE_ONLINE;
+					trade.responseCode = userstate;
 					break;
 				case 1:
-					trade.cmd = UC_SET_SRV_REQ;
-					trade
 					// left
+					trade.cmd = WS_VALUE_EXTENSION_STATE_LEFT;
+					trade.responseCode = UC_SRV_DND;
 					break;
 				case 2:
 					// dnd
+					trade.cmd = WS_VALUE_EXTENSION_STATE_DND;
+					trade.responseCode = UC_SRV_DND;
 					break;
 				case 3:
 					// redirected
-					break;
+					trade.cmd = WS_VALUE_EXTENSION_STATE_REDIRECTED;
+					trade.responseCode = UC_SRV_UNCONDITIONAL;
+					
+					btnbehavoir = btnbhv.redirected;
+					
+					$("#ModalTransfer").modal("show");
+					return;
 			}
 			
 			stompClient.send("/app/traders", {}, JSON.stringify(trade));
