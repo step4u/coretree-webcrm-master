@@ -77,7 +77,10 @@
 		dnd: 2,
 		directed: 3
 	}
-	var userstate = state.online;
+	var userstate = {
+		state: state.online,
+		unconditional: ''
+	}
 	
 	// 고객 등록, 수정, 삭제 시 사용
 	var custbhv = bhv.none;
@@ -403,16 +406,21 @@
 	                status: -1
 	        	};
 			} else {
-				trade.extension = crmidentity.ext,
+				trade.extension = crmidentity.ext
 			}
 
 			var msidx = $(".mystatus").index(this);
-			
+			console.log("userstate : " + JSON.stringify(userstate));
 			switch (msidx) {
 				case 0:
 					// online
 					trade.cmd = WS_VALUE_EXTENSION_STATE_ONLINE;
-					trade.responseCode = userstate;
+					if (userstate == state.left || userstate == state.dnd) {
+						trade.responseCode = UC_SRV_DND;
+					} else if (userstate == state.directed) {
+						trade.responseCode = UC_SRV_UNCONDITIONAL;
+						trade.unconditional = userstate.unconditional;
+					}
 					break;
 				case 1:
 					// left

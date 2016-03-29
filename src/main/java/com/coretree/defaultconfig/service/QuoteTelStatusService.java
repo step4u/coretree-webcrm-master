@@ -180,9 +180,18 @@ public class QuoteTelStatusService implements ApplicationListener<BrokerAvailabi
 			case Const4pbx.WS_VALUE_EXTENSION_STATE_LEFT:
 			case Const4pbx.WS_VALUE_EXTENSION_STATE_DND:
 			case Const4pbx.WS_VALUE_EXTENSION_STATE_REDIRECTED:
-				// Member member = userstate.stream().filter(x -> x.getExtension().equals(message.extension)).findFirst().get();
+				Member member;
+				r.lock();
+				try {
+					member = userstate.stream().filter(x -> x.getExtension().equals(message.extension)).findFirst().get();
+				} catch (NoSuchElementException | NullPointerException e) {
+					member = null;
+				} finally {
+					r.unlock();
+				}
+				
 				this.RequestToPbx(message);
-				// member.setState(message.cmd);
+				member.setTempval(message.cmd);
 				break;
 			default:
 				this.RequestToPbx(message);
@@ -200,29 +209,6 @@ public class QuoteTelStatusService implements ApplicationListener<BrokerAvailabi
 				break;
 		}
 	}
-	
-/*	private UcMessage GetMessage(Member member, int status) {
-		UcMessage msg;
-		
-		switch (status) {
-			case Const4pbx.WS_VALUE_EXTENSION_STATE_ONLINE:
-				try {
-					if (member.getState() == Const4pbx.ws)
-				} catch (NoSuchElementException | NullPointerException e) {
-					
-				}
-				this.RequestToPbx(message);
-				break;
-			case Const4pbx.WS_VALUE_EXTENSION_STATE_LEFT:
-				break;
-			case Const4pbx.WS_VALUE_EXTENSION_STATE_REDIRECTED:
-				break;
-			case Const4pbx.WS_VALUE_EXTENSION_STATE_DND:
-				break;
-		}
-		
-		return msg;
-	}*/
 	
 	@MessageExceptionHandler
 	@SendToUser("/queue/errors")
@@ -246,7 +232,6 @@ public class QuoteTelStatusService implements ApplicationListener<BrokerAvailabi
 			case Const4pbx.UC_REGISTER_RES:
 			case Const4pbx.UC_UNREGISTER_RES:
 			case Const4pbx.UC_BUSY_EXT_RES:
-			case Const4pbx.UC_REPORT_SRV_STATE:
 				break;
 			case Const4pbx.UC_REPORT_EXT_STATE:
 				for (Member m : userstate) {
@@ -256,6 +241,7 @@ public class QuoteTelStatusService implements ApplicationListener<BrokerAvailabi
 				}
 				
 				if (data.getCallee().isEmpty()) break;
+			case Const4pbx.UC_REPORT_SRV_STATE:
 			case Const4pbx.UC_SET_SRV_RES:
 			case Const4pbx.UC_CLEAR_SRV_RES:
 			case Const4pbx.UC_REPORT_WAITING_COUNT:
@@ -285,8 +271,6 @@ public class QuoteTelStatusService implements ApplicationListener<BrokerAvailabi
 				this.msgTemplate.convertAndSendToUser(smsmem.getUsername(), "/queue/groupware", payload);
 				break;
 			default:
-				// System.err.println(String.format("Extension : %s", data.getExtension()));
-				
 				if (data.getExtension() == null) return;
 				if (data.getExtension().isEmpty()) return;
 				
@@ -321,12 +305,12 @@ public class QuoteTelStatusService implements ApplicationListener<BrokerAvailabi
 		payload.status = data.getStatus();
 		payload.responseCode = data.getResponseCode();
 		
-		Member cousellor = null;
+		Member counsellor = null;
 		
 		r.lock();
 		try
 		{
-			cousellor = userstate.stream().filter(x -> x.getExtension().equals(data.getExtension())).findFirst().get();
+			counsellor = userstate.stream().filter(x -> x.getExtension().equals(data.getExtension())).findFirst().get();
 		} catch (NoSuchElementException | NullPointerException e) {
 			return;
 		} finally {
@@ -339,38 +323,33 @@ public class QuoteTelStatusService implements ApplicationListener<BrokerAvailabi
 				break;
 			case Const4pbx.UC_CLEAR_SRV_RES:
 				if (data.getStatus() == Const4pbx.UC_STATUS_SUCCESS) {
-					cousellor.setState(data.getCmd());
-					cousellor.setTempstr("");
+					counsellor.setState(Const4pbx.WS_VALUE_EXTENSION_STATE_ONLINE);
+					counsellor.setTempstr("");
+					payload.status = counsellor.getState();
+					this.messagingTemplate.convertAndSend("/topic/ext.state." + data.getExtension(), payload);
 				}
 				break;
 			case Const4pbx.UC_SET_SRV_RES:
 				if (data.getStatus() == Const4pbx.UC_STATUS_SUCCESS) {
-					cousellor.setState(data.getCmd());
+					counsellor.setState(counsellor.getTempval());
 					if (data.getResponseCode() == Const4pbx.UC_SRV_UNCONDITIONAL) {
-						cousellor.setTempstr(data.getUnconditional());
+						counsellor.setTempstr(data.getUnconditional());
 					} else if (data.getResponseCode() == Const4pbx.UC_SRV_NOANSWER) {
-						cousellor.setTempstr(data.getNoanswer());
+						counsellor.setTempstr(data.getNoanswer());
 					} else if (data.getResponseCode() == Const4pbx.UC_SRV_BUSY) {
-						cousellor.setTempstr(data.getBusy());
+						counsellor.setTempstr(data.getBusy());
 					}
 				}
 				break;
 			case Const4pbx.UC_REPORT_SRV_STATE:
-				if (data.getDnD() == Const4pbx.UC_DND_SET) {
-					payload.status = Const4pbx.WS_VALUE_EXTENSION_STATE_DND;
-				} else {
-					if (!data.getUnconditional().isEmpty()) {
-						payload.status = Const4pbx.WS_VALUE_EXTENSION_STATE_REDIRECTED;
-					}
+				if (counsellor.getState() == Const4pbx.WS_VALUE_EXTENSION_STATE_ONLINE
+						|| counsellor.getState() == Const4pbx.WS_VALUE_EXTENSION_STATE_LEFT
+						|| counsellor.getState() == Const4pbx.WS_VALUE_EXTENSION_STATE_DND
+						|| counsellor.getState() == Const4pbx.WS_VALUE_EXTENSION_STATE_REDIRECTED) {
+					payload.status = counsellor.getState();
+					
+					this.messagingTemplate.convertAndSend("/topic/ext.state." + data.getExtension(), payload);
 				}
-
-				if (!data.getUnconditional().isEmpty()) {
-					if (userstate != null) {
-						Member member = userstate.stream().filter(x -> x.getExtension().equals(data.getExtension())).findFirst().get();
-					}
-				}
-				
-				this.messagingTemplate.convertAndSend("/topic/ext.state." + data.getExtension(), payload);
 				break;
 			case Const4pbx.UC_REPORT_EXT_STATE:
 				Call call = null;

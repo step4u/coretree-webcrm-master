@@ -58,31 +58,8 @@
 			var extitem = angular.fromJson(jsonData);
 			
 			var item = $scope.gridOptions.data.find(function(element, index){
-/*				
-				if (crmidentity.ext != element.innertel) {
-					switch (element.status) {
-						case '미등록':
-							extstatecount.unreg++;
-							break;
-						case '온라인':
-							extstatecount.idle++;
-							break;
-						case '연결중':
-							extstatecount.invite++;
-							break;
-						case '전화울림':
-							extstatecount.ring++;
-							break;
-						case '통화중':
-							extstatecount.busy++;
-							break;
-					}					
-				}
-*/
 				return element.extension == extitem.extension;
 			});
-			
-			// console.log(">>>>>>>>>>>>>>>>> log : " + extitem.status);
 			
 			if (item) {
 				switch (extitem.status) {
@@ -101,22 +78,38 @@
 					case UC_CALL_STATE_BUSY:
 						item.state = '통화중';
 						break;
+				}
+			}
+			
+			if (item.extension == crmidentity.ext) {
+				console.log("item.extension : " + item.extension);
+				console.log("extitem.status : " + extitem.status);
+				switch (extitem.status) {
 					case WS_VALUE_EXTENSION_STATE_ONLINE:
 						item.state = '온라인';
+						userstate.state = state.online;
+						userstate.unconditional = '';
+						for (var i = 1 ; i < $(".mystatus").size() ; i++) {
+							var itm = $(".mystatus:eq(" + i + ")");
+							itm.unbind("click");
+						}
 						break;
 					case WS_VALUE_EXTENSION_STATE_LEFT:
 						item.state = '자리비움';
+						userstate.state = state.left;
 						break;
 					case WS_VALUE_EXTENSION_STATE_REDIRECTED:
 						item.state = '착신전환';
+						userstate.state = state.redirected;
+						userstate.unconditional = extitem.unconditional;
 						break;
 					case WS_VALUE_EXTENSION_STATE_DND:
 						item.state = '수신거부';
+						userstate.state = state.dnd;
 						break;
 					default:
 						switch (extitem.cmd) {
 							case UC_SET_SRV_RES:
-								// console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>> UC_SET_SRV_RES");
 								switch (extitem.responseCode) {
 									case UC_SRV_UNCONDITIONAL:
 										item.state = '착신전환';
@@ -127,7 +120,6 @@
 								}
 								break;
 							case UC_CLEAR_SRV_RES:
-								// console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>> UC_CLEAR_SRV_RES");
 								switch (extitem.responseCode) {
 									case UC_SRV_UNCONDITIONAL:
 										item.state = '온라인';
@@ -141,12 +133,6 @@
 						break;
 				}
 			}
-
-/*
-			if (crmidentity.ext == extitem.extension) {
-				SetMyState(extitem, extstatecount);
-			}
-*/
 		};
 		
 		$scope.gridOptions = {

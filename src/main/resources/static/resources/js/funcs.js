@@ -405,6 +405,11 @@
 				break;
 		}
 		
+		console.log("TelePhoneFunction() : " + JSON.stringify(trade));
 	 	stompClient.send("/app/traders", {}, JSON.stringify(trade));
 	 	$("#ModalTransfer").modal("hide");
+	}
+	
+	function setMyStatus(states) {
+		
 	}
