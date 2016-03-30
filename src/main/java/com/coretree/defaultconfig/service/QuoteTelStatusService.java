@@ -78,8 +78,6 @@ public class QuoteTelStatusService implements ApplicationListener<BrokerAvailabi
 	public void onApplicationEvent(BrokerAvailabilityEvent event) {
 		this.brokerAvailable.set(event.isBrokerAvailable());
 		
-		
-		
 		// uc = new UcServer("14.63.171.190", 31001, 1, ByteOrder.BIG_ENDIAN);
 		// uc = new UcServer("14.63.168.129", 31001, 1, ByteOrder.BIG_ENDIAN);
 		// uc = new UcServer("127.0.0.1", 31001, 1, ByteOrder.BIG_ENDIAN);
@@ -93,14 +91,6 @@ public class QuoteTelStatusService implements ApplicationListener<BrokerAvailabi
 	private void InitializeUserState() {
 		userstate = memberMapper.getUserState();
 		sendExtensionStatus();
-		
-/*		
-		int i = 0;
-		for (Member m : userstate) {
-			System.err.println(">> InitializeUserState(), userstate[" + i + "] : " + m.toString());
-			i++;
-		}
-*/
 	}
 	
 	// subscribe extension status
@@ -116,47 +106,6 @@ public class QuoteTelStatusService implements ApplicationListener<BrokerAvailabi
 			e.printStackTrace();
 		}
 	}
-	
-/*	
-	private static class StockQuoteGenerator {
-		private final Map<String, TelStatus> innertels = new ConcurrentHashMap<>();
-
-		public StockQuoteGenerator() {
-			
-			this.innertels.put("8001", TelStatus.Busy);
-			this.innertels.put("8002", TelStatus.Busy);
-			this.innertels.put("8003", TelStatus.Normal);
-			this.innertels.put("8004", TelStatus.None);
-			this.innertels.put("8005", TelStatus.Normal);
-			this.innertels.put("8006", TelStatus.None);
-			this.innertels.put("8007", TelStatus.Busy);
-		}
-
-		public Set<QuoteTelStatus> generateQuotes() {
-			Set<QuoteTelStatus> quotes = new HashSet<>();
-			for (String ticker : this.innertels.keySet()) {
-				TelStatus status = getRandumStatus(ticker);
-				quotes.add(new QuoteTelStatus(ticker, status));
-			}
-			return quotes;
-		}
-
-		private TelStatus getRandumStatus(String ticker) {
-			return TelStatus.randomLetter();
-		}
-	}
-	
-	public void sendQuotes2() {
-		for (QuoteTelStatus quote : this.quoteGenerator.generateQuotes()) {
-			if (logger.isTraceEnabled()) {
-				logger.trace("Sending quote " + quote);
-			}
-			if (this.brokerAvailable.get()) {
-				this.messagingTemplate.convertAndSend("/topic/tel.status." + quote.getTicker(), quote);
-			}
-		}
-	}
-*/
 	
 	@MessageMapping("/traders")
 	public void executeTrade(UcMessage message, Principal principal) {

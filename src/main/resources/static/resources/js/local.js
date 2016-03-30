@@ -75,7 +75,7 @@
 		online: 0,
 		left: 1,
 		dnd: 2,
-		directed: 3
+		redirected: 3
 	}
 	var userstate = {
 		state: state.online,
@@ -410,14 +410,13 @@
 			}
 
 			var msidx = $(".mystatus").index(this);
-			console.log("userstate : " + JSON.stringify(userstate));
 			switch (msidx) {
 				case 0:
 					// online
 					trade.cmd = WS_VALUE_EXTENSION_STATE_ONLINE;
-					if (userstate == state.left || userstate == state.dnd) {
+					if (userstate.state == state.left || userstate.state == state.dnd) {
 						trade.responseCode = UC_SRV_DND;
-					} else if (userstate == state.directed) {
+					} else if (userstate.state == state.redirected) {
 						trade.responseCode = UC_SRV_UNCONDITIONAL;
 						trade.unconditional = userstate.unconditional;
 					}
@@ -427,12 +426,12 @@
 					trade.cmd = WS_VALUE_EXTENSION_STATE_LEFT;
 					trade.responseCode = UC_SRV_DND;
 					break;
-				case 2:
+/*				case 2:
 					// dnd
 					trade.cmd = WS_VALUE_EXTENSION_STATE_DND;
 					trade.responseCode = UC_SRV_DND;
-					break;
-				case 3:
+					break;*/
+				case 2:
 					// redirected
 					trade.cmd = WS_VALUE_EXTENSION_STATE_REDIRECTED;
 					trade.responseCode = UC_SRV_UNCONDITIONAL;
@@ -443,7 +442,18 @@
 					return;
 			}
 			
-			stompClient.send("/app/traders", {}, JSON.stringify(trade));
+			switch (userstate.state) {
+				case state.online:
+					if (msidx == 1 || msidx == 2)
+						stompClient.send("/app/traders", {}, JSON.stringify(trade));
+					break;
+				case state.left:
+				case state.dnd:
+				case state.redirected:
+					if (msidx == 0)
+						stompClient.send("/app/traders", {}, JSON.stringify(trade));
+					break;
+			}
 		});
 		/*** set MyStatus right top ***/
 		

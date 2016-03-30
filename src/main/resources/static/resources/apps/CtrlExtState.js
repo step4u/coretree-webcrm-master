@@ -61,6 +61,9 @@
 				return element.extension == extitem.extension;
 			});
 			
+			console.log("item.extension : " + item.extension);
+			console.log("extitem.status : " + extitem.status);
+			
 			if (item) {
 				switch (extitem.status) {
 					case UC_CALL_STATE_UNREG:
@@ -78,34 +81,17 @@
 					case UC_CALL_STATE_BUSY:
 						item.state = '통화중';
 						break;
-				}
-			}
-			
-			if (item.extension == crmidentity.ext) {
-				console.log("item.extension : " + item.extension);
-				console.log("extitem.status : " + extitem.status);
-				switch (extitem.status) {
 					case WS_VALUE_EXTENSION_STATE_ONLINE:
 						item.state = '온라인';
-						userstate.state = state.online;
-						userstate.unconditional = '';
-						for (var i = 1 ; i < $(".mystatus").size() ; i++) {
-							var itm = $(".mystatus:eq(" + i + ")");
-							itm.unbind("click");
-						}
 						break;
 					case WS_VALUE_EXTENSION_STATE_LEFT:
 						item.state = '자리비움';
-						userstate.state = state.left;
 						break;
 					case WS_VALUE_EXTENSION_STATE_REDIRECTED:
 						item.state = '착신전환';
-						userstate.state = state.redirected;
-						userstate.unconditional = extitem.unconditional;
 						break;
 					case WS_VALUE_EXTENSION_STATE_DND:
 						item.state = '수신거부';
-						userstate.state = state.dnd;
 						break;
 					default:
 						switch (extitem.cmd) {
@@ -130,6 +116,31 @@
 								}
 								break;
 						}
+						break;
+				}
+			}
+
+			if (item.extension == crmidentity.ext) {
+				switch (extitem.status) {
+					case WS_VALUE_EXTENSION_STATE_ONLINE:
+						userstate.state = state.online;
+						userstate.unconditional = '';
+						$("#mystatusheader").html("온라인");
+						break;
+					case WS_VALUE_EXTENSION_STATE_LEFT:
+						userstate.state = state.left;
+						$("#mystatusheader").html("자리비움");
+						break;
+					case WS_VALUE_EXTENSION_STATE_REDIRECTED:
+						userstate.state = state.redirected;
+						userstate.unconditional = extitem.unconditional;
+						$("#mystatusheader").html("착신전환");
+						break;
+					case WS_VALUE_EXTENSION_STATE_DND:
+						userstate.state = state.dnd;
+						$("#mystatusheader").html("수신거부");
+						break;
+					default:
 						break;
 				}
 			}
