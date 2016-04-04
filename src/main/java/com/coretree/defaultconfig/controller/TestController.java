@@ -25,7 +25,7 @@ import com.coretree.defaultconfig.mapper.Member;
 import com.coretree.defaultconfig.mapper.MemberMapper;
 import com.coretree.defaultconfig.model.ChatMessage;
 import com.coretree.defaultconfig.model.LoginResult;
-import com.coretree.interfaces.IQuoteTelStatusService;
+import com.coretree.interfaces.ITelStatusService;
 import com.coretree.models.UcMessage;
 
 // @Controller
@@ -33,10 +33,10 @@ public class TestController {
 	
 	private static final Log logger = LogFactory.getLog(TestController.class);
 	private SimpMessagingTemplate template;
-	private IQuoteTelStatusService ucservice;
+	private ITelStatusService ucservice;
 	
 	@Autowired
-	public TestController(SimpMessagingTemplate template, IQuoteTelStatusService ucservice) {
+	public TestController(SimpMessagingTemplate template, ITelStatusService ucservice) {
 		this.template = template;
 		this.ucservice = ucservice;
 	}

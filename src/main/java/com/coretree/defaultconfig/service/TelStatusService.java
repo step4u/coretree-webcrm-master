@@ -32,23 +32,19 @@ import com.coretree.defaultconfig.mapper.Customer;
 import com.coretree.defaultconfig.mapper.CustomerMapper;
 import com.coretree.defaultconfig.mapper.Member;
 import com.coretree.defaultconfig.mapper.MemberMapper;
-import com.coretree.defaultconfig.model.WorkTime;
-import com.coretree.defaultconfig.model.WorkTimes;
 import com.coretree.event.HaveGotUcMessageEventArgs;
 import com.coretree.event.IEventHandler;
-import com.coretree.interfaces.IQuoteTelStatusService;
+import com.coretree.interfaces.ITelStatusService;
 import com.coretree.models.GroupWareData;
 import com.coretree.models.SmsMsg;
 import com.coretree.models.UcMessage;
 import com.coretree.socket.*;
 import com.coretree.util.Const4pbx;
 
-import ch.qos.logback.core.joran.util.ConfigurationWatchListUtil;
-
 @Service
 @RestController
-public class QuoteTelStatusService implements ApplicationListener<BrokerAvailabilityEvent>, IEventHandler<HaveGotUcMessageEventArgs>, IQuoteTelStatusService {
-	private static Log logger = LogFactory.getLog(QuoteTelStatusService.class);
+public class TelStatusService implements ApplicationListener<BrokerAvailabilityEvent>, IEventHandler<HaveGotUcMessageEventArgs>, ITelStatusService {
+	private static Log logger = LogFactory.getLog(TelStatusService.class);
 	private final MessageSendingOperations<String> messagingTemplate;
 	private final SimpMessagingTemplate msgTemplate;
 	private AtomicBoolean brokerAvailable = new AtomicBoolean();
@@ -67,7 +63,7 @@ public class QuoteTelStatusService implements ApplicationListener<BrokerAvailabi
 	private List<Member> userstate = new ArrayList<Member>();
 
 	@Autowired
-	public QuoteTelStatusService(MessageSendingOperations<String> messagingTemplate, SimpMessagingTemplate msgTemplate) {
+	public TelStatusService(MessageSendingOperations<String> messagingTemplate, SimpMessagingTemplate msgTemplate) {
 		this.messagingTemplate = messagingTemplate;
 		this.msgTemplate = msgTemplate;
 	}
@@ -93,8 +89,6 @@ public class QuoteTelStatusService implements ApplicationListener<BrokerAvailabi
 		sendExtensionStatus();
 	}
 	
-	// subscribe extension status
-	// @Scheduled(fixedDelay=5000)
 	private void sendExtensionStatus() {
 		UcMessage msg = new UcMessage();
 		msg.cmd = Const4pbx.UC_BUSY_EXT_REQ;
@@ -747,8 +741,8 @@ public class QuoteTelStatusService implements ApplicationListener<BrokerAvailabi
 	}
 
 	class Timer_Elapsed extends TimerTask {
-		public QuoteTelStatusService parent = null;
-		public Timer_Elapsed(QuoteTelStatusService obj) {
+		public TelStatusService parent = null;
+		public Timer_Elapsed(TelStatusService obj) {
 			this.parent = obj;
 		}
 		
