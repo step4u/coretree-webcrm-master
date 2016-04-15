@@ -565,7 +565,7 @@
 			});
 			
 			if (subgroup) {
-				$("#addCustomer #subgroup").val(subgroup);				
+				$("#addCustomer #subgroup").val(subgroup);
 			}
 		});
 	}
