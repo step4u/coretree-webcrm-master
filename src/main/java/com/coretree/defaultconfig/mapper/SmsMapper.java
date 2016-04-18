@@ -3,10 +3,10 @@ package com.coretree.defaultconfig.mapper;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.ibatis.annotations.Param;
 import org.springframework.boot.mybatis.autoconfigure.Mapper;
 
 import com.coretree.defaultconfig.model.SearchConditions;
+import com.coretree.models.SmsData;
 
 @Mapper
 public interface SmsMapper {
@@ -16,5 +16,5 @@ public interface SmsMapper {
 	List<Sms> getByTxt(String txt);
     void del(long idx);
     void delAll(ArrayList<Sms> list);
-    void add(Sms sms);
+    void add(SmsData data);
 }

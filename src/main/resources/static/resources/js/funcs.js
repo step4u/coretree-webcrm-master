@@ -74,7 +74,13 @@
 					if ($("#btnMemoRedirect").hasClass("disabled")) $("#btnMemoRedirect").removeClass("disabled");
 				}
 				break;
-			case UC_SMS_SEND_RES:
+			case UC_SMS_INFO_REQ:
+				if ($("#ctrlsms").length) {
+			    	var scope = angular.element($("#ctrlsms")).scope();
+				    scope.$apply(function () {
+				        scope.getPage();
+				    });
+				}
 /*				
 			    var smsinfo = {
 					idx: -1,

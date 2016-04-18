@@ -166,8 +166,8 @@
                     </li>
                     <li>
                         <a href="#/smses">
-                            <i class="fa fa-comment fa-fw"></i>
-                            <span class="menu-text">SMS 내역</span>
+                            <i class="fa fa-paper-plane fa-fw badge badge-danger"></i>
+                            <span class="menu-text">SMS 내역 <span class="badge badge-danger">N</span></span>
                             <span class="selected"></span>
                         </a>
                     </li>
@@ -569,13 +569,24 @@
 			</div>
 			<div class="modal-body">
 				<div class="form-group">
-					<input type="hidden" id="receivephones" />
-					<textarea class="form-control" style="height: 150px;" id="smstxt" maxlength="80"></textarea>
+					<div>
+						<label for="receivephones">받는번호</label>
+					</div>
+					<div>
+						<input type="text" class="form-control" id="receivephones" readonly style="margin-bottom: 5px;" />
+					</div>
+				</div>
+				<div class="form-group">
+					<div>
+						<textarea class="form-control" style="height: 150px;" id="smstxt" maxlength="80"></textarea>
+					</div>
 				</div>
       		</div>
       		<div class="modal-footer">
+      			<div>
         		<button type="button" class="btn btn-primary" id="btnSmsSend">보내기</button>
         		<button type="button" class="btn btn-default" id="btnSmsClose">닫기</button>
+        		</div>
       		</div>
     	</div>
   	</div>

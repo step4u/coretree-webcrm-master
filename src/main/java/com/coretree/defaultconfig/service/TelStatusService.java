@@ -32,11 +32,12 @@ import com.coretree.defaultconfig.mapper.Customer;
 import com.coretree.defaultconfig.mapper.CustomerMapper;
 import com.coretree.defaultconfig.mapper.Member;
 import com.coretree.defaultconfig.mapper.MemberMapper;
+import com.coretree.defaultconfig.mapper.SmsMapper;
 import com.coretree.event.HaveGotUcMessageEventArgs;
 import com.coretree.event.IEventHandler;
 import com.coretree.interfaces.ITelStatusService;
 import com.coretree.models.GroupWareData;
-import com.coretree.models.SmsMsg;
+import com.coretree.models.SmsData;
 import com.coretree.models.UcMessage;
 import com.coretree.socket.*;
 import com.coretree.util.Const4pbx;
@@ -49,6 +50,7 @@ public class TelStatusService implements ApplicationListener<BrokerAvailabilityE
 	private final SimpMessagingTemplate msgTemplate;
 	private AtomicBoolean brokerAvailable = new AtomicBoolean();
 	// private final StockQuoteGenerator quoteGenerator = new StockQuoteGenerator();
+	private ByteOrder byteorder = ByteOrder.BIG_ENDIAN;
 	
 	@Autowired
 	private MemberMapper memberMapper;
@@ -58,6 +60,8 @@ public class TelStatusService implements ApplicationListener<BrokerAvailabilityE
 	private CallMapper callMapper;
 	@Autowired
 	private Configurations configs;
+	@Autowired
+	private SmsMapper smsMapper;
 	
 	private List<Call> curcalls = new ArrayList<Call>();
 	private List<Member> userstate = new ArrayList<Member>();
@@ -73,11 +77,8 @@ public class TelStatusService implements ApplicationListener<BrokerAvailabilityE
 	@Override
 	public void onApplicationEvent(BrokerAvailabilityEvent event) {
 		this.brokerAvailable.set(event.isBrokerAvailable());
-		
-		// uc = new UcServer("14.63.171.190", 31001, 1, ByteOrder.BIG_ENDIAN);
-		// uc = new UcServer("14.63.168.129", 31001, 1, ByteOrder.BIG_ENDIAN);
-		// uc = new UcServer("127.0.0.1", 31001, 1, ByteOrder.BIG_ENDIAN);
-		uc = new UcServer(configs.getPbxip(), 31001, 1, ByteOrder.BIG_ENDIAN);
+
+		uc = new UcServer(configs.getPbxip(), 31001, 1, this.byteorder);
 		uc.HaveGotUcMessageEventHandler.addEventHandler(this);
 		uc.regist();
 
@@ -143,7 +144,7 @@ public class TelStatusService implements ApplicationListener<BrokerAvailabilityE
 	}
 	
 	@MessageMapping("/sendmsg")
-	public void executeTrade(SmsMsg message, Principal principal) {
+	public void executeTrade(SmsData message, Principal principal) {
 		switch (message.getCmd()) {
 			case Const4pbx.UC_SMS_SEND_REQ:
 				this.SendSms(message);
@@ -164,7 +165,7 @@ public class TelStatusService implements ApplicationListener<BrokerAvailabilityE
 	public void eventReceived(Object sender, HaveGotUcMessageEventArgs e) {
 		// when a message have been arrived from the groupware socket 31001, an event raise.
 		// DB
-		GroupWareData data = (GroupWareData) e.getItem();
+		GroupWareData data = new GroupWareData(e.getItem(), byteorder);
 		System.out.println(">>> " + data.toString());
 
 		if (!this.brokerAvailable.get()) return;
@@ -175,6 +176,10 @@ public class TelStatusService implements ApplicationListener<BrokerAvailabilityE
 			case Const4pbx.UC_REGISTER_RES:
 			case Const4pbx.UC_UNREGISTER_RES:
 			case Const4pbx.UC_BUSY_EXT_RES:
+				break;
+			case Const4pbx.UC_SMS_SEND_RES:
+				SmsData smsdata = new SmsData(e.getItem(), byteorder);
+				System.out.println(">>> " + smsdata.toString());
 				break;
 			case Const4pbx.UC_REPORT_EXT_STATE:
 				for (Member m : userstate) {
@@ -190,28 +195,8 @@ public class TelStatusService implements ApplicationListener<BrokerAvailabilityE
 			case Const4pbx.UC_REPORT_WAITING_COUNT:
 				this.PassReportExtState(data);
 				break;
-			case Const4pbx.UC_SMS_SEND_RES:
-				// SmsMsg smsdata = new SmsMsg();
-				// smsdata.toObject(e.getItem().toBytes());
-
-				System.err.println("UC_SMS_SEND_RES : " + data.toString());
-				if (data.getStatus() == Const4pbx.UC_STATUS_SUCCESS) {
-					
-				}
-
-				
-				Member smsmem = memberMapper.selectByExt(data.getCaller());
-				
-				if (smsmem.getUsername() == null) return;
-				if (smsmem.getUsername().isEmpty()) return;
-				
-				payload = new UcMessage();
-				payload.cmd = data.getCmd();
-				payload.extension = data.getCaller();
-				payload.caller = data.getCaller();
-				payload.callee = data.getCallee();
-				payload.status = data.getStatus();
-				this.msgTemplate.convertAndSendToUser(smsmem.getUsername(), "/queue/groupware", payload);
+			case Const4pbx.UC_SMS_INFO_REQ:
+				this.PassReportSms(e.getItem());
 				break;
 			default:
 				if (data.getExtension() == null) return;
@@ -721,6 +706,19 @@ public class TelStatusService implements ApplicationListener<BrokerAvailabilityE
 
 	}
 
+	private void PassReportSms(byte[] bytes) {
+		SmsData data = new SmsData(bytes, byteorder);
+		
+		Member mem = userstate.stream().filter(x -> x.getExtension().equals(data.getFrom_ext())).findFirst().get();
+		
+		if (mem.getUsername() == null) return;
+		if (mem.getUsername().isEmpty()) return;
+		
+		// smsMapper.add(data);
+		// this.msgTemplate.convertAndSendToUser(mem.getUsername(), "/queue/groupware", data);
+		data.setCmd(Const4pbx.UC_SMS_INFO_RES);
+		this.SendSms(data);
+	}
 		
 	@Override
 	public void RequestToPbx(UcMessage msg) {
@@ -732,7 +730,7 @@ public class TelStatusService implements ApplicationListener<BrokerAvailabilityE
 	}
 	
 	@Override
-	public void SendSms(SmsMsg msg) {
+	public void SendSms(SmsData msg) {
 		try {
 			uc.Send(msg);
 		} catch (UnknownHostException e) {

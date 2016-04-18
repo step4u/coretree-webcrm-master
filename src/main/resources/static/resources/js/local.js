@@ -273,6 +273,9 @@
 */
 		
 	    $("#btnSmsSend").click(function(){
+	    	if ($("#receivephones").val() == '') return;
+	    	if ($("#smstxt").val() == '') return;
+	    	
 	    	var rphones = $("#receivephones").val();
 	    	var arrrphones = rphones.split(",");
 	        smsmsg = {
@@ -292,7 +295,8 @@
 		    	var scope = angular.element($("#ctrlsms")).scope();
 			    scope.$apply(function () {
 			        scope.getPage('');
-			    });*/
+			    });
+*/
 	    });
 	    
 	    $("#btnSmsClose").click(function(){

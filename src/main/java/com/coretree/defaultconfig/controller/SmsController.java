@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.coretree.defaultconfig.mapper.Sms;
 import com.coretree.defaultconfig.mapper.SmsMapper;
 import com.coretree.defaultconfig.model.SearchConditions;
+import com.coretree.models.SmsData;
 
 @RestController
 public class SmsController {
@@ -46,7 +47,7 @@ public class SmsController {
 	}
 	
 	@RequestMapping(path="/sms/add/msg", method=RequestMethod.POST)
-	public void addMsg(@RequestBody Sms sms, Principal principal) {
-		mapper.add(sms);
+	public void addMsg(@RequestBody SmsData data, Principal principal) {
+		mapper.add(data);
 	}
 }

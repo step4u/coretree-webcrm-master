@@ -61,9 +61,9 @@
     </select>
     
     <insert id="add">
-    	insert into sms ( cust_tel, contents, result ) values (
-		<foreach collection="custs_tel" item="item" separator=",">
-			#{item}, #{contents}, #{result} 
+    	insert into sms ( cust_tel, contents ) values (
+		<foreach collection="receiverphones" item="phonenum" separator=",">
+			#{phonenum}, #{contents}
 		</foreach>
 		)
     </insert>
