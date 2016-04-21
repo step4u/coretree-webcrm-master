@@ -47,7 +47,7 @@ public class SmsController {
 	}
 	
 	@RequestMapping(path="/sms/add/msg", method=RequestMethod.POST)
-	public void addMsg(@RequestBody SmsData data, Principal principal) {
+	public void addMsg(@RequestBody Sms data, Principal principal) {
 		mapper.add(data);
 	}
 }

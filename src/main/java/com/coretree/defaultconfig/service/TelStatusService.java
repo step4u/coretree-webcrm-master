@@ -32,6 +32,7 @@ import com.coretree.defaultconfig.mapper.Customer;
 import com.coretree.defaultconfig.mapper.CustomerMapper;
 import com.coretree.defaultconfig.mapper.Member;
 import com.coretree.defaultconfig.mapper.MemberMapper;
+import com.coretree.defaultconfig.mapper.Sms;
 import com.coretree.defaultconfig.mapper.SmsMapper;
 import com.coretree.event.HaveGotUcMessageEventArgs;
 import com.coretree.event.IEventHandler;
@@ -65,6 +66,7 @@ public class TelStatusService implements ApplicationListener<BrokerAvailabilityE
 	
 	private List<Call> curcalls = new ArrayList<Call>();
 	private List<Member> userstate = new ArrayList<Member>();
+	private List<SmsData> smsrunning = new ArrayList<SmsData>();
 
 	@Autowired
 	public TelStatusService(MessageSendingOperations<String> messagingTemplate, SimpMessagingTemplate msgTemplate) {
@@ -178,8 +180,9 @@ public class TelStatusService implements ApplicationListener<BrokerAvailabilityE
 			case Const4pbx.UC_BUSY_EXT_RES:
 				break;
 			case Const4pbx.UC_SMS_SEND_RES:
-				SmsData smsdata = new SmsData(e.getItem(), byteorder);
-				System.out.println(">>> " + smsdata.toString());
+				//SmsData smsdata = new SmsData(e.getItem(), byteorder);
+				//System.out.println(">>> " + smsdata.toString());
+				this.PassReportSms(e.getItem());
 				break;
 			case Const4pbx.UC_REPORT_EXT_STATE:
 				for (Member m : userstate) {
@@ -196,7 +199,8 @@ public class TelStatusService implements ApplicationListener<BrokerAvailabilityE
 				this.PassReportExtState(data);
 				break;
 			case Const4pbx.UC_SMS_INFO_REQ:
-				this.PassReportSms(e.getItem());
+				// this.PassReportSms(e.getItem());
+				this.PassReportSms2(e.getItem());
 				break;
 			default:
 				if (data.getExtension() == null) return;
@@ -708,16 +712,50 @@ public class TelStatusService implements ApplicationListener<BrokerAvailabilityE
 
 	private void PassReportSms(byte[] bytes) {
 		SmsData data = new SmsData(bytes, byteorder);
+		System.out.println(">>> 2 " + data.toString());
+		
+		
+		for(String rphone : data.getRphones()) {
+			Sms sms = new Sms();
+			sms.setCusts_tel(rphone);
+			sms.setContents(data.getMessage());
+			smsMapper.add(sms);
+		}
+		
+		r.lock();
+		try {
+			this.smsrunning.add(data);
+		} finally {
+			r.unlock();
+		}
+		
+		// this.msgTemplate.convertAndSendToUser(mem.getUsername(), "/queue/groupware", data);
+	}
+	
+	private void PassReportSms2(byte[] bytes) {
+		SmsData data = new SmsData(bytes, byteorder);
+		data.setCmd(Const4pbx.UC_SMS_INFO_RES);
+		this.SendSms(data);
 		
 		Member mem = userstate.stream().filter(x -> x.getExtension().equals(data.getFrom_ext())).findFirst().get();
 		
 		if (mem.getUsername() == null) return;
 		if (mem.getUsername().isEmpty()) return;
 		
-		// smsMapper.add(data);
-		// this.msgTemplate.convertAndSendToUser(mem.getUsername(), "/queue/groupware", data);
-		data.setCmd(Const4pbx.UC_SMS_INFO_RES);
-		this.SendSms(data);
+		SmsData runningdata = null;
+		
+		r.lock();
+		try {
+			runningdata = smsrunning.stream().filter(x -> x.getFrom_ext().equals(data.getFrom_ext())).findFirst().get();
+		} finally {
+			r.unlock();
+		}
+		
+		if (data.getStatus() == Const4pbx.UC_STATUS_SUCCESS) {
+			
+		}
+		
+		this.msgTemplate.convertAndSendToUser(mem.getUsername(), "/queue/groupware", data);
 	}
 		
 	@Override

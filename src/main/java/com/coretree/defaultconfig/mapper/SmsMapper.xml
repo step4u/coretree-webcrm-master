@@ -1,10 +1,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.coretree.defaultconfig.mapper.SmsMapper">
 
-    <resultMap id="Map" type="com.coretree.defaultconfig.mapper.Sms">
+    <resultMap id="smsMap" type="com.coretree.defaultconfig.mapper.Sms">
         <id     property="idx"    		column="idx" />
         <result property="custs_idx"	column="custs_idx" />
-        <result property="custs_tel"   	column="cust_tel" />
+        <result property="custs_tel"   	column="custs_tel" />
         <result property="contents"     column="contents" />
         <result property="result"     	column="result" />
         <result property="regdate"      column="regdate" />
@@ -22,7 +22,7 @@
 		</if>
     </select>
     
-    <select id="getAll" resultMap="Map">
+    <select id="getAll" resultMap="smsMap">
     	select first #{rowsperpage} skip ((#{curpage} - 1) * #{rowsperpage})
 			idx, custs_idx, custs_tel, contents, result, regdate
 			from sms
@@ -36,13 +36,13 @@
 			order by regdate desc
     </select>
     
-<!--     <select id="getByIdx" resultMap="Map">
+<!--     <select id="getByIdx" resultMap="smsMap">
     	select idx, custs_idx, custs_tel, contents, result, regdate
 			from sms
 			where idx=#{idx}
     </select> -->
     
-    <select id="getByTxt" resultMap="Map">
+    <select id="getByTxt" resultMap="smsMap">
     	select idx, custs_idx, custs_tel, contents, result, regdate
 			from sms
 			where cust_tel like #{txt}
@@ -60,11 +60,12 @@
 		</foreach>
     </select>
     
-    <insert id="add">
-    	insert into sms ( cust_tel, contents ) values (
-		<foreach collection="receiverphones" item="phonenum" separator=",">
-			#{phonenum}, #{contents}
-		</foreach>
-		)
+    <insert id="add" useGeneratedKeys="true" keyProperty="idx">
+		insert into sms (custs_tel, contents) values (#{custs_tel}, #{contents})
     </insert>
+    
+    <update id="modi">
+    	update sms set result=#{result} where idx=
+		insert into sms (custs_tel, contents) values (#{custs_tel}, #{contents})
+    </update>
 </mapper>
