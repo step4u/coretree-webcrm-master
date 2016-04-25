@@ -3,7 +3,8 @@
 
     <resultMap id="smsMap" type="com.coretree.defaultconfig.mapper.Sms">
         <id     property="idx"    		column="idx" />
-        <result property="custs_idx"	column="custs_idx" />
+        <result property="username"		column="username" />
+        <result property="ext"			column="ext" />
         <result property="custs_tel"   	column="custs_tel" />
         <result property="contents"     column="contents" />
         <result property="result"     	column="result" />
@@ -60,11 +61,17 @@
 		</foreach>
     </select>
     
-    <insert id="add" useGeneratedKeys="true" keyProperty="idx">
-		insert into sms (custs_tel, contents) values (#{custs_tel}, #{contents})
+    <insert id="add" useGeneratedKeys="true" keyProperty="idx" keyColumn="idx">
+		<selectKey keyProperty="username" resultType="String" order="BEFORE">
+			select username from users_exts where extension = #{ext}
+		</selectKey>
+		insert into sms (username, custs_tel, contents) values (#{username}, #{custs_tel}, #{contents})
+<!-- 		<selectKey keyProperty="idx" resultType="java.lang.Long" order="AFTER">
+			select gen_id(GEN_SMS_IDX, 0) from rdb$database
+		</selectKey> -->
     </insert>
     
-    <update id="modi">
+    <update id="setresult">
     	update sms set result=#{result} where idx=
 		insert into sms (custs_tel, contents) values (#{custs_tel}, #{contents})
     </update>

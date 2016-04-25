@@ -4,7 +4,8 @@ import java.util.Date;
 
 public class Sms {
 	private long idx;
-	private int custs_idx;
+	private String username;
+	private String ext;
 	private String custs_tel;
 	private String contents;
 	private int result;
@@ -17,8 +18,11 @@ public class Sms {
 	public long getIdx() { return this.idx; }
 	public void setIdx(long idx) { this.idx = idx; }
 	
-	public int getCusts_idx() { return this.custs_idx; }
-	public void setCusts_idx(int custs_idx) { this.custs_idx = custs_idx; }
+	public String getUsername() { return this.username; }
+	public void setUsername(String username) { this.username = username; }
+	
+	public String getExt() { return this.ext; }
+	public void setExt(String ext) { this.ext = ext; }
 
 	public String getCusts_tel() { return this.custs_tel; }
 	public void setCusts_tel(String custs_tel) { this.custs_tel = custs_tel; }
@@ -46,7 +50,7 @@ public class Sms {
 	
 	@Override
 	public String toString() {
-		return "Record [idx=" + idx + ", custs_idx=" + custs_idx + ", custs_tel=" + custs_tel + ", contents=" + contents
+		return "Record [idx=" + idx + ", username=" + username + ", ext=" + ext  +", custs_tel=" + custs_tel + ", contents=" + contents
 				+ ", result=" + result + ", regdate=" + regdate + "]";
 	}
 }

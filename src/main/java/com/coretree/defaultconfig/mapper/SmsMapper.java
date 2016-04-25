@@ -16,5 +16,6 @@ public interface SmsMapper {
 	List<Sms> getByTxt(String txt);
     void del(long idx);
     void delAll(ArrayList<Sms> list);
-    void add(Sms data);
+    long add(Sms data);
+    void setresult(SmsData data);
 }

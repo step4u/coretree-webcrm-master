@@ -66,7 +66,7 @@ public class TelStatusService implements ApplicationListener<BrokerAvailabilityE
 	
 	private List<Call> curcalls = new ArrayList<Call>();
 	private List<Member> userstate = new ArrayList<Member>();
-	private List<SmsData> smsrunning = new ArrayList<SmsData>();
+	private List<Sms> smsrunning = new ArrayList<Sms>();
 
 	@Autowired
 	public TelStatusService(MessageSendingOperations<String> messagingTemplate, SimpMessagingTemplate msgTemplate) {
@@ -162,7 +162,7 @@ public class TelStatusService implements ApplicationListener<BrokerAvailabilityE
 		//System.err.println(String.format("handleException : message : %s", exception.getMessage()));
 		return exception.getMessage();
 	}
- 
+
 	@Override
 	public void eventReceived(Object sender, HaveGotUcMessageEventArgs e) {
 		// when a message have been arrived from the groupware socket 31001, an event raise.
@@ -714,17 +714,15 @@ public class TelStatusService implements ApplicationListener<BrokerAvailabilityE
 		SmsData data = new SmsData(bytes, byteorder);
 		System.out.println(">>> 2 " + data.toString());
 		
-		
-		for(String rphone : data.getRphones()) {
-			Sms sms = new Sms();
-			sms.setCusts_tel(rphone);
-			sms.setContents(data.getMessage());
-			smsMapper.add(sms);
-		}
+		Sms sms = new Sms();
+		sms.setExt(data.getFrom_ext());
+		sms.setCusts_tel(data.getReceiverphones());
+		sms.setContents(data.getMessage());
+		long ttt = smsMapper.add(sms);
 		
 		r.lock();
 		try {
-			this.smsrunning.add(data);
+			this.smsrunning.add(sms);
 		} finally {
 			r.unlock();
 		}
@@ -742,20 +740,24 @@ public class TelStatusService implements ApplicationListener<BrokerAvailabilityE
 		if (mem.getUsername() == null) return;
 		if (mem.getUsername().isEmpty()) return;
 		
-		SmsData runningdata = null;
+/*		Sms runningdata = null;
 		
 		r.lock();
 		try {
-			runningdata = smsrunning.stream().filter(x -> x.getFrom_ext().equals(data.getFrom_ext())).findFirst().get();
+			runningdata = smsrunning.stream().filter(x -> x.getExt().equals(data.getFrom_ext())).findFirst().get();
 		} finally {
 			r.unlock();
-		}
+		}*/
 		
 		if (data.getStatus() == Const4pbx.UC_STATUS_SUCCESS) {
 			
 		}
 		
-		this.msgTemplate.convertAndSendToUser(mem.getUsername(), "/queue/groupware", data);
+		UcMessage payload = new UcMessage();
+		payload.cmd = data.getCmd();
+		payload.extension = data.getFrom_ext();
+		
+		// this.msgTemplate.convertAndSendToUser(mem.getUsername(), "/queue/groupware", payload);
 	}
 		
 	@Override
