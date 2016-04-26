@@ -3,6 +3,7 @@ package com.coretree.defaultconfig.service;
 import java.net.UnknownHostException;
 import java.nio.ByteOrder;
 import java.security.Principal;
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,10 +39,13 @@ import com.coretree.event.HaveGotUcMessageEventArgs;
 import com.coretree.event.IEventHandler;
 import com.coretree.interfaces.ITelStatusService;
 import com.coretree.models.GroupWareData;
+import com.coretree.models.ReceivedRTP;
 import com.coretree.models.SmsData;
 import com.coretree.models.UcMessage;
 import com.coretree.socket.*;
 import com.coretree.util.Const4pbx;
+import com.coretree.util.Finalvars;
+import com.coretree.util.Util;
 
 @Service
 @RestController
@@ -712,13 +716,11 @@ public class TelStatusService implements ApplicationListener<BrokerAvailabilityE
 
 	private void PassReportSms(byte[] bytes) {
 		SmsData data = new SmsData(bytes, byteorder);
-		System.out.println(">>> 2 " + data.toString());
-		
 		Sms sms = new Sms();
 		sms.setExt(data.getFrom_ext());
 		sms.setCusts_tel(data.getReceiverphones());
 		sms.setContents(data.getMessage());
-		long ttt = smsMapper.add(sms);
+		sms.setIdx(smsMapper.add(sms));
 		
 		r.lock();
 		try {
@@ -733,6 +735,11 @@ public class TelStatusService implements ApplicationListener<BrokerAvailabilityE
 	private void PassReportSms2(byte[] bytes) {
 		SmsData data = new SmsData(bytes, byteorder);
 		data.setCmd(Const4pbx.UC_SMS_INFO_RES);
+		if (data.getStatus() == Const4pbx.UC_STATUS_FAIL) {
+			data.setStatus(Const4pbx.UC_STATUS_FAIL);
+		} else {
+			data.setStatus(Const4pbx.UC_STATUS_SUCCESS);
+		}
 		this.SendSms(data);
 		
 		Member mem = userstate.stream().filter(x -> x.getExtension().equals(data.getFrom_ext())).findFirst().get();
@@ -740,24 +747,37 @@ public class TelStatusService implements ApplicationListener<BrokerAvailabilityE
 		if (mem.getUsername() == null) return;
 		if (mem.getUsername().isEmpty()) return;
 		
-/*		Sms runningdata = null;
-		
-		r.lock();
-		try {
-			runningdata = smsrunning.stream().filter(x -> x.getExt().equals(data.getFrom_ext())).findFirst().get();
-		} finally {
-			r.unlock();
-		}*/
-		
-		if (data.getStatus() == Const4pbx.UC_STATUS_SUCCESS) {
-			
-		}
-		
 		UcMessage payload = new UcMessage();
 		payload.cmd = data.getCmd();
 		payload.extension = data.getFrom_ext();
+		payload.status = data.getStatus();
 		
-		// this.msgTemplate.convertAndSendToUser(mem.getUsername(), "/queue/groupware", payload);
+		Sms runningsms = null;
+		
+		r.lock();
+		try {
+			runningsms = smsrunning.stream().filter(x -> x.getExt().equals(data.getFrom_ext())).findFirst().get();
+			runningsms.setResult(data.getStatus());
+			payload.status = data.getStatus();
+			smsMapper.setresult(runningsms);
+		} catch (NoSuchElementException | NullPointerException e) {
+			payload.status = Const4pbx.WS_STATUS_ING_NOTFOUND;
+		} catch (Exception e) {
+			
+		} finally {
+			r.unlock();
+		}
+		
+		w.lock();
+		try {
+			smsrunning.removeIf(x -> x.equals(data.getFrom_ext()));
+		} catch (UnsupportedOperationException | NullPointerException e) {
+			payload.status = Const4pbx.WS_STATUS_ING_UNSUPPORTED;
+		} finally {
+			w.unlock();
+		}
+		
+		this.msgTemplate.convertAndSendToUser(mem.getUsername(), "/queue/groupware", payload);
 	}
 		
 	@Override

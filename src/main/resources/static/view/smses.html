@@ -15,15 +15,15 @@
 						        <span class="glyphicon glyphicon-calendar"></span>
 						    </span>
 						</div>
-						<input type='text' id='txtsmssearch' class='form-control' placeholder="전화번호 / 휴대전화" style="margin-left: 10px; max-width: 11em;" />
+						<input type='text' id='txtsmssearch' class='form-control' placeholder="고객 전화 / 휴대전화" style="margin-left: 10px; max-width: 11em;" />
 						<button type='button' for='txtsearch' class="btn btn-info btn-sm" id="btnSmsSearch">검색</button>
-						<!-- <button type="button" class="btn btn-warning btn-sm" style="float: right;" id="btnSmsDel">삭제</button> -->
+						<button type="button" class="btn btn-warning btn-sm" style="float: right;" id="btnSmsDel">삭제</button>
 						<!-- <button type="button" class="btn btn-primary btn-sm" style="float: right;" id="btnSmsPop">내용작성</button> -->
 					</div>
 <script>
 	$(document).ready(function(){
 		var newdate = new Date();
-		var firstdate = new Date(newdate.getFullYear(), newdate.getMonth(), 1);
+		var firstdate = new Date(newdate.getFullYear(), newdate.getMonth(), newdate.getDate());
 		
 	    $('#datetimepicker1').datetimepicker({
 	    	locale: 'ko',
@@ -40,6 +40,18 @@
 	    });
 	    $("#datetimepicker2").on("dp.change", function (e) {
 	        $('#datetimepicker1').data("DateTimePicker").maxDate(e.date);
+	    });
+	    $("#btnSmsSearch").click(function(){
+	    	var scope = angular.element($("#ctrlsms")).scope();
+		    scope.$apply(function () {
+		        scope.getPage($("#txtsmssearch").val());
+		    });
+	    });
+	    $("#btnSmsDel").click(function(){
+	    	var scope = angular.element($("#ctrlsms")).scope();
+		    scope.$apply(function () {
+		        scope.deleteAllRow();
+		    });
 	    });
 	});
 </script>

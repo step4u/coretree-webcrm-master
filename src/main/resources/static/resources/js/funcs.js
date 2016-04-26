@@ -74,13 +74,16 @@
 					if ($("#btnMemoRedirect").hasClass("disabled")) $("#btnMemoRedirect").removeClass("disabled");
 				}
 				break;
-			case UC_SMS_INFO_REQ:
+			case UC_SMS_INFO_RES:
 				if ($("#ctrlsms").length) {
 			    	var scope = angular.element($("#ctrlsms")).scope();
 				    scope.$apply(function () {
 				        scope.getPage();
 				    });
 				}
+				
+				$("#ModalSms").modal("hide");
+
 /*				
 			    var smsinfo = {
 					idx: -1,
@@ -411,7 +414,7 @@
 				break;
 		}
 		
-		console.log("TelePhoneFunction() : " + JSON.stringify(trade));
+		// console.log("TelePhoneFunction() : " + JSON.stringify(trade));
 	 	stompClient.send("/app/traders", {}, JSON.stringify(trade));
 	 	$("#ModalTransfer").modal("hide");
 	}

@@ -290,13 +290,6 @@
             }
 	    	
 	    	stompClient.send("/app/sendmsg", {}, JSON.stringify(smsmsg));
-/*				$('#ModalSms').modal("hide");
-				
-		    	var scope = angular.element($("#ctrlsms")).scope();
-			    scope.$apply(function () {
-			        scope.getPage('');
-			    });
-*/
 	    });
 	    
 	    $("#btnSmsClose").click(function(){
@@ -309,7 +302,9 @@
     	});
 		
 		$("#ModalSms").on('hidden.bs.modal', function () {
-			
+			$("#ModalSms #btnSmsSend").css("display", "inline");
+			$("#ModalSms #receivephones").val("");
+			$("#ModalSms #smstxt").val("");
     	});
 		/*** script for sms ***/
 		

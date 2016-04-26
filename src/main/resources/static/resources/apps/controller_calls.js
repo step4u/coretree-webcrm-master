@@ -95,8 +95,8 @@
 			    	});
 	
 					gridApi.selection.on.rowSelectionChangedBatch($scope,function(rows){
-						var msg = 'rows changed ' + rows.length;
-						$log.log(msg);
+//						var msg = 'rows changed ' + rows.length;
+//						$log.log(msg);
 						
 						$scope.gridOptions.selectedItems = rows;
 					});

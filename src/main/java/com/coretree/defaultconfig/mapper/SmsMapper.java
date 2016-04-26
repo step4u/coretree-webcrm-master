@@ -4,18 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.boot.mybatis.autoconfigure.Mapper;
-
-import com.coretree.defaultconfig.model.SearchConditions;
-import com.coretree.models.SmsData;
+import com.coretree.defaultconfig.model.SmsSearchConditions;
 
 @Mapper
 public interface SmsMapper {
-	long count(SearchConditions condition);
-	List<Sms> getAll(SearchConditions condition);
+	long count(SmsSearchConditions condition);
+	List<Sms> getAll(SmsSearchConditions condition);
 	// Sms getByIdx(@Param("idx") long idx);
-	List<Sms> getByTxt(String txt);
+	List<Sms> getView(SmsSearchConditions condition);
     void del(long idx);
-    void delAll(ArrayList<Sms> list);
+    // void delAll(ArrayList<Sms> list);
     long add(Sms data);
-    void setresult(SmsData data);
+    void setresult(Sms sms);
 }

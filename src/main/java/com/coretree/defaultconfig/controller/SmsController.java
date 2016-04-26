@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.coretree.defaultconfig.mapper.Sms;
 import com.coretree.defaultconfig.mapper.SmsMapper;
 import com.coretree.defaultconfig.model.SearchConditions;
-import com.coretree.models.SmsData;
+import com.coretree.defaultconfig.model.SmsSearchConditions;
 
 @RestController
 public class SmsController {
@@ -22,28 +22,33 @@ public class SmsController {
 	SmsMapper mapper;
 	
 	@RequestMapping(path="/sms/get/count", method=RequestMethod.POST)
-	public long getCount(@RequestBody SearchConditions condition, Principal principal) {
+	public long getCount(@RequestBody SmsSearchConditions condition, Principal principal) {
+		condition.setUsername(principal.getName());
 		return mapper.count(condition);
 	}
 	
 	@RequestMapping(path="/sms/get/all", method=RequestMethod.POST)
-	public List<Sms> getAll(@RequestBody SearchConditions condition, Principal principal) {
+	public List<Sms> getAll(@RequestBody SmsSearchConditions condition, Principal principal) {
+		condition.setUsername(principal.getName());
 		return mapper.getAll(condition);
 	}
 	
-	@RequestMapping(path="/sms/get/search", method=RequestMethod.POST)
-	public List<Sms> getByTxt(@RequestBody SearchConditions condition, Principal principal) {
-		return mapper.getByTxt("%" + condition.getTxt() + "%");
+	@RequestMapping(path="/sms/get/view", method=RequestMethod.POST)
+	public List<Sms> getView(@RequestBody SmsSearchConditions condition, Principal principal) {
+		condition.setUsername(principal.getName());
+		return mapper.getView(condition);
 	}
 
 	@RequestMapping(path="/sms/del", method=RequestMethod.POST)
-	public void remove(@RequestBody SearchConditions condition, Principal principal) {
+	public void remove(@RequestBody SmsSearchConditions condition, Principal principal) {
 		mapper.del(condition.getIdx());
 	}
 	
 	@RequestMapping(path="/sms/del/all", method=RequestMethod.POST)
 	public void removeAll(ArrayList<Sms> list, Principal principal) {
-		mapper.delAll(list);
+		for(Sms sms : list) {
+			mapper.del(sms.getIdx());
+		}
 	}
 	
 	@RequestMapping(path="/sms/add/msg", method=RequestMethod.POST)

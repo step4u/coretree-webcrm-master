@@ -1,6 +1,6 @@
 package com.coretree.defaultconfig.mapper;
 
-import java.util.Date;
+import java.sql.Timestamp;
 
 public class Sms {
 	private long idx;
@@ -9,7 +9,8 @@ public class Sms {
 	private String custs_tel;
 	private String contents;
 	private int result;
-	private Date regdate;
+	private String resultTxt;
+	private Timestamp regdate;
 	private String sdate;
 	private String edate;
 	private int curpage;
@@ -33,8 +34,11 @@ public class Sms {
 	public int getResult() { return this.result; }
 	public void setResult(int result) { this.result = result; }
 	
-	public Date getRegdate() { return this.regdate; }
-	public void setRegdate(Date regdate) { this.regdate = regdate; }
+	public String getResultTxt() { return this.resultTxt; }
+	public void setResultTxt(String resultTxt) { this.resultTxt = resultTxt; }
+	
+	public Timestamp getRegdate() { return this.regdate; }
+	public void setRegdate(Timestamp regdate) { this.regdate = regdate; }
 	
 	public String getSdate() { return this.sdate; }
 	public void setSdate(String sdate) { this.sdate = sdate; }

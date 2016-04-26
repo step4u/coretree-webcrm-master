@@ -24,17 +24,18 @@
 				enableSorting: true,
 				showGridFooter: false,
 				columnDefs: [
-			    		      { displayName: '이름', field: 'name', headerCellClass: 'white', cellClass: 'grid-cell', width: 120 },
-			    		      { displayName: '전화번호', field: 'tel', headerCellClass:'white', cellClass: 'grid-cell', width: 120 },
-			    		      { displayName: '날짜', field: 'date', headerCellClass: 'white', cellClass: 'grid-cell', width: 120 },
-			    		      { displayName: '시각', field: 'time', headerCellClass: 'white', cellClass: 'grid-cell', width: 100 },
-			    		      { displayName: '통화시간', field: 'duration', headerCellClass: 'white', cellClass: 'grid-cell', width: 100 },
-			    		      { displayName: '상담내용', field: 'memo', headerCellClass: 'white', cellClass: 'grid-cell' },
+			    		      { displayName: '전화번호', field: 'custs_tel', headerCellClass:'white', cellClass: 'grid-cell', width: 230 },
+			    		      { displayName: '날짜', field: 'regdate', headerCellClass: 'white', cellClass: 'grid-cell', width: 100
+			    		    	  , type: 'date', cellFilter: 'date:\'yyyy-MM-dd\'' },
+			    		      { displayName: '시각', field: 'regdate', headerCellClass: 'white', cellClass: 'grid-cell', width: 80
+			    		    		  , type: 'date', cellFilter: 'date:\'HH:mm:ss\''},
+			    		      { displayName: '내용', field: 'contents', headerCellClass: 'white', cellClass: 'grid-cell' },
+			    		      { displayName: '상태', field: 'resultTxt', headerCellClass: 'white', cellClass: 'grid-cell', width: 80 },
 			    		      { displayName: '기타', field: 'etc',
 			    		    	  headerCellClass: 'white',
 			    		    	  cellClass: 'grid-cell-align',
-			    		    	  width: 120,
-			    		    	  cellTemplate: '<button class="btn btn-primary btn-xs" ng-click="grid.appScope.viewRow(row)">보기</button>'
+			    		    	  width: 100,
+			    		    	  cellTemplate: '<button class="btn btn-primary btn-xs" ng-click="grid.appScope.viewRow(row)">보기</button> <button class="btn btn-warning btn-xs" ng-click="grid.appScope.deleteRow(row)">삭제</button>'
 							  }
 			    		    ],
 			    groupHeaders: false,
@@ -50,63 +51,40 @@
 			    	
 			    	$scope.gridApi.core.on.sortChanged($scope, function(grid, sortColumns) {
 			            if (sortColumns.length == 0) {
-			            	paginationOptionsCall.sort = null;
+			            	paginationOptions.sort = null;
 			            } else {
-			            	paginationOptionsCall.sort = sortColumns[0].sort.direction;
+			            	paginationOptions.sort = sortColumns[0].sort.direction;
 			            }
 			            $scope.getPage();
 			    	});
 			    	
 			    	gridApi.pagination.on.paginationChanged($scope, function (newPage, pageSize) {
-			    		paginationOptionsCall.pageNumber = newPage;
-			    		paginationOptionsCall.pageSize = pageSize;
+			    		paginationOptions.pageNumber = newPage;
+			    		paginationOptions.pageSize = pageSize;
 			    		$scope.getPage();
 			    	});
 			    	
 			    	gridApi.selection.on.rowSelectionChanged($scope,function(row){
-			            var msg = 'row selected ' + row.isSelected;
-			            $log.log(msg);
+//			            var msg = 'row selected ' + row.isSelected;
+//			            $log.log(msg);
+			            $log.log("$scope.gridOptions.selectedItems.length : " + $scope.gridOptions.selectedItems.length);
 			    	});
 	
 					gridApi.selection.on.rowSelectionChangedBatch($scope,function(rows){
-						var msg = 'rows changed ' + rows.length;
-						$log.log(msg);
-						
 						$scope.gridOptions.selectedItems = rows;
+						$log.log("$scope.gridOptions.selectedItems.length : " + $scope.gridOptions.selectedItems.length);
+					});
+					
+					gridApi.selection.on.rowSelectionChangedBatch($scope,function(rows){
+						$log.log($scope);
+						$log.log(rows);
+						$scope.gridOptions.selectedItems = rows;
+						$log.log("$scope.gridOptions.selectedItems.length : " + $scope.gridOptions.selectedItems.length);
 					});
 			    }
 		};
 		
 		$scope.getPage = function(txt) {
-/*
-			var url;
-			
-			if (txt == ''){
-				url = '/sms/get/all/' + paginationOptions.pageNumber + '/' + paginationOptions.pageSize;
-			} else {
-				url = '/sms/get/search/' + txt;
-			}
-			
-			if (typeof(txt) == 'undefined'){
-				url = '/sms/get/all/' + paginationOptions.pageNumber + '/' + paginationOptions.pageSize;
-			}
-			
-			var counturl = '/sms/get/count';
-			$http.get(counturl)
-			.success(function(data) {
-				if ($scope.gridOptions.totalItems != data) {
-					paginationOptions.pageNumber = 1;
-				}
-				
-				$scope.gridOptions.totalItems = data;
-				
-				$http.post(url)
-				.success(function(data) {
-					$scope.gridOptions.data = data;
-				});
-			});
-*/			
-			
 			var condition = {
 		    		idx: 0,
 		    		sdate: $("#sdate").val(),
@@ -148,20 +126,81 @@
 		$scope.viewRow = function(row) {
 			var item = row.entity;
 			
-			$http.get('/sms/get/' + item.idx)
-			.success(function(data) {
-				$scope.getPage();
-				custbhv = bhv.none;
+			$("#receivephones").val(item.custs_tel);
+			$("#smstxt").val(item.contents);
+			$("#btnSmsSend").css("display","none");
+			$("#ModalSms").modal("show");
+
+/*
+			var condition = {
+	    		idx: item.idx,
+	    		sdate: '',
+	    		edate: '',
+    			txt: '',
+    			curpage: 0,
+    			rowsperpage: 0
+			};
+			 
+			$http({
+				method: "POST",
+				url: "/sms/get/view",
+				data: condition
+			}).then(function(response){
+    			$("#receivephones").val(item.custs_tel);
+    			$("#smstxt").val(item.contents);
+				$("#ModalSms").modal("show");
+			}, function(response){
+				
 			});
+*/
 		};
 		
 		$scope.deleteRow = function(row) {
 			custbhv = bhv.del;
 			var item = row.entity;
 			
+			var condition = {
+	    		idx: item.idx,
+	    		sdate: '',
+	    		edate: '',
+    			txt: '',
+    			curpage: 0,
+    			rowsperpage: 0
+			};
+			 
+			$http({
+				method: "POST",
+				url: "/sms/del",
+				data: condition
+			}).then(function(response){
+				$scope.getPage();
+				custbhv = bhv.none;
+			}, function(response){
+				custbhv = bhv.none;
+			});
+			
+/*			
 			$http.get('/sms/del/' + item.idx)
 			.success(function(data) {
 				$scope.getPage();
+				custbhv = bhv.none;
+			});
+*/
+		};
+		
+		$scope.deleteAllRow = function() {
+			custbhv = bhv.del;
+
+			alert($scope.gridOptions.selectedItems);
+			
+			$http({
+				method: "POST",
+				url: "/sms/del/all",
+				data: $scope.gridOptions.selectedItems
+			}).then(function(response){
+				$scope.getPage();
+				custbhv = bhv.none;
+			}, function(response){
 				custbhv = bhv.none;
 			});
 		};

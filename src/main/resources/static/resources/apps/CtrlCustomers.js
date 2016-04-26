@@ -26,15 +26,14 @@
 					            ,null
 						        ,['전화하기 : ' + itm.tel, function () {
 									trade = {
-							                cmd: UC_MAKE_CALL_REQ,
-							                extension: crmidentity.ext,
-							                caller: crmidentity.ext,
-							                callee: itm.tel,
-							                unconditional: '',
-							                status: -1
-							              };
+						                cmd: UC_MAKE_CALL_REQ,
+						                extension: crmidentity.ext,
+						                caller: crmidentity.ext,
+						                callee: itm.tel,
+						                unconditional: '',
+						                status: -1
+						              };
 							     	stompClient.send("/app/traders", {}, JSON.stringify(trade));
-						        	console.log("전화하기: " + angular.toJson(item.entity));
 						        }]
 					            ,['전화하기 : ' + itm.cellular, function () {
 									trade = {
@@ -46,7 +45,6 @@
 						                status: -1
 									};
 							     	stompClient.send("/app/traders", {}, JSON.stringify(trade));
-						        	console.log("전화하기: " + angular.toJson(item.entity));
 						        }]
 					            ,['SMS 한번에 보내기', function () {
 					            	var receivephones = '';
@@ -58,7 +56,6 @@
 					    			});
 					    			$("#receivephones").val(receivephones);
 					            	$("#ModalSms").modal("show");
-					            	// console.log(receivephones);
 						        }]
 						    ];
 			} else {
@@ -75,7 +72,6 @@
 								                status: -1
 								              };
 								     	stompClient.send("/app/traders", {}, JSON.stringify(trade));
-							        	console.log("전화하기: " + angular.toJson(item.entity));
 							        }]
 						            ,['전화하기 : ' + itm.cellular, function () {
 										trade = {
@@ -87,7 +83,6 @@
 							                status: -1
 										};
 								     	stompClient.send("/app/traders", {}, JSON.stringify(trade));
-							        	console.log("전화하기: " + angular.toJson(item.entity));
 							        }]
 						            ,['SMS 보내기 : ' + itm.cellular, function () {
 						            	$("#receivephones").val(itm.cellular);
