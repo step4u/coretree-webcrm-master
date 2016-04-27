@@ -22,7 +22,7 @@ public class CallController {
 	CallMapper mapper;
 	
 	@RequestMapping(path="/call/get/count", method=RequestMethod.POST)
-	public int getCount(@RequestBody SearchConditions condition, Principal principal) {
+	public long getCount(@RequestBody SearchConditions condition, Principal principal) {
 		condition.setUsername(principal.getName());
 		return mapper.count(condition);
 	}

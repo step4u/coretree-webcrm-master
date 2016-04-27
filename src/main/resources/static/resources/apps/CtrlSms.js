@@ -65,21 +65,47 @@
 			    	});
 			    	
 			    	gridApi.selection.on.rowSelectionChanged($scope,function(row){
-//			            var msg = 'row selected ' + row.isSelected;
-//			            $log.log(msg);
-			            $log.log("$scope.gridOptions.selectedItems.length : " + $scope.gridOptions.selectedItems.length);
+			            // $log.log(row);
+			            
+			    		if (row.isSelected) {
+			    			if ($scope.gridOptions.selectedItems.length > 0) {
+			    				var idx = $scope.gridOptions.selectedItems.indexOf(row);
+			    				
+			    				if (idx == -1) {
+			    					$scope.gridOptions.selectedItems.splice($scope.gridOptions.selectedItems.length-1, 0, row.entity);
+			    				}
+			    			} else {
+			    				$scope.gridOptions.selectedItems[0] = row.entity;
+			    			}
+			    		} else {
+			    			if ($scope.gridOptions.selectedItems.length > 0) {
+				    			var val = $scope.gridOptions.selectedItems.filter(function(element, index){
+				    				return element.idx === row.idx;
+				    	    	});
+			    				var idx = $scope.gridOptions.selectedItems.indexOf(val);
+			    				$scope.gridOptions.selectedItems.splice(idx, 1);
+			    			}
+			    		}
+
+//			            $log.log("$scope.gridOptions.selectedItems.length : " + $scope.gridOptions.selectedItems.length);
+//			            $log.log("$scope.gridOptions.selectedItems : " + $scope.gridOptions.selectedItems);
 			    	});
 	
 					gridApi.selection.on.rowSelectionChangedBatch($scope,function(rows){
-						$scope.gridOptions.selectedItems = rows;
-						$log.log("$scope.gridOptions.selectedItems.length : " + $scope.gridOptions.selectedItems.length);
-					});
-					
-					gridApi.selection.on.rowSelectionChangedBatch($scope,function(rows){
-						$log.log($scope);
-						$log.log(rows);
-						$scope.gridOptions.selectedItems = rows;
-						$log.log("$scope.gridOptions.selectedItems.length : " + $scope.gridOptions.selectedItems.length);
+						// $log.log(rows);
+						
+						if (rows[0].isSelected) {
+							for (var i = 0 ; i < rows.length ; i++) {
+								$scope.gridOptions.selectedItems[i] = rows[i].entity;
+							}
+							// $scope.gridOptions.selectedItems = rows.entity;
+						} else {
+							$scope.gridOptions.selectedItems = [];
+						}
+						
+//						$log.log("$scope.gridOptions.selectedItems.length : " + $scope.gridOptions.selectedItems.length);
+//						$log.log("$scope.gridOptions.selectedItems : " + $scope.gridOptions.selectedItems);
+//						$log.log("$scope.gridOptions.selectedItems : " + angular.toJson($scope.gridOptions.selectedItems));
 					});
 			    }
 		};
@@ -130,29 +156,6 @@
 			$("#smstxt").val(item.contents);
 			$("#btnSmsSend").css("display","none");
 			$("#ModalSms").modal("show");
-
-/*
-			var condition = {
-	    		idx: item.idx,
-	    		sdate: '',
-	    		edate: '',
-    			txt: '',
-    			curpage: 0,
-    			rowsperpage: 0
-			};
-			 
-			$http({
-				method: "POST",
-				url: "/sms/get/view",
-				data: condition
-			}).then(function(response){
-    			$("#receivephones").val(item.custs_tel);
-    			$("#smstxt").val(item.contents);
-				$("#ModalSms").modal("show");
-			}, function(response){
-				
-			});
-*/
 		};
 		
 		$scope.deleteRow = function(row) {
@@ -178,21 +181,11 @@
 			}, function(response){
 				custbhv = bhv.none;
 			});
-			
-/*			
-			$http.get('/sms/del/' + item.idx)
-			.success(function(data) {
-				$scope.getPage();
-				custbhv = bhv.none;
-			});
-*/
 		};
 		
 		$scope.deleteAllRow = function() {
 			custbhv = bhv.del;
 
-			alert($scope.gridOptions.selectedItems);
-			
 			$http({
 				method: "POST",
 				url: "/sms/del/all",

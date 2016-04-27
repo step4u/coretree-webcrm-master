@@ -48,17 +48,17 @@
 				columnDefs: [
 			    		      { displayName: '이름', field: 'cust_name', headerCellClass: 'white', cellClass: 'grid-cell', width: 120 },
 			    		      { displayName: '전화번호', field: 'cust_tel', headerCellClass:'white', cellClass: 'grid-cell', width: 120 },
-			    		      { displayName: '날짜', field: 'regdate', headerCellClass: 'white', cellClass: 'grid-cell', width: 120
+			    		      { displayName: '날짜', field: 'regdate', headerCellClass: 'white', cellClass: 'grid-cell', width: 100
 			    		    	, type: 'date', cellFilter: 'date:\'yyyy-MM-dd\'' },
-			    		      { displayName: '시각', field: 'regdate', headerCellClass: 'white', cellClass: 'grid-cell', width: 100
+			    		      { displayName: '시각', field: 'regdate', headerCellClass: 'white', cellClass: 'grid-cell', width: 80
 			    		    	, type: 'date', cellFilter: 'date:\'HH:mm:ss\'' },
-			    		      { displayName: '통화시간', field: 'diff', headerCellClass: 'white', cellClass: 'grid-cell', width: 100 },
+			    		      { displayName: '통화시간', field: 'diff', headerCellClass: 'white', cellClass: 'grid-cell', width: 80 },
 			    		      { displayName: '상담내용', field: 'memo', headerCellClass: 'white', cellClass: 'grid-cell' },
-			    		      { displayName: '상태', field: 'statustxt', headerCellClass: 'white', cellClass: 'grid-cell', width: 100 },
+			    		      { displayName: '상태', field: 'statustxt', headerCellClass: 'white', cellClass: 'grid-cell', width: 80 },
 			    		      { displayName: '기타', field: 'etc',
 			    		    	  headerCellClass: 'white',
 			    		    	  cellClass: 'grid-cell-align',
-			    		    	  width: 180,
+			    		    	  width: 120,
 			    		    	  // cellTemplate: '<button class="btn btn-primary btn-xs" ng-click="grid.appScope.callRow(row)">전화하기</button> <button class="btn btn-primary btn-xs" ng-click="grid.appScope.viewRow(row)">메모보기</button> <button class="btn btn-warning btn-xs" ng-click="grid.appScope.deleteRow(row)">삭제</button>'
 			    		    	  cellTemplate: '<button class="btn btn-primary btn-xs" ng-click="grid.appScope.viewRow(row)">메모보기</button> <button class="btn btn-warning btn-xs" ng-click="grid.appScope.deleteRow(row)">삭제</button>'
 							  }
@@ -104,6 +104,8 @@
 		};
 		
 		$scope.getPage = function(val) {
+			
+			alert($("#sdate").val() + ' // ' + $("#edate").val());
 
 			if (typeof(val) == 'undefined') {
 		    	val = {
@@ -124,13 +126,13 @@
 				url: "/call/get/count",
 				data: val
 			}).then(function(response){
-				var data = response.data;
+				var count = response.data;
 				
-				if ($scope.gridOptions.totalItems != data) {
+				if ($scope.gridOptions.totalItems != count) {
 					paginationOptions.pageNumber = 1;
 				}
 				
-				$scope.gridOptions.totalItems = data;
+				$scope.gridOptions.totalItems = count;
 				
 				val.curpage = paginationOptions.pageNumber;
 				val.rowsperpage = paginationOptions.pageSize;

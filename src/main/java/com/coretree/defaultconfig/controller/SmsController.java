@@ -45,7 +45,7 @@ public class SmsController {
 	}
 	
 	@RequestMapping(path="/sms/del/all", method=RequestMethod.POST)
-	public void removeAll(ArrayList<Sms> list, Principal principal) {
+	public void removeAll(@RequestBody ArrayList<Sms> list, Principal principal) {
 		for(Sms sms : list) {
 			mapper.del(sms.getIdx());
 		}

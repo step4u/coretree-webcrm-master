@@ -54,7 +54,7 @@ public class Sms {
 	
 	@Override
 	public String toString() {
-		return "Record [idx=" + idx + ", username=" + username + ", ext=" + ext  +", custs_tel=" + custs_tel + ", contents=" + contents
+		return "Sms [idx=" + idx + ", username=" + username + ", ext=" + ext  +", custs_tel=" + custs_tel + ", contents=" + contents
 				+ ", result=" + result + ", regdate=" + regdate + "]";
 	}
 }

@@ -10,7 +10,7 @@ import com.coretree.defaultconfig.model.SearchConditions;
 
 @Mapper
 public interface CallMapper {
-	int count(SearchConditions conditions);
+	long count(SearchConditions conditions);
 	List<Call> selectAll(SearchConditions conditions);
 	List<Call> selectByIdx(@Param("idx") int idx);
 	List<Call> selectByTxt(@Param("txt") String txt);
