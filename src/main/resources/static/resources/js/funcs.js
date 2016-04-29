@@ -83,53 +83,6 @@
 				}
 				
 				$("#ModalSms").modal("hide");
-
-/*				
-			    var smsinfo = {
-					idx: -1,
-					custs_idx: '',
-					custs_tel: $("#receivephones").val(),
-					contents: $("#smstxt").val(),
-					result: item.status,
-					regdate: '',
-					sdate: '',
-					edate: '',
-					curpage: '',
-					rowsperpage: ''
-			    };
-
-			    //$("#ModalSms").modal("hide");
-			    
-			    $.ajax({
-			    	type: "POST",
-			    	url: "/sms/add/msg",
-			    	data: smsinfo,
-			    	dataType: "json",
-			    	success: function(data){
-						$("#ModalSms").modal("hide");
-						
-						if ($("#ctrlsms").length) {
-					    	var scope = angular.element($("#ctrlsms")).scope();
-						    scope.$apply(function () {
-						        scope.getPage();
-						    });
-						}
-			    	},
-			    	error: function(data){
-			    		
-			    	}
-			    });
-*/
-/*			    $.post("/sms/add/msg", smsinfo, function(response){
-					$("#ModalSms").modal("hide");
-					
-					if ($("#ctrlsms").length) {
-				    	var scope = angular.element($("#ctrlsms")).scope();
-					    scope.$apply(function () {
-					        scope.getPage();
-					    });
-					}
-			    });*/
 				break;
 			case WS_RES_EXTENSION_STATE:
 				update_ext_status(item);

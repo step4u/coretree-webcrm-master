@@ -27,7 +27,7 @@
     <select id="getAll" resultMap="smsMap">
     	select first #{rowsperpage} skip ((#{curpage} - 1) * #{rowsperpage})
 			idx, username, custs_tel, contents
-			, case when result=100 then '성공' else '오류' end resultTxt
+			, case when result=0 then '성공' else '오류' end resultTxt
 			, regdate
 			from sms
 			where 1=1
