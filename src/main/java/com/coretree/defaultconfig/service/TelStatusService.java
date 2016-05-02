@@ -150,7 +150,7 @@ public class TelStatusService implements ApplicationListener<BrokerAvailabilityE
 	}
 	
 	@MessageMapping("/sendmsg")
-	public void executeTrade(SmsData message, Principal principal) {
+	public void executeTrade(SmsData message) {
 		switch (message.getCmd()) {
 			case Const4pbx.UC_SMS_SEND_REQ:
 				this.SendSms(message);
