@@ -249,8 +249,8 @@
 				$("#call_idx").val("");
 				$("#Memo").modal("hide");
 				
-				if ($("#ctrlsms").length) {
-			    	var scope = angular.element($("#ctrlsms")).scope();
+				if ($("#ctrlcalls").length) {
+			    	var scope = angular.element($("#ctrlcalls")).scope();
 				    scope.$apply(function () {
 				        scope.getPage();
 				    });

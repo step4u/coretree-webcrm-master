@@ -22,7 +22,7 @@
 			<if test="sdate != null and edate != null">
 				and cast(a.regdate as date) between cast(#{sdate} as date) and cast(#{edate} as date)
 			</if>
-			<if test="sdate == null and edate == null">
+			<if test="sdate == null or edate == null">
 				and cast(a.regdate as date)=current_date
 			</if>
 			<if test="txt != null">
@@ -33,7 +33,6 @@
     <select id="selectAll" resultMap="callMap">
     	select first #{rowsperpage} skip ((#{curpage} - 1) * #{rowsperpage})
 			a.idx
-			-- , b.uname as cust_name
 			, iif(b.uname is null, '-', b.uname) as cust_name
 			, a.custs_idx, a.direction, a.cust_tel, a.startdate, a.enddate, a.memo, a.regdate
 			, iif(datediff(second from a.startdate to a.enddate) is null, 0, datediff(second from a.startdate to a.enddate)) diff
@@ -44,7 +43,7 @@
 			<if test="sdate != null and edate != null">
 				and cast(a.regdate as date) between cast(#{sdate} as date) and cast(#{edate} as date)
 			</if>
-			<if test="sdate == null and edate == null">
+			<if test="sdate == null or edate == null">
 				and cast(a.regdate as date)=current_date
 			</if>
 			<if test="txt != null">
@@ -94,13 +93,6 @@
     
     <delete id="del">
 		delete from calls where idx=#{idx}
-    </delete>
-    
-    <delete id="delAll" parameterType="java.util.List">
-		delete from calls where
-		<foreach collection="list" item="item" separator=",">
-			 idx=#{item.idx}
-		</foreach>
     </delete>
     
     <update id="memo">

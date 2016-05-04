@@ -105,8 +105,9 @@
 		
 		$scope.getPage = function(val) {
 			
-			alert($("#sdate").val() + ' // ' + $("#edate").val());
-
+			//console.log(angular.toJson(val))
+			//console.log($("#sdate").val() + ' // ' + $("#edate").val());
+			
 			if (typeof(val) == 'undefined') {
 		    	val = {
 		    		idx: 0,
@@ -120,7 +121,7 @@
 		    	val.curpage = paginationOptions.pageNumber;
 		    	val.rowsperpage = paginationOptions.pageSize;
 			}
-
+			
 			$http({
 				method: "POST",
 				url: "/call/get/count",
@@ -180,7 +181,28 @@
 			custbhv = bhv.del;
 			var item = row.entity;
 			
-			$http.get('/call/del/' + item.idx)
+			var condition = {
+		    		idx: item.idx,
+		    		sdate: '',
+		    		edate: '',
+	    			txt: '',
+	    			curpage: 0,
+	    			rowsperpage: 0
+				};
+			
+			$http({
+				method: "POST",
+				url: "/call/del",
+				data: condition
+			}).then(function(response){
+				$scope.getPage();
+				custbhv = bhv.none;
+			}, function(response){
+				custbhv = bhv.none;
+			});
+			
+			
+			$http.post('/call/del/')
 			.success(function(data) {
 				$scope.getPage();
 			});

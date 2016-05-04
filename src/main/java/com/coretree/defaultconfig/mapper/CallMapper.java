@@ -17,7 +17,6 @@ public interface CallMapper {
     void add(Call call);
     void modiStatus(Call call);
     void modiEnd(Call call);
-    void del(int idx);
-    void delAll(@Param("list") ArrayList<Call> list);
+    void del(SearchConditions conditions);
     void memo(Call call);
 }
