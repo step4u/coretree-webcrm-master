@@ -1,13 +1,13 @@
 spring:
-  profiles: dev
+  profiles: dev1
   name: webcrm
-datasource:
-  driverClassName: org.firebirdsql.jdbc.FBDriver
-  url: jdbc:firebirdsql:localhost/3050:d:/dev/fbdb/webcrm.fdb?sqlDialect=3;charSet=UTF-8;Role=;Connection lifetime=15;pooling=true;blobBufferSize=8192;type=TYPE2
-  username: coretree
-  password: core9158
+  datasource:
+    driverClassName: org.firebirdsql.jdbc.FBDriver
+    url: jdbc:firebirdsql:localhost/3050:d:/dev/fbdb/webcrm.fdb?sqlDialect=3;charSet=UTF-8;Role=;Connection lifetime=15;pooling=true;blobBufferSize=8192;type=TYPE2
+    username: coretree
+    password: core9158
 server:
-  port: 80
+  port: ${port:80}
   session-timeout: 1800
 uc:
   pbxip: 14.63.168.129
@@ -17,13 +17,13 @@ uc:
 spring:
   profiles: dev2
   name: webcrm
-datasource:
-  driverClassName: org.firebirdsql.jdbc.FBDriver
-  url: jdbc:firebirdsql://localhost:3050/d:/dev/fbdb/webcrm.fdb?sqlDialect=3;charSet=UTF-8;Role=;Connection lifetime=15;pooling=true;blobBufferSize=8192;type=TYPE2
-  username: coretree
-  password: core9158
+  datasource:
+    driverClassName: org.firebirdsql.jdbc.FBDriver
+    url: jdbc:firebirdsql://localhost:3050/d:/dev/fbdb/webcrm.fdb?sqlDialect=3;charSet=UTF-8;Role=;Connection lifetime=15;pooling=true;blobBufferSize=8192;type=TYPE2
+    username: coretree
+    password: core9158
 server:
-  port: 80
+  port: ${port:80}
   session-timeout: 1800
 uc:
   pbxip: 14.63.171.190
@@ -31,15 +31,15 @@ uc:
 ---
 
 spring:
-  profiles: prodlocal
+  profiles: local
   name: webcrm
-datasource:
-  driverClassName: org.firebirdsql.jdbc.FBDriver
-  url: jdbc:firebirdsql://localhost:3050//opt/webcrm/db/WEBCRM.FDB?sqlDialect=3;charSet=UTF-8;Role=;Connection lifetime=15;pooling=true;blobBufferSize=8192;type=TYPE2
-  username: coretree
-  password: core9158
+  datasource:
+    driverClassName: org.firebirdsql.jdbc.FBDriver
+    url: jdbc:firebirdsql://localhost:3050//opt/webcrm/db/WEBCRM.FDB?sqlDialect=3;charSet=UTF-8;Role=;Connection lifetime=15;pooling=true;blobBufferSize=8192;type=TYPE2
+    username: coretree
+    password: core9158
 server:
-  port: 80
+  port: ${port:80}
   session-timeout: 1800
 uc:
   pbxip: 127.0.0.1
@@ -47,25 +47,15 @@ uc:
 ---
 
 spring:
-  profiles: prodremote
+  profiles: remote
   name: webcrm
-datasource:
-  driverClassName: org.firebirdsql.jdbc.FBDriver
-  url: jdbc:firebirdsql:localhost/3050:/opt/webcrm/db/WEBCRM.FDB?sqlDialect=3;charSet=UTF-8;Role=;Connection lifetime=15;pooling=true;blobBufferSize=8192;type=TYPE2
-  username: coretree
-  password: core9158
+  datasource:
+    driverClassName: org.firebirdsql.jdbc.FBDriver
+    url: jdbc:firebirdsql://${dbserver:localhost}:3050/${dbpath:/opt/webcrm/db/WEBCRM.FDB}?sqlDialect=3;charSet=UTF-8;Role=;Connection lifetime=15;pooling=true;blobBufferSize=8192;type=TYPE2
+    username: coretree
+    password: core9158
 server:
-  port: 80
+  port: ${port:80}
   session-timeout: 1800
 uc:
   pbxip: ${pbxip:127.0.0.1}
-
-#h2:
-#    console: 
-#      path: /console
-#      enabled: true
-#      
-#logging:
-#  level:
-#    org.springframework.boot: DEBUG
-#    sample.springboot.mybatis: DEBUG
