@@ -66,8 +66,9 @@
 		<dependency>
 			<groupId>org.firebirdsql.jdbc</groupId>
 			<artifactId>jaybird-jdk18</artifactId>
-			</dependency>
-		
+			<version>2.2.10</version>
+		</dependency>
+
 	    <dependency>
 	      <groupId>com.h2database</groupId>
 	      <artifactId>h2</artifactId>
