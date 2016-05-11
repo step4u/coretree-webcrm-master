@@ -1,7 +1,5 @@
 package com.coretree.defaultconfig.model;
 
-import java.sql.Date;
-
 public class StatisticsSearchConditions {
 	private String sdate;
 	private String edate;

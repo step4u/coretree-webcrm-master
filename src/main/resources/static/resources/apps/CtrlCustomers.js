@@ -118,16 +118,18 @@
 				showGridFooter: false,
 				rowTemplate: '<div ng-repeat="col in colContainer.renderedColumns track by col.colDef.name" class="ui-grid-cell" ui-grid-cell context-menu="grid.appScope.menuOptions(row)"></div>',
 				columnDefs: [
-			    		      { displayName: '고객이름', field: 'uname', headerCellClass: 'white' , cellClass: 'grid-cell' },
+			    		      { displayName: '고객이름', field: 'uname', headerCellClass: 'white' , cellClass: 'grid-cell', width: 150 },
 			    		      { displayName: '회사', field: 'firm', headerCellClass:'white', cellClass: 'grid-cell' },
-			    		      { displayName: '전화번호', field: 'tel', headerCellClass: $scope.highlightFilteredHeader, cellClass: 'grid-cell' },
-			    		      { displayName: '휴대전화', field: 'cellular', headerCellClass: $scope.highlightFilteredHeader, cellClass: 'grid-cell' },
+			    		      { displayName: '직책', field: 'posi', headerCellClass: $scope.highlightFilteredHeader, cellClass: 'grid-cell', width: 150 },
+			    		      { displayName: '전화번호', field: 'tel', headerCellClass: $scope.highlightFilteredHeader, cellClass: 'grid-cell', width: 120 },
+			    		      { displayName: '휴대전화', field: 'cellular', headerCellClass: $scope.highlightFilteredHeader, cellClass: 'grid-cell', width: 120 },
 			    		      { displayName: '기타',
 			    		    	  field: 'etc',
 			    		    	  enableFiltering: false,
 			    		    	  cellClass: 'grid-cell-align',
 			    		    	  headerCellClass: 'white',
-			    		    	  cellTemplate: '<button class="btn btn-primary btn-xs" ng-click="grid.appScope.modiRow(row)">수정</button> <button class="btn btn-warning btn-xs" ng-click="grid.appScope.deleteRow(row)">삭제</button>'
+			    		    	  cellTemplate: '<button class="btn btn-primary btn-xs" ng-click="grid.appScope.modiRow(row)">수정</button> <button class="btn btn-warning btn-xs" ng-click="grid.appScope.deleteRow(row)">삭제</button>',
+			    		    	  width: 100
 							  }
 			    		    ],
 			    groupHeaders: false,
@@ -177,7 +179,54 @@
 		};
 		
 		$scope.getPage = function(searchtxt) {
+			
+			if (typeof(val) == 'undefined') {
+		    	val = {
+		    		idx: 0,
+		    		sdate: '',
+		    		edate: '',
+	    			txt: '',
+	    			curpage: paginationOptions.pageNumber,
+	    			rowsperpage: paginationOptions.pageSize
+	    		}
+			} else {
+		    	val.curpage = paginationOptions.pageNumber;
+		    	val.rowsperpage = paginationOptions.pageSize;
+			}
+			
+			$http({
+				method: "POST",
+				url: "/customer/get/count",
+				data: val
+			}).then(function(response){
+				var count = response.data;
+				
+				if ($scope.gridOptions.totalItems != count) {
+					paginationOptions.pageNumber = 1;
+				}
+				
+				$scope.gridOptions.totalItems = count;
+				
+				val.curpage = paginationOptions.pageNumber;
+				val.rowsperpage = paginationOptions.pageSize;
+				
+				$http({
+					method: "POST",
+					url: "/call/get/all",
+					data: val
+				}).then(function(response){
+					$scope.gridOptions.data = response.data;
+				}, function(response){
+					
+				});
+			}, function(){
+				
+			});
+			
 			var url;
+			
+			
+			
 			
 			if (searchtxt == ''){
 				url = '/customer/get/page/' + $stateParams.maingroup + '/' + $stateParams.subgroup + '/' + paginationOptions.pageNumber + '/' + paginationOptions.pageSize;
