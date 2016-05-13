@@ -6,12 +6,14 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.coretree.defaultconfig.mapper.Customer;
 import com.coretree.defaultconfig.mapper.CustomerMapper;
+import com.coretree.defaultconfig.model.CustSearchConditions;
 import com.coretree.defaultconfig.model.Group;
 
 @RestController
@@ -21,27 +23,15 @@ public class CustomerController {
 	CustomerMapper mapper;
 	
 	@RequestMapping(path="/customer/get/count", method=RequestMethod.POST)
-	public int getCount(@PathVariable("maingroup") String maingroup, @PathVariable("subgroup") String subgroup, Principal principal) {
-		String username = principal.getName();
-		String group = "0";
-		
-		if (subgroup.equals("0")) {
-			group = maingroup;
-		} else {
-			group = maingroup + subgroup;
-		}
-		
-		return mapper.count(group, username);
+	public long getCount(@RequestBody CustSearchConditions condition, Principal principal) {
+		condition.setUsername(principal.getName());
+		return mapper.count(condition);
 	}
 	
-	@RequestMapping(path="/customer/get/all/{maingroup}/{subgroup}/{curpage}/{rowsperpage}", method=RequestMethod.GET)
-	public List<Customer> getAll(@PathVariable("maingroup") String maingroup
-			, @PathVariable("subgroup") String subgroup
-			, @PathVariable("curpage") int curpage
-			, @PathVariable("rowsperpage") int rowsperpage
-			, Principal principal) {
-		String username = principal.getName();
-		return mapper.findAll(curpage, rowsperpage, maingroup, subgroup, username);
+	@RequestMapping(path="/customer/get/all", method=RequestMethod.POST)
+	public List<Customer> getAll(@RequestBody CustSearchConditions condition, Principal principal) {
+		condition.setUsername(principal.getName());
+		return mapper.findAll(condition);
 	}
 	
 	@RequestMapping(path="/customer/get/idx/{idx}", method=RequestMethod.GET)

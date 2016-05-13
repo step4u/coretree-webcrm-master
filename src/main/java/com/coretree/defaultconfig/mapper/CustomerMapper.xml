@@ -16,12 +16,20 @@
 		<result property="email"			column="email" />
     </resultMap>
     
-    <select id="count" resultType="java.lang.Integer">
-    	{call GET_CUSTCOUNT ( #{group, mode=IN, jdbcType=VARCHAR}, #{username, mode=IN, jdbcType=VARCHAR} )}
+    <select id="count" resultType="java.lang.Long">
+    	<!-- {call GET_CUSTCOUNT ( #{group, mode=IN, jdbcType=VARCHAR}, #{username, mode=IN, jdbcType=VARCHAR} )} -->
+    	select count(idx) from customers where 1=1
+    	<if test="group0 == 1">
+    		 and substring(depthorder from 1 for 1)=#{group0}
+    	</if>
+    	<if test="group0 == 2">
+    		and substring(depthorder from 1 for 1)=#{group0} and username=#{username}
+    	</if>
     </select>
     
-    <select id="findAll" resultMap="resMap" statementType = "CALLABLE">
-    	{call GET_CUSTLIST ( #{curpage, mode=IN, jdbcType=INTEGER}, #{rowsperpage, mode=IN, jdbcType=INTEGER}, #{maingroup, mode=IN, jdbcType=VARCHAR}, #{subgroup, mode=IN, jdbcType=VARCHAR}, #{username, mode=IN, jdbcType=VARCHAR} )}
+    <select id="findAll" resultMap="resMap">
+    	<!-- {call GET_CUSTLIST ( #{curpage, mode=IN, jdbcType=INTEGER}, #{rowsperpage, mode=IN, jdbcType=INTEGER}, #{maingroup, mode=IN, jdbcType=VARCHAR}, #{subgroup, mode=IN, jdbcType=VARCHAR}, #{username, mode=IN, jdbcType=VARCHAR} )} -->
+    	
     </select>
     
     <select id="selectByIdx" resultMap="resMap">

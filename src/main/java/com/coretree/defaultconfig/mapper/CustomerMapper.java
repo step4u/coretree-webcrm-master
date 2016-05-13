@@ -6,12 +6,13 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.boot.mybatis.autoconfigure.Mapper;
 
+import com.coretree.defaultconfig.model.CustSearchConditions;
 import com.coretree.defaultconfig.model.Group;
 
 @Mapper
 public interface CustomerMapper {
-	int count(@Param("group") String group, @Param("username") String username);
-	List<Customer> findAll(@Param("curpage") int curpage, @Param("rowsperpage") int rowsperpage, @Param("maingroup") String maingroup, @Param("subgroup") String subgroup, @Param("username") String username);
+	long count(CustSearchConditions condition);
+	List<Customer> findAll(CustSearchConditions condition);
 	List<Customer> findByTxt(@Param("searchtxt") String searchtxt);
 	Customer findByIdx(@Param("idx") long idx);
 	Customer findByExt(@Param("telnum") String telnum);

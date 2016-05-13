@@ -45,13 +45,13 @@ public class CallController {
 	
 	@RequestMapping(path="/call/del", method=RequestMethod.POST)
 	public void remove(@RequestBody SearchConditions condition, Principal principal) {
-		mapper.del(condition);
+		mapper.del(condition.getIdx());
 	}
 	
 	@RequestMapping(path="/call/del/all", method=RequestMethod.POST)
-	public void removeAll(@RequestBody ArrayList<SearchConditions> conditions, Principal principal) {
-		for(SearchConditions condition : conditions) {
-			mapper.del(condition);
+	public void removeAll(@RequestBody ArrayList<Call> list, Principal principal) {
+		for(Call call : list) {
+			mapper.del(call.getIdx());
 		}
 	}
 	

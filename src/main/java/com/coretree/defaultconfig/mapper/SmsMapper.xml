@@ -49,14 +49,14 @@
     <select id="del">
 		delete from sms where idx=#{idx}
     </select>
-
+<!-- 
     <select id="delAll" parameterType="java.util.List">
 		delete from sms where
 		<foreach collection="list" item="item" separator=",">
 			 idx=#{item.idx}
 		</foreach>
     </select>
-
+ -->
 <!--    
      <insert id="add" useGeneratedKeys="true" keyProperty="idx" keyColumn="idx">
 		<selectKey keyProperty="username" resultType="String" order="BEFORE">

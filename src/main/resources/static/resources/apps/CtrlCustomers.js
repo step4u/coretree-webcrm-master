@@ -11,6 +11,13 @@
 		});
 		*/
 		
+		// 고객리스트
+		var paginationOptions = {
+			    pageNumber: 1,
+			    pageSize: 20,
+			    sort: null
+			  };
+		
 		// 컨텍스트 메뉴
 		$scope.menuOptions = function (item) {
 			var itm = item.entity;
@@ -94,13 +101,6 @@
 		    return popupcontents;
 		};
 		
-		// 고객리스트
-		var paginationOptions = {
-			    pageNumber: 1,
-			    pageSize: 20,
-			    sort: null
-			  };
-		
 		$scope.highlightFilteredHeader = function( row, rowRenderIndex, col, colRenderIndex ) {
 		    if( col.filters[0].term ){
 		      return 'white header-filtered';
@@ -159,61 +159,70 @@
 			    	});
 			    	
 			    	gridApi.selection.on.rowSelectionChanged($scope,function(row){
-			            //var msg = 'row selected ' + row.isSelected + '//' + row.entity.uname;
-			            //$log.log(msg);
+			    		if (row.isSelected) {
+			    			if ($scope.gridOptions.selectedItems.length > 0) {
+			    				var idx = $scope.gridOptions.selectedItems.indexOf(row);
+			    				
+			    				if (idx == -1) {
+			    					$scope.gridOptions.selectedItems.splice($scope.gridOptions.selectedItems.length-1, 0, row.entity);
+			    				}
+			    			} else {
+			    				$scope.gridOptions.selectedItems[0] = row.entity;
+			    			}
+			    		} else {
+			    			if ($scope.gridOptions.selectedItems.length > 0) {
+				    			var val = $scope.gridOptions.selectedItems.filter(function(element, index){
+				    				return element.idx === row.idx;
+				    	    	});
+			    				var idx = $scope.gridOptions.selectedItems.indexOf(val);
+			    				$scope.gridOptions.selectedItems.splice(idx, 1);
+			    			}
+			    		}
 			    	});
 	
 					gridApi.selection.on.rowSelectionChangedBatch($scope,function(rows){
-						//var msg = 'rows changed ' + rows.length;
-						//$log.log(msg);
-
-						$scope.gridOptions.selectedItems = rows;
-/*						
-						$.each($scope.gridOptions.selectedItems, function (index, value){
-							console.log( index + ": " + value.isSelected );
-						});
-*/
-						// $scope.selectedItems = rows;
+						if (rows[0].isSelected) {
+							for (var i = 0 ; i < rows.length ; i++) {
+								$scope.gridOptions.selectedItems[i] = rows[i].entity;
+							}
+						} else {
+							$scope.gridOptions.selectedItems = [];
+						}
 					});
 			    }
 		};
 		
-		$scope.getPage = function(searchtxt) {
-			
-			if (typeof(val) == 'undefined') {
-		    	val = {
-		    		idx: 0,
-		    		sdate: '',
-		    		edate: '',
-	    			txt: '',
-	    			curpage: paginationOptions.pageNumber,
-	    			rowsperpage: paginationOptions.pageSize
-	    		}
-			} else {
-		    	val.curpage = paginationOptions.pageNumber;
-		    	val.rowsperpage = paginationOptions.pageSize;
-			}
-			
+		$scope.getPage = function(txt) {
+			var condition = {
+	    		idx: 0,
+	    		sdate: $("#sdate").val(),
+	    		edate: $("#edate").val(),
+	    		group0: $stateParams.maingroup,
+	    		group1: $stateParams.subgroup,
+    			txt: txt,
+    			curpage: paginationOptions.pageNumber,
+    			rowsperpage: paginationOptions.pageSize
+			};
+
 			$http({
 				method: "POST",
 				url: "/customer/get/count",
-				data: val
+				data: condition
 			}).then(function(response){
-				var count = response.data;
+				var data = response.data;
 				
-				if ($scope.gridOptions.totalItems != count) {
+				alert(data);
+				
+				if ($scope.gridOptions.totalItems != data) {
 					paginationOptions.pageNumber = 1;
 				}
 				
-				$scope.gridOptions.totalItems = count;
-				
-				val.curpage = paginationOptions.pageNumber;
-				val.rowsperpage = paginationOptions.pageSize;
+				$scope.gridOptions.totalItems = data;
 				
 				$http({
 					method: "POST",
-					url: "/call/get/all",
-					data: val
+					url: "/customer/get/all",
+					data: condition
 				}).then(function(response){
 					$scope.gridOptions.data = response.data;
 				}, function(response){
@@ -222,40 +231,8 @@
 			}, function(){
 				
 			});
-			
-			var url;
-			
-			
-			
-			
-			if (searchtxt == ''){
-				url = '/customer/get/page/' + $stateParams.maingroup + '/' + $stateParams.subgroup + '/' + paginationOptions.pageNumber + '/' + paginationOptions.pageSize;
-			} else {
-				url = '/customer/get/search/' + $stateParams.maingroup + '/' + $stateParams.subgroup + '/' + searchtxt;
-			}
-			
-			if (typeof(searchtxt) == 'undefined'){
-				url = '/customer/get/page/' + $stateParams.maingroup + '/' + $stateParams.subgroup + '/' + paginationOptions.pageNumber + '/' + paginationOptions.pageSize;
-			}
-
-			var counturl = '/customer/get/count/' + $stateParams.maingroup + '/' + $stateParams.subgroup;
-
-			$http.get(counturl)
-			.success(function(data) {
-				if ($scope.gridOptions.totalItems != data) {
-					paginationOptions.pageNumber = 1;
-				}
-				$scope.gridOptions.totalItems = data;
-				
-				// console.log(">>>>>>>>>>>> : " + url);
-				
-				$http.get(url)
-				.success(function(data) {
-					// console.log("/customer/get/count/ : data : " + angular.toJson(data));
-					$scope.gridOptions.data = data;
-				});
-			});
 		}
+		
 		$scope.getPage();
 		
 		$scope.bindSubGroup = function(){
@@ -280,13 +257,13 @@
 			var item = row.entity;
 			
 			trade = {
-	                cmd: 74,
-	                extension: crmidentity.ext,
-	                caller: crmidentity.ext,
-	                callee: item.cellular,
-	                unconditional: '',
-	                status: -1
-				};
+                cmd: UC_MAKE_CALL_REQ,
+                extension: crmidentity.ext,
+                caller: crmidentity.ext,
+                callee: item.cellular,
+                unconditional: '',
+                status: -1
+			};
 			
 			stompClient.send("/app/traders", {}, JSON.stringify(trade));
 		};
@@ -301,6 +278,22 @@
 				custbhv = bhv.none;
 			}, function(response){
 				console.log("/customer/del/ : " + angular.toJson(response));
+				custbhv = bhv.none;
+			});
+		};
+		
+		$scope.deleteAllRow = function() {
+			custbhv = bhv.del;
+
+			$http({
+				method: "POST",
+				url: "/customer/del/all",
+				data: $scope.gridOptions.selectedItems
+			}).then(function(response){
+				$scope.getPage();
+				custbhv = bhv.none;
+			}, function(response){
+				custbhv = bhv.none;
 			});
 		};
 		

@@ -1,6 +1,5 @@
 package com.coretree.defaultconfig.mapper;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
@@ -17,6 +16,6 @@ public interface CallMapper {
     void add(Call call);
     void modiStatus(Call call);
     void modiEnd(Call call);
-    void del(SearchConditions conditions);
+    void del(long idx);
     void memo(Call call);
 }

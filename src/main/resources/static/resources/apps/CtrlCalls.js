@@ -2,6 +2,12 @@
 	angular.module('app')
 	.controller('CtrlCall', ['$scope', '$http', '$log', '$timeout', 'uiGridConstants', function ($scope, $http, $log, $timeout, uiGridConstants) {
 
+		var paginationOptions = {
+			    pageNumber: 1,
+			    pageSize: 20,
+			    sort: null
+		};
+		
 		// 컨텍스트 메뉴
 		$scope.menuOptions = function (item) {
 			var itm = item.entity;
@@ -21,12 +27,6 @@
 		        	console.log("전화하기: " + angular.toJson(item.entity));
 		        }]
 		    ];
-		};
-		
-		var paginationOptions = {
-			    pageNumber: 1,
-			    pageSize: 20,
-			    sort: null
 		};
 		
 		$scope.highlightFilteredHeader = function( row, rowRenderIndex, col, colRenderIndex ) {
@@ -90,58 +90,66 @@
 			    	});
 			    	
 			    	gridApi.selection.on.rowSelectionChanged($scope,function(row){
-			            var msg = 'row selected ' + row.isSelected;
-			            $log.log(msg);
+			    		if (row.isSelected) {
+			    			if ($scope.gridOptions.selectedItems.length > 0) {
+			    				var idx = $scope.gridOptions.selectedItems.indexOf(row);
+			    				
+			    				if (idx == -1) {
+			    					$scope.gridOptions.selectedItems.splice($scope.gridOptions.selectedItems.length-1, 0, row.entity);
+			    				}
+			    			} else {
+			    				$scope.gridOptions.selectedItems[0] = row.entity;
+			    			}
+			    		} else {
+			    			if ($scope.gridOptions.selectedItems.length > 0) {
+				    			var val = $scope.gridOptions.selectedItems.filter(function(element, index){
+				    				return element.idx === row.idx;
+				    	    	});
+			    				var idx = $scope.gridOptions.selectedItems.indexOf(val);
+			    				$scope.gridOptions.selectedItems.splice(idx, 1);
+			    			}
+			    		}
 			    	});
 	
 					gridApi.selection.on.rowSelectionChangedBatch($scope,function(rows){
-//						var msg = 'rows changed ' + rows.length;
-//						$log.log(msg);
-						
-						$scope.gridOptions.selectedItems = rows;
+						if (rows[0].isSelected) {
+							for (var i = 0 ; i < rows.length ; i++) {
+								$scope.gridOptions.selectedItems[i] = rows[i].entity;
+							}
+						} else {
+							$scope.gridOptions.selectedItems = [];
+						}
 					});
 			    }
 		};
 		
-		$scope.getPage = function(val) {
-			
-			//console.log(angular.toJson(val))
-			//console.log($("#sdate").val() + ' // ' + $("#edate").val());
-			
-			if (typeof(val) == 'undefined') {
-		    	val = {
+		$scope.getPage = function(txt) {
+			var condition = {
 		    		idx: 0,
-		    		sdate: '',
-		    		edate: '',
-	    			txt: '',
+		    		sdate: $("#sdate").val(),
+		    		edate: $("#edate").val(),
+	    			txt: txt,
 	    			curpage: paginationOptions.pageNumber,
 	    			rowsperpage: paginationOptions.pageSize
-	    		}
-			} else {
-		    	val.curpage = paginationOptions.pageNumber;
-		    	val.rowsperpage = paginationOptions.pageSize;
-			}
-			
+    			};
+
 			$http({
 				method: "POST",
 				url: "/call/get/count",
-				data: val
+				data: condition
 			}).then(function(response){
-				var count = response.data;
+				var data = response.data;
 				
-				if ($scope.gridOptions.totalItems != count) {
+				if ($scope.gridOptions.totalItems != data) {
 					paginationOptions.pageNumber = 1;
 				}
 				
-				$scope.gridOptions.totalItems = count;
-				
-				val.curpage = paginationOptions.pageNumber;
-				val.rowsperpage = paginationOptions.pageSize;
+				$scope.gridOptions.totalItems = data;
 				
 				$http({
 					method: "POST",
 					url: "/call/get/all",
-					data: val
+					data: condition
 				}).then(function(response){
 					$scope.gridOptions.data = response.data;
 				}, function(response){
@@ -158,13 +166,13 @@
 			var item = row.entity;
 
 			trade = {
-	                cmd: 74,
-	                extension: crmidentity.ext,
-	                caller: crmidentity.ext,
-	                callee: item.cust_tel,
-	                unconditional: '',
-	                status: -1
-	              };
+                cmd: UC_MAKE_CALL_REQ,
+                extension: crmidentity.ext,
+                caller: crmidentity.ext,
+                callee: item.cust_tel,
+                unconditional: '',
+                status: -1
+			};
 			
 	     	stompClient.send("/app/traders", {}, JSON.stringify(trade));
 		};
@@ -182,13 +190,13 @@
 			var item = row.entity;
 			
 			var condition = {
-		    		idx: item.idx,
-		    		sdate: '',
-		    		edate: '',
-	    			txt: '',
-	    			curpage: 0,
-	    			rowsperpage: 0
-				};
+	    		idx: item.idx,
+	    		sdate: '',
+	    		edate: '',
+    			txt: '',
+    			curpage: 0,
+    			rowsperpage: 0
+			};
 			
 			$http({
 				method: "POST",
@@ -200,11 +208,20 @@
 			}, function(response){
 				custbhv = bhv.none;
 			});
-			
-			
-			$http.post('/call/del/')
-			.success(function(data) {
+		};
+		
+		$scope.deleteAllRow = function() {
+			custbhv = bhv.del;
+
+			$http({
+				method: "POST",
+				url: "/call/del/all",
+				data: $scope.gridOptions.selectedItems
+			}).then(function(response){
 				$scope.getPage();
+				custbhv = bhv.none;
+			}, function(response){
+				custbhv = bhv.none;
 			});
 		};
 		

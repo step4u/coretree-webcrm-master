@@ -28,9 +28,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
         	.csrf().disable() //HTTP with Disable CSRF
-        	.headers().addHeaderWriter(
-    				new XFrameOptionsHeaderWriter(
-    						XFrameOptionsHeaderWriter.XFrameOptionsMode.SAMEORIGIN)).and()
+        		.headers().addHeaderWriter(new XFrameOptionsHeaderWriter(XFrameOptionsHeaderWriter.XFrameOptionsMode.SAMEORIGIN))
+        		.and()
             .formLogin()
 				.defaultSuccessUrl("/index.html")
 				.loginPage("/login.html")
@@ -50,12 +49,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.permitAll()
 				.and()
 			.sessionManagement()
+				.sessionAuthenticationErrorUrl("/login.html?sessionautherr")
                 .maximumSessions(1)
-                .expiredUrl("/login.html?expired")
+                .expiredUrl("/login.html?sessionexpired")
                 .maxSessionsPreventsLogin(true)
                 .and()
                 // .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
-                .invalidSessionUrl("/")
+            .invalidSessionUrl("/login.html?sessioninvalid")
                 .and()
             .authorizeRequests() //Authorize Request Configuration
 				.antMatchers("/resources/**").permitAll()
