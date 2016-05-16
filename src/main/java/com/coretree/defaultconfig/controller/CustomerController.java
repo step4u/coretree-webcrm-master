@@ -70,7 +70,9 @@ public class CustomerController {
 	}
 	
 	@RequestMapping(path="/customer/del/all", method=RequestMethod.POST)
-	public void del(ArrayList<Customer> custs, Principal principal) {
-		mapper.delAll(custs);
+	public void delAll(@RequestBody ArrayList<Customer> list, Principal principal) {
+		for (Customer cust : list) {
+			mapper.del(cust.getIdx());
+		}
 	}
 }

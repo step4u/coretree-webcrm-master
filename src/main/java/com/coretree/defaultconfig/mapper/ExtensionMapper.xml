@@ -8,19 +8,25 @@
     </resultMap>
     
     <select id="count" resultType="java.lang.Integer">
-    	select count(extension) from extensions;
+    	select count(a.extension)
+    	from extensions a left join users_exts b
+    	on a.extension = b.extension
+    	<if test="txt != null">
+    		where b.extension like #{txt} or b.username like #{txt}
+    	</if>
     </select>
     
-    <select id="selectAll" parameterType="map" resultMap="extensionMap">
-    	select 
-    	<if test="rowsperpage > 0 and curpage > 0">
+    <select id="selectAll" resultMap="extensionMap">
+    	select
     		first #{rowsperpage} skip ((#{curpage} - 1) * #{rowsperpage})
-    	</if>
 			a.extension
 			, iif((select uname from users where username=b.username) is null, '-', (select uname from users where username=b.username)) uname
 			from extensions a left join users_exts b
-				on a.extension=b.extension
-			 order by a.extension asc
+			on a.extension=b.extension
+		<if test="txt != null">
+			where b.extension like #{txt} or b.username like #{txt}
+		</if>
+		order by a.extension asc
     </select>
     
     <select id="selectByIdx" resultMap="extensionMap">
@@ -52,17 +58,6 @@
     <select id="del" resultType="java.lang.Void">
     	{call RMV_EXTENSION ( #{ext, mode=IN, jdbcType=VARCHAR} )}
     </select>
-    
-    <delete id="delAll" parameterType="java.util.List">
-		delete from extensions where
-		<foreach collection="list" item="item" separator=",">
-			 extension=#{item.extension};
-		</foreach>
-		delete from users_exts where
-		<foreach collection="list" item="item" separator=",">
-			 extension=#{item.extension};
-		</foreach>
-    </delete>
     
     <select id="modi" resultType="java.lang.Void">
 	    {call UDP_EXTENSION ( #{extension, mode=IN, jdbcType=VARCHAR}, #{newext, mode=IN, jdbcType=VARCHAR} )}

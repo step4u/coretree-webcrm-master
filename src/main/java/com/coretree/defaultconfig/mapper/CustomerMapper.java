@@ -17,8 +17,7 @@ public interface CustomerMapper {
 	Customer findByIdx(@Param("idx") long idx);
 	Customer findByExt(@Param("telnum") String telnum);
 	void add(Customer cust);
-	void del(int idx);
-	void delAll(ArrayList<Customer> list);
+	void del(long idx);
 	void modi(Customer obj);
 	List<Group> getGroup();
 	List<Group> getSubgroup(String maingroup);

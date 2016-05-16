@@ -6,43 +6,40 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.coretree.defaultconfig.mapper.Record;
-import com.coretree.defaultconfig.mapper.RecordMapper;
+import com.coretree.defaultconfig.mapper.Counsellor;
+import com.coretree.defaultconfig.mapper.CounsellorMapper;
+import com.coretree.defaultconfig.model.SearchConditions;
 
 @RestController
 public class CouncellorController {
 	
 	@Autowired
-	RecordMapper mapper;
+	CounsellorMapper mapper;
 	
-	@RequestMapping(path="/councellor/get/count", method=RequestMethod.GET)
-	public long getCount(Principal principal) {
-		return mapper.count();
+	@RequestMapping(path="/counsellor/get/count", method=RequestMethod.POST)
+	public int getCount(@RequestBody SearchConditions condition, Principal principal) {
+		return mapper.count(condition);
 	}
 	
-	@RequestMapping(path="/councellor/get/all/{curpage}/{rowsperpage}", method=RequestMethod.GET)
-	public List<Record> getAll(@PathVariable("curpage") int curpage
-			, @PathVariable("rowsperpage") int rowsperpage
-			, Principal principal) {
-		return mapper.selectAll(curpage, rowsperpage);
+	@RequestMapping(path="/counsellor/get/all", method=RequestMethod.POST)
+	public List<Counsellor> getAll(@RequestBody SearchConditions condition, Principal principal) {
+		return mapper.selectAll(condition);
 	}
 	
-	@RequestMapping(path="/councellor/get/search/{txt}", method=RequestMethod.GET)
-	public List<Record> getByTxt(@PathVariable("txt") String txt, Principal principal) {
-		return mapper.selectByTxt("%" + txt + "%");
-	}
-
-	@RequestMapping(path="/councellor/del/{idx}", method=RequestMethod.GET)
-	public void remove(@PathVariable("idx") long idx, Principal principal) {
-		mapper.del(idx);
+	@RequestMapping(path="/counsellor/del/{username}", method=RequestMethod.GET)
+	public void remove(@PathVariable("username") String username, Principal principal) {
+		mapper.del(username);
 	}
 	
-	@RequestMapping(path="/councellor/del/all", method=RequestMethod.POST)
-	public void removeAll(ArrayList<Record> list, Principal principal) {
-		mapper.delAll(list);
+	@RequestMapping(path="/counsellor/del/all", method=RequestMethod.POST)
+	public void removeAll(ArrayList<Counsellor> list, Principal principal) {
+		for(Counsellor counsellor : list) {
+			mapper.del(counsellor.getUsername());
+		}
 	}
 }

@@ -1,16 +1,20 @@
 package com.coretree.defaultconfig.controller;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.social.linkedin.api.Post;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.coretree.defaultconfig.mapper.Extension;
 import com.coretree.defaultconfig.mapper.ExtensionMapper;
+import com.coretree.defaultconfig.model.SearchConditions;
 
 @RestController
 public class ExtensionController {
@@ -18,14 +22,14 @@ public class ExtensionController {
 	@Autowired
 	ExtensionMapper mapper;
 	
-	@RequestMapping(path="/extension/get/count", method=RequestMethod.GET)
-	public int getCount(Principal principal) {
+	@RequestMapping(path="/extension/get/count", method=RequestMethod.POST)
+	public int getCount(@RequestBody SearchConditions condition, Principal principal) {
 		return mapper.count();
 	}
 	
-	@RequestMapping(path="/extension/get/all/{curpage}/{rowsperpage}", method=RequestMethod.GET)
-	public List<Extension> getAll(@PathVariable("curpage") int curpage, @PathVariable("rowsperpage") int rowsperpage, Principal principa) {
-		return mapper.selectAll(curpage, rowsperpage);
+	@RequestMapping(path="/extension/get/all", method=RequestMethod.POST)
+	public List<Extension> getAll(@RequestBody SearchConditions condition, Principal principa) {
+		return mapper.selectAll(condition);
 	}
 
 	@RequestMapping("/extension/get/{ext}")
@@ -57,6 +61,13 @@ public class ExtensionController {
 	@RequestMapping(value = "/extension/del/{ext}", method = RequestMethod.GET)
 	public void del(@PathVariable("ext") String ext, Principal principal) {
 		mapper.del(ext);
+	}
+	
+	@RequestMapping(value = "/extension/del/all", method = RequestMethod.POST)
+	public void delAll(@RequestBody ArrayList<Extension> list, Principal principal) {
+		for(Extension ext : list) {
+			mapper.del(ext.getExtension());
+		}
 	}
 	
 	@RequestMapping(value = "/extension/modi", method = RequestMethod.POST)

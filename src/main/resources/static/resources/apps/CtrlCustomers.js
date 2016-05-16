@@ -198,7 +198,7 @@
 	    		sdate: $("#sdate").val(),
 	    		edate: $("#edate").val(),
 	    		group0: $stateParams.maingroup,
-	    		group1: $stateParams.subgroup,
+	    		group1: $("#subgroup2").val() == 0 ? $stateParams.subgroup : $("#subgroup2").val(),
     			txt: txt,
     			curpage: paginationOptions.pageNumber,
     			rowsperpage: paginationOptions.pageSize
@@ -210,8 +210,6 @@
 				data: condition
 			}).then(function(response){
 				var data = response.data;
-				
-				alert(data);
 				
 				if ($scope.gridOptions.totalItems != data) {
 					paginationOptions.pageNumber = 1;
@@ -238,15 +236,36 @@
 		$scope.bindSubGroup = function(){
 			$http.get('/customer/get/group/' + $stateParams.maingroup)
 			.success(function(response) {
+/*
 				$scope.options = response;
+				
 				var item = response.find(function(element, index){
 					return element.subgroup == $stateParams.subgroup;
 				});
 				
+				console.log(item);
+				
 				if (typeof(item) == 'undefined') {
-					$scope.modeloption = "0";
-				} else {
-					$scope.modeloption = item.subgroup;
+					item = {
+						depthorder: "00",
+						maingroup: $stateParams.maingroup,
+						subgroup: "0",
+						txt: ":: 서브그룹 ::"
+					}
+				}
+				console.log(item);
+				$scope.modeloption = item.subgroup;
+*/
+				
+				$('#subgroup2').find('option:not(:first)').remove();
+				
+				var itm = response;
+				$(itm).each(function(i, v){ 
+					$("#subgroup2").append($("<option>", { value: v.subgroup, html: v.txt }));
+				});
+				
+				if (itm.subgroup) {
+					$("#subgroup2").val(itm.subgroup);
 				}
 			});
 		};
@@ -307,7 +326,7 @@
 			$("#addCustomer #maingroup").val(item.maingroup);
 
 			$("#addCustomer #uname").val(item.uname);
-			$("#addCustomer #company").val(item.firm);
+			$("#addCustomer #firm").val(item.firm);
 			$("#addCustomer #posi").val(item.posi);
 			$("#addCustomer #tel").val(item.tel);
 			$("#addCustomer #cellular").val(item.cellular);

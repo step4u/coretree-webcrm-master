@@ -2,8 +2,6 @@
 	angular.module('app')
 	.controller('CtrlRecords', ['$scope', '$http', 'uiGridConstants', function ($scope, $http, uiGridConstants) {
 
-		console.log("calls entered");
-
 		var paginationOptions = {
 			    pageNumber: 1,
 			    pageSize: 20,

@@ -67,58 +67,81 @@
 			    	});
 			    	
 			    	gridApi.selection.on.rowSelectionChanged($scope,function(row){
-			            var msg = 'row selected ' + row.isSelected;
-			            $console.log(msg);
+			    		if (row.isSelected) {
+			    			if ($scope.gridOptions.selectedItems.length > 0) {
+			    				var idx = $scope.gridOptions.selectedItems.indexOf(row);
+			    				
+			    				if (idx == -1) {
+			    					$scope.gridOptions.selectedItems.splice($scope.gridOptions.selectedItems.length-1, 0, row.entity);
+			    				}
+			    			} else {
+			    				$scope.gridOptions.selectedItems[0] = row.entity;
+			    			}
+			    		} else {
+			    			if ($scope.gridOptions.selectedItems.length > 0) {
+				    			var val = $scope.gridOptions.selectedItems.filter(function(element, index){
+				    				return element.idx === row.idx;
+				    	    	});
+			    				var idx = $scope.gridOptions.selectedItems.indexOf(val);
+			    				$scope.gridOptions.selectedItems.splice(idx, 1);
+			    			}
+			    		}
 			    	});
 	
 					gridApi.selection.on.rowSelectionChangedBatch($scope,function(rows){
-						var msg = 'rows changed ' + rows.length;
-						$console.log(msg);
-						
-						$scope.gridOptions.selectedItems = rows;
+						if (rows[0].isSelected) {
+							for (var i = 0 ; i < rows.length ; i++) {
+								$scope.gridOptions.selectedItems[i] = rows[i].entity;
+							}
+						} else {
+							$scope.gridOptions.selectedItems = [];
+						}
 					});
 			    }
 		};
 		
 		$scope.getPage = function(txt) {
-			var url;
-			
-			if (txt == ''){
-				url = '/member/get/all/' + paginationOptions.pageNumber + '/' + paginationOptions.pageSize;
-			} else {
-				url = '/member/get/search/' + txt;
-			}
-			
-			if (typeof(txt) == 'undefined'){
-				url = '/member/get/all/' + paginationOptions.pageNumber + '/' + paginationOptions.pageSize;
-			}
-			
-			var counturl = '/member/get/count';
-			$http.get(counturl)
-			.success(function(data) {
-				
-				if ($scope.gridOptions.totalItems != data) {
-					paginationOptions.pageNumber = 1;
-				}
-				
-				// console.log("count:" + data);
-				
-				$scope.gridOptions.totalItems = data;
-				
-				$http.get(url)
-				.success(function(data) {
-					// console.log("calls list:" + data);
-					$scope.gridOptions.data = data;
+			var condition = {
+		    		idx: 0,
+		    		sdate: '',
+		    		edate: '',
+	    			txt: txt,
+	    			curpage: paginationOptions.pageNumber,
+	    			rowsperpage: paginationOptions.pageSize
+				};
+
+				$http({
+					method: "POST",
+					url: "/counsellor/get/count",
+					data: condition
+				}).then(function(response){
+					var data = response.data;
+					
+					if ($scope.gridOptions.totalItems != data) {
+						paginationOptions.pageNumber = 1;
+					}
+					
+					$scope.gridOptions.totalItems = data;
+					
+					$http({
+						method: "POST",
+						url: "/counsellor/get/all",
+						data: condition
+					}).then(function(response){
+						$scope.gridOptions.data = response.data;
+					}, function(response){
+						
+					});
+				}, function(){
+					
 				});
-			});
 		}
-		
 		$scope.getPage();
 		
 		$scope.viewRow = function(row) {
 			var item = row.entity;
 			
-			$http.get('/member/get/' + item.idx)
+			$http.get('/counsellor/get/' + item.idx)
 			.success(function(data) {
 				$scope.getPage();
 				custbhv = bhv.none;
@@ -129,9 +152,24 @@
 			custbhv = bhv.del;
 			var item = row.entity;
 			
-			$http.get('/member/del/' + item.username)
+			$http.get('/counsellor/del/' + item.username)
 			.success(function(data) {
 				$scope.getPage();
+				custbhv = bhv.none;
+			});
+		};
+		
+		$scope.deleteAllRow = function() {
+			custbhv = bhv.del;
+
+			$http({
+				method: "POST",
+				url: "/counsellor/del/all",
+				data: $scope.gridOptions.selectedItems
+			}).then(function(response){
+				$scope.getPage();
+				custbhv = bhv.none;
+			}, function(response){
 				custbhv = bhv.none;
 			});
 		};

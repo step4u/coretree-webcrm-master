@@ -20,16 +20,62 @@
     	<!-- {call GET_CUSTCOUNT ( #{group, mode=IN, jdbcType=VARCHAR}, #{username, mode=IN, jdbcType=VARCHAR} )} -->
     	select count(idx) from customers where 1=1
     	<if test="group0 == 1">
-    		 and substring(depthorder from 1 for 1)=#{group0}
+			and substring(depthorder from 1 for 1)=#{group0}
     	</if>
     	<if test="group0 == 2">
     		and substring(depthorder from 1 for 1)=#{group0} and username=#{username}
+    	</if>
+    	<if test="txt != null">
+    		and (tel like #{txt} or cellular like #{txt} or extension like #{txt})
     	</if>
     </select>
     
     <select id="findAll" resultMap="resMap">
     	<!-- {call GET_CUSTLIST ( #{curpage, mode=IN, jdbcType=INTEGER}, #{rowsperpage, mode=IN, jdbcType=INTEGER}, #{maingroup, mode=IN, jdbcType=VARCHAR}, #{subgroup, mode=IN, jdbcType=VARCHAR}, #{username, mode=IN, jdbcType=VARCHAR} )} -->
-    	
+    	select first (#{rowsperpage}) skip ((#{curpage} - 1) * #{rowsperpage})
+   			idx
+   			, iif(depthorder is null, '00', substring(depthorder from 1 for 1)) maingroup
+   			, iif(depthorder is null, '00', substring(depthorder from 2 for 1)) subgroup
+   			, username
+   			, uname
+   			, firm
+   			, posi
+   			, tel
+   			, cellular
+   			, extension
+   			, email
+       	from customers
+   		where 1=1
+		<choose>
+			<when test="group0 == 1">
+				<choose>
+					<when test="group1 == 0">
+                    	and substring(depthorder from 1 for 1)=#{group0}
+					</when>
+					<otherwise>
+						and substring(depthorder from 1 for 1)=#{group0}
+						and substring(depthorder from 2 for 1)=#{group1}
+					</otherwise>
+				</choose>
+			</when>
+			<when test="group0 == 2">
+				<choose>
+					<when test="group1 == 0">
+                    	and substring(depthorder from 1 for 1)=#{group0}
+                    	and username=#{username}
+					</when>
+					<otherwise>
+                    	and substring(depthorder from 1 for 1)=#{group0}
+                    	and substring(depthorder from 2 for 1)=#{group1}
+                    	and username=#{username}
+					</otherwise>
+				</choose>
+			</when>
+		</choose>
+    	<if test="txt != null">
+    		and (tel like #{txt} or cellular like #{txt} or extension like #{txt})
+    	</if>
+		order by uname asc
     </select>
     
     <select id="selectByIdx" resultMap="resMap">
@@ -77,13 +123,6 @@
     
     <delete id="del">
     	delete from customers where idx=#{idx}
-    </delete>
-    
-    <delete id="delAll" parameterType="java.util.List">
-		delete from customers where
-		<foreach collection="list" item="item" separator=",">
-			idx=#{item.idx}
-		</foreach>
     </delete>
     
     <update id="modi">
