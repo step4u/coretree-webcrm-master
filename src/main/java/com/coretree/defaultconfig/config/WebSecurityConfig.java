@@ -17,7 +17,7 @@ import com.coretree.defaultconfig.mapper.MemberMapper;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
-	private LoginFailureHandler loginFailureHandler ;
+	private AuthFailureHandler authFailureHandler ;
 	@Autowired
 	private LoginHandler loginSuccessHandler;
 //	@Autowired
@@ -36,7 +36,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.defaultSuccessUrl("/index.html")
 				.loginPage("/login.html")
 				//.loginProcessingUrl("/login")
-				.failureHandler(loginFailureHandler)
+				.failureHandler(authFailureHandler)
 				// .failureUrl("/login.html?error")
 				.usernameParameter("username")
 				.passwordParameter("password")

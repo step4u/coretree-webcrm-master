@@ -11,7 +11,7 @@ public interface CounsellorMapper {
 	List<Counsellor> selectAll(SearchConditions condition);
 	List<Counsellor> getUserState();
 	int chkById(String username);
-	void add(Counsellor member);
+	void add(Counsellor counsellor);
     void del(String username);
     void modi(Counsellor counsellor);
 }

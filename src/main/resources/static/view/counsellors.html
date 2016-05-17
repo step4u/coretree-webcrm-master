@@ -134,13 +134,13 @@
 				return;
 			}
 			
-			$.get("/member/chk/" + obj.username, function(response){
-				var data = JSON.parse(response);
+			$.get("/counsellor/chk/" + obj.username, function(response){
+				console.log("/counsellor/chk/ : " + response);
 				
-				if (data.result == 1) {
+				if (response == 1) {
 					$("#alert").html("사용할 수 있는 아이디 입니다.").css('display', 'block');
 					$("#password").focus();
-					$("#confirm_id").val(data.result);
+					$("#confirm_id").val(response);
 					return;
 				} else {
 					$("#alert").html("<strong>필수입력</strong> 사용할 수 없는 아이디 입니다.").css('display', 'block');
@@ -154,15 +154,7 @@
 		$("#btn_Del").click(function(){
 	    	var scope = angular.element($("#ctrlcounsellers")).scope();
 		    scope.$apply(function () {
-		    	var seledtedItems = scope.gridOptions.selectedItems;
-	
-				$.post("/member/del/all", seledtedItems, function(response){
-					
-			    	var scope = angular.element($("#ctrlcounsellers")).scope();
-				    scope.$apply(function () {
-				        scope.getPage('');
-				    });
-				});
+		        scope.deleteAllRow();
 		    });
 		});
 		
@@ -228,7 +220,7 @@
 				return;
 			}
 			
-			url = "/member/add";
+			url = "/counsellor/add";
 		} else if (custbhv == bhv.modi) {
 			if (obj.uname == "") {
 				$("#alert").html("<strong>필수입력</strong> 이름을 입력하세요.").css('display', 'block');
@@ -243,7 +235,7 @@
 				}
 			}
 			
-			url = "/member/modi";
+			url = "/counsellor/modi";
 		}
 		
 		$.post(url, obj, function(response){
@@ -251,7 +243,7 @@
 			
 	    	var scope = angular.element($("#ctrlcounsellers")).scope();
 		    scope.$apply(function () {
-		        scope.getPage('');
+		        scope.getPage();
 		    });
 			
 			custbhv = bhv.none;

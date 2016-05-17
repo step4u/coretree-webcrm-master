@@ -31,15 +31,30 @@ public class CouncellorController {
 		return mapper.selectAll(condition);
 	}
 	
+	@RequestMapping(path="/counsellor/chk/{username}", method=RequestMethod.GET)
+	public int chkById(@PathVariable("username") String username, Principal principal) {
+		return mapper.chkById(username);
+	}
+	
+	@RequestMapping(path="/counsellor/add", method=RequestMethod.POST)
+	public void add(Counsellor consellor, Principal principal) {
+		mapper.add(consellor);
+	}
+	
 	@RequestMapping(path="/counsellor/del/{username}", method=RequestMethod.GET)
 	public void remove(@PathVariable("username") String username, Principal principal) {
 		mapper.del(username);
 	}
 	
 	@RequestMapping(path="/counsellor/del/all", method=RequestMethod.POST)
-	public void removeAll(ArrayList<Counsellor> list, Principal principal) {
+	public void removeAll(@RequestBody ArrayList<Counsellor> list, Principal principal) {
 		for(Counsellor counsellor : list) {
 			mapper.del(counsellor.getUsername());
 		}
+	}
+	
+	@RequestMapping(path="/counsellor/modi", method=RequestMethod.POST)
+	public void modi(Counsellor consellor, Principal principal) {
+		mapper.modi(consellor);
 	}
 }

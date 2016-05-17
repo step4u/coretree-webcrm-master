@@ -15,20 +15,20 @@
     
     <select id="count" resultType="java.lang.Integer">
     	select count(a.username)
-			from users a join users_exts b
+			from users a left join users_exts b
 			on a.username=b.username
 			<if test="txt != null">
-				where b.username like #{txt} or b.extension like #{txt}
+				where a.username like #{txt} or a.cellular like #{txt} or b.extension like #{txt}
 			</if>
     </select>
     
     <select id="selectAll" resultMap="resMap">
     	select first #{rowsperpage} skip ((#{curpage} - 1) * #{rowsperpage})
 			a.username, a.uname, a.posi, a.tel, a.cellular, a.role, a.state, a.enabled, b.extension
-			from users a join users_exts b
+			from users a left join users_exts b
 				on a.username=b.username
 			<if test="txt != null">
-				where b.username like #{txt} or b.extension like #{txt}
+				where a.username like #{txt} or a.cellular like #{txt} or b.extension like #{txt}
 			</if>
 			order by a.uname asc
     </select>

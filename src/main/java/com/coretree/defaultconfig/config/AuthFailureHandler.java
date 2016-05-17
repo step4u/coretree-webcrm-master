@@ -26,14 +26,14 @@ import com.coretree.models.UcUserState;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Component
-public class LoginFailureHandler implements AuthenticationFailureHandler {
+public class AuthFailureHandler implements AuthenticationFailureHandler {
 
 	@Override
 	public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception)
 			throws IOException, ServletException {
 		if(exception.getClass().isAssignableFrom(SessionAuthenticationException.class)) {
 			System.err.println(">>>>>>>>>> Session Error!!");
-			response.sendRedirect("/login.html?sessionautherr");
+			response.sendRedirect("/authfailure.html");
 		}
 	}
 }
