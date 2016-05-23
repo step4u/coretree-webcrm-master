@@ -10,12 +10,12 @@ public class Configurations {
 	
 	
 	public void setPbxip(String pbxip) {
-		System.err.println(pbxip);
+		System.err.println("set : " + pbxip);
 		this.pbxip = pbxip;
 	}
 	
 	public String getPbxip() {
-		System.err.println(this.pbxip);
+		System.err.println("get : " + this.pbxip);
 		return this.pbxip;
 	}
 }

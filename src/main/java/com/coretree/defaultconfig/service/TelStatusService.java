@@ -64,9 +64,10 @@ public class TelStatusService implements ApplicationListener<BrokerAvailabilityE
 	@Autowired
 	private CallMapper callMapper;
 	@Autowired
-	private Configurations configs;
-	@Autowired
 	private SmsMapper smsMapper;
+	
+	@Autowired
+	private Configurations configs;
 	
 	private List<Call> curcalls = new ArrayList<Call>();
 	private List<Member> userstate = new ArrayList<Member>();

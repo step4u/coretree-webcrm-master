@@ -32,8 +32,9 @@ public class AuthFailureHandler implements AuthenticationFailureHandler {
 	public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception)
 			throws IOException, ServletException {
 		if(exception.getClass().isAssignableFrom(SessionAuthenticationException.class)) {
-			System.err.println(">>>>>>>>>> Session Error!!");
 			response.sendRedirect("/authfailure.html");
+		} else {
+			response.sendRedirect("/login.html");
 		}
 	}
 }

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Coretre &middot; CRM Login</title>
+  	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <link rel="stylesheet" href="resources/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="resources/bootstrap/css/bootstrap-theme.min.css" />
+	<script src="resources/bootstrap/js/bootstrap.min.js"></script>
+  	<link href="resources/css/login.css" rel="stylesheet">
+</head>
+<body>
+  <div class="container">
+    <form class="form-signin" method="post" action="login.html">
+      <h3 class="muted form-signin-heading">Please sign in</h3>
+      <input type="text" class="input-block-level" placeholder="User name" name="username">
+      <input type="password" class="input-block-level" placeholder="Password" name="password">
+      <button class="btn btn-primary" type="submit">Sign in</button>
+      <hr>
+    </form>
+  </div><!-- /container -->
+  <script>
+  	$(document).ready(function(){
+  		$("input[name=username]").focus();
+  	});
+  </script>
+</body>
+</html>
