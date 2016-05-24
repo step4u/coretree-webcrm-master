@@ -464,6 +464,10 @@
 	    	disconnect();
 	    	location.href = "/logout.html";
 	    });
+	    
+	    $("#sysinfo").click(function(){
+	    	alert("ttt");
+	    });
 	});
 	
 	/*** script for address book ***/

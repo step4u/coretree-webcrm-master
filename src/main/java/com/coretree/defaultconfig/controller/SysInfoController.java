@@ -7,13 +7,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.coretree.defaultconfig.mapper.SysInfo;
-import com.coretree.defaultconfig.mapper.SysinfoMapper;
+import com.coretree.defaultconfig.mapper.SysInfoMapper;
 
 @RestController
 public class SysInfoController {
 
 	@Autowired
-	SysinfoMapper sysinfoMapper;
+	SysInfoMapper sysinfoMapper;
 	
 	@RequestMapping(path="/sysinfo", method=RequestMethod.POST)
 	public SysInfo getDiskSpace(Principal principal) {
