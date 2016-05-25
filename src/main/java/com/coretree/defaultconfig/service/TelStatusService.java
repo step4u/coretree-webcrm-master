@@ -3,7 +3,6 @@ package com.coretree.defaultconfig.service;
 import java.net.UnknownHostException;
 import java.nio.ByteOrder;
 import java.security.Principal;
-import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,13 +38,10 @@ import com.coretree.event.HaveGotUcMessageEventArgs;
 import com.coretree.event.IEventHandler;
 import com.coretree.interfaces.ITelStatusService;
 import com.coretree.models.GroupWareData;
-import com.coretree.models.ReceivedRTP;
 import com.coretree.models.SmsData;
 import com.coretree.models.UcMessage;
 import com.coretree.socket.*;
 import com.coretree.util.Const4pbx;
-import com.coretree.util.Finalvars;
-import com.coretree.util.Util;
 
 @Service
 @RestController
