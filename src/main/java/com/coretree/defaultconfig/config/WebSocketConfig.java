@@ -18,6 +18,7 @@ public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer {
 	public void registerStompEndpoints(StompEndpointRegistry registry) {
 		registry.addEndpoint("/webcrm").withSockJS();
 		registry.addEndpoint("/OAPI").setAllowedOrigins("*");
+		registry.addEndpoint("/WEBOAPI").setAllowedOrigins("*").withSockJS();
 		// registry.addEndpoint("/webcrm");
 	}
 	
