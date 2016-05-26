@@ -466,7 +466,12 @@
 	    });
 	    
 	    $("#sysinfo").click(function(){
-	    	alert("ttt");
+			$.post("/sysinfo", function(data){
+				$("#diskspace").html(data.diskspace.format() + " (MB)");
+				$("#todaycalls").html(data.todaycall.format());
+				$("#weekcalls").html(data.weekcall.format());
+				$("#monthcalls").html(data.monthcall.format());
+			});
 	    });
 	});
 	

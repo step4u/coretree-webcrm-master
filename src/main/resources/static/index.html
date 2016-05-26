@@ -59,6 +59,7 @@
 	
 	<script src="/resources/js/local.js"></script>
 	<script src="/resources/js/funcs.js"></script>
+	<script src="/resources/js/utility.js"></script>
 	
 	<script src="/resources/apps/CtrlCallstatus.js"></script>
 	<script src="/resources/apps/CtrlExtState.js"></script>
@@ -91,10 +92,10 @@
                             <span><b id="systeminfo"></b><i class=" fa fa-angle-down fa-fw"></i></span>
 						</a>
 						<ul class="dropdown-menu">
-							<li><a href="#">디스크 용량 <span class="badge badge-danger">3,123,123</span></a></li>
-							<li><a href="#">금일 통화 <span class="badge badge-danger">223</span></a></li>
-							<li><a href="#">주간 통화 <span class="badge badge-danger">1,235</span></a></li>
-							<li><a href="#">월간 통화 <span class="badge badge-danger">19,546</span></a></li>
+							<li><a href="#">디스크 용량 <span class="badge badge-danger" id="diskspace">3,123,123</span></a></li>
+							<li><a href="#">금일 통화 <span class="badge badge-danger" id="todaycalls">223</span></a></li>
+							<li><a href="#">주간 통화 <span class="badge badge-danger" id="weekcalls">1,235</span></a></li>
+							<li><a href="#">월간 통화 <span class="badge badge-danger" id="monthcalls">19,546</span></a></li>
 						</ul>
 					</li>
 					<li class="dropdown hoe-rheader-submenu hoe-header-profile">

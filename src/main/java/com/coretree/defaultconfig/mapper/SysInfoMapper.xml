@@ -9,6 +9,6 @@
     </resultMap>
     
     <select id="getCallInfo" resultMap="sysinfoMap" statementType="CALLABLE">
-    	{call GET_CALLS()}
+    	{call GET_CALLS_INFO()}
     </select>
 </mapper>

@@ -1,5 +1,6 @@
 package com.coretree.defaultconfig.controller;
 
+import java.io.File;
 import java.security.Principal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,7 +19,11 @@ public class SysInfoController {
 	@RequestMapping(path="/sysinfo", method=RequestMethod.POST)
 	public SysInfo getDiskSpace(Principal principal) {
 		SysInfo sysinfo = sysinfoMapper.getCallInfo();
-		sysinfo.setDiskspace(8897895);
+		
+		File file = new File("./");
+        long freespace = file.getFreeSpace(); 
+		
+		sysinfo.setDiskspace(freespace / 1024 / 1024);
 		return sysinfo;
 	}
 }
