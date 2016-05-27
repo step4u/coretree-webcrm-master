@@ -37,7 +37,7 @@
 	}
 	
 	function TreatMySelf(item) {
-		console.log("TreatMySelf: " + item.cmd + " // " + item.direct + " // " + item.status);
+		// console.log("TreatMySelf: " + item.cmd + " // " + item.direct + " // " + item.status);
 		
 		switch (item.cmd) {
 			case UC_MAKE_CALL_RES:

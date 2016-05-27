@@ -1,16 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="utf-8">
-  <title>Coretree &middot; CRM Session Failure</title>
-  	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-    <link rel="stylesheet" href="resources/bootstrap/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="resources/bootstrap/css/bootstrap-theme.min.css" />
-	<script src="resources/bootstrap/js/bootstrap.min.js"></script>
+	<meta charset="utf-8">
+	<title>Coretree - IP Contact Centre</title>
+
+	<!-- Google Fonts -->
+	<link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700|Lato:400,100,300,700,900' rel='stylesheet' type='text/css'>
+
+	<link rel="stylesheet" href="/resources/css/newlogin_animate.css">
+	<!-- Custom Stylesheet -->
+	<link rel="stylesheet" href="/resources/css/newlogin.css">
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 </head>
+
 <body>
-  <div class="container">
-  	session failure
-  </div>
+	<div class="container">
+		<div class="top">
+			<h1 id="title" class="hidden"><span id="logo">Web <span>IPCC</span></span></h1>
+		</div>
+		<div class="login-box animated fadeInUp">
+			<div class="box-header">
+				<h2>경고!! - 중복 로그인</h2>
+			</div>
+			<label for="gotologinpage">같은 아이디로 중복 로그인 하여<br/>로그인 할 수 없습니다.</br>30분 경과 후 다시 시도해 주십시오.</br></br></label>
+			<button type="button" id="gotologinpage">확인</button>
+			<br/>
+		</div>
+	</div>
 </body>
+
+<script>
+	$(document).ready(function () {
+    	$('#logo').addClass('animated fadeInDown');
+    	$("input:text:visible:first").focus();
+    	
+    	
+    	$('#username').focus(function() {
+    		$('label[for="username"]').addClass('selected');
+    	});
+    	$('#username').blur(function() {
+    		$('label[for="username"]').removeClass('selected');
+    	});
+    	$('#password').focus(function() {
+    		$('label[for="password"]').addClass('selected');
+    	});
+    	$('#password').blur(function() {
+    		$('label[for="password"]').removeClass('selected');
+    	});
+    	
+    	$("#gotologinpage").click(function(){
+    		location.replace("/login.html");
+    	}).focus();
+	});
+</script>
+
 </html>
