@@ -462,7 +462,7 @@
 	    
 	    $("#logout").click(function(){
 	    	disconnect();
-	    	location.href = "/logout";
+	    	location.href = "/logout.html";
 	    });
 	    
 	    $("#sysinfo").click(function(){
