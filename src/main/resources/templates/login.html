@@ -1,24 +1,25 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-	<meta charset="utf-8">
+	<meta charset="utf-8" />
 	<title>Coretree - IP Contact Centre</title>
 
 	<!-- Google Fonts -->
-	<link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700|Lato:400,100,300,700,900' rel='stylesheet' type='text/css'>
+	<link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700|Lato:400,100,300,700,900' rel='stylesheet' type='text/css' />
 
-	<link rel="stylesheet" href="/resources/css/newlogin_animate.css">
+	<link rel="stylesheet" href="/resources/css/newlogin_animate.css" />
 	<!-- Custom Stylesheet -->
-	<link rel="stylesheet" href="/resources/css/newlogin.css">
+	<link rel="stylesheet" href="/resources/css/newlogin.css" />
 
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 </head>
 
 <body>
 	<div class="container">
-		<form method="post" action="login.html">
+		<form method="post" action="/main/login">
 		<div class="top">
+			<h2>TEST!! <span th:text="${name}">${name}</span></h2>
 			<h1 id="title" class="hidden"><span id="logo">Web <span>IPCC</span></span></h1>
 		</div>
 		<div class="login-box animated fadeInUp">

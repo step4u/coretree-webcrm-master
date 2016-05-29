@@ -1,17 +1,15 @@
 package com.coretree.defaultconfig.controller;
 
-import java.util.Locale;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
-//@Controller
+@Controller
 public class AuthController {
-	@RequestMapping(value = "/CRM", method = RequestMethod.POST)
-	public String main(Locale locale, Model model) {
-		String url = "index";
-		return url;
+	@RequestMapping(value = "/main/{val}")
+	public String Auth(@PathVariable("val") String val, Model model) {
+		model.addAttribute("name", val);
+		return "login";
 	}
 }
