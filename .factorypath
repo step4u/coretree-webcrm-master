@@ -15,6 +15,7 @@
     <factorypathentry kind="VARJAR" id="M2_REPO/org/springframework/boot/spring-boot-starter-logging/1.3.1.RELEASE/spring-boot-starter-logging-1.3.1.RELEASE.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/ch/qos/logback/logback-classic/1.1.3/logback-classic-1.1.3.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/ch/qos/logback/logback-core/1.1.3/logback-core-1.1.3.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/slf4j/slf4j-api/1.7.13/slf4j-api-1.7.13.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/org/slf4j/jcl-over-slf4j/1.7.13/jcl-over-slf4j-1.7.13.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/org/slf4j/jul-to-slf4j/1.7.13/jul-to-slf4j-1.7.13.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/org/slf4j/log4j-over-slf4j/1.7.13/log4j-over-slf4j-1.7.13.jar" enabled="true" runInBatchMode="false"/>
@@ -40,12 +41,6 @@
     <factorypathentry kind="VARJAR" id="M2_REPO/org/apache/tomcat/tomcat-juli/8.0.30/tomcat-juli-8.0.30.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/org/mybatis/mybatis/3.3.0/mybatis-3.3.0.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/org/mybatis/mybatis-spring/1.2.3/mybatis-spring-1.2.3.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/thymeleaf/extras/thymeleaf-extras-springsecurity4/2.1.2.RELEASE/thymeleaf-extras-springsecurity4-2.1.2.RELEASE.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/thymeleaf/thymeleaf/2.1.4.RELEASE/thymeleaf-2.1.4.RELEASE.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/ognl/ognl/3.0.8/ognl-3.0.8.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/javassist/javassist/3.18.1-GA/javassist-3.18.1-GA.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/unbescape/unbescape/1.1.0.RELEASE/unbescape-1.1.0.RELEASE.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/slf4j/slf4j-api/1.7.13/slf4j-api-1.7.13.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/org/springframework/boot/spring-boot-starter-websocket/1.3.1.RELEASE/spring-boot-starter-websocket-1.3.1.RELEASE.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/org/springframework/spring-websocket/4.2.4.RELEASE/spring-websocket-4.2.4.RELEASE.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/org/springframework/spring-messaging/4.2.4.RELEASE/spring-messaging-4.2.4.RELEASE.jar" enabled="true" runInBatchMode="false"/>
@@ -72,9 +67,9 @@
     <factorypathentry kind="VARJAR" id="M2_REPO/org/springframework/batch/spring-batch-infrastructure/3.0.6.RELEASE/spring-batch-infrastructure-3.0.6.RELEASE.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/org/springframework/retry/spring-retry/1.1.2.RELEASE/spring-retry-1.1.2.RELEASE.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/org/scala-lang/scala-library/2.11.0/scala-library-2.11.0.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/firebirdsql/jdbc/jaybird-jdk18/2.2.9/jaybird-jdk18-2.2.9.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/com/googlecode/soundlibs/tritonus-share/0.3.7-2/tritonus-share-0.3.7-2.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/urbanophile/java-getopt/1.0.9/java-getopt-1.0.9.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/javax/media/jmf/2.1.1e/jmf-2.1.1e.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/org/apache/logging/log4j/log4j-core/2.5/log4j-core-2.5.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/org/apache/logging/log4j/log4j-api/2.5/log4j-api-2.5.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/org/apache/logging/log4j/log4j-core/2.4.1/log4j-core-2.4.1.jar" enabled="true" runInBatchMode="false"/>

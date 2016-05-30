@@ -94,8 +94,8 @@
 					$("#call_idx").val(currentCallInfo.call_idx);
 				}
 				
-				//console.log("item.direct: " + item.direct + ", item.status: " + item.status + ", item.callername: " + item.callername);
-				//console.log("currentCallInfo.direct: " + currentCallInfo.direct + ", currentCallInfo.status: " + currentCallInfo.status + ", currentCallInfo.callername: " + currentCallInfo.callername);
+				console.log("item.direct: " + item.direct + ", item.status: " + item.status + ", item.callername: " + item.callername);
+				console.log("currentCallInfo.direct: " + currentCallInfo.direct + ", currentCallInfo.status: " + currentCallInfo.status + ", currentCallInfo.callername: " + currentCallInfo.callername);
 				
 				// telephone button of main page top
 				if (item.status == UC_CALL_STATE_IDLE) {
