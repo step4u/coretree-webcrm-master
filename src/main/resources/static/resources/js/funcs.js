@@ -58,7 +58,7 @@
 					}
 				}
 				break;
-			case UC_PICKUP_CALL_REQ:
+			case UC_PICKUP_CALL_RES:
 				break;
 			case UC_HOLD_CALL_RES:
 				if (item.status == UC_STATUS_SUCCESS){
