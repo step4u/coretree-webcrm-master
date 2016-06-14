@@ -5,7 +5,7 @@
 
 	<groupId>com.coretree</groupId>
 	<artifactId>coretree-webcrm-master</artifactId>
-	<version>0.8.1-SNAPSHOT</version>
+	<version>0.8.1-OPENAPI</version>
 	<packaging>jar</packaging>
 
 	<name>coretree-webcrm-master</name>
