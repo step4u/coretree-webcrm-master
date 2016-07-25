@@ -47,6 +47,22 @@ uc:
 ---
 
 spring:
+  profiles: dev4
+  name: webcrm
+  datasource:
+    driverClassName: org.firebirdsql.jdbc.FBDriver
+    url: jdbc:firebirdsql://localhost:3050/d:/dev/fbdb/webcrm.fdb?sqlDialect=3;charSet=UTF-8;Role=;Connection lifetime=15;pooling=true;blobBufferSize=8192;type=TYPE2
+    username: coretree
+    password: core9158
+server:
+  port: ${port:8080}
+  session-timeout: 1800
+uc:
+  pbxip: 14.63.168.149
+  
+---
+
+spring:
   profiles: local
   name: webcrm
   datasource:
