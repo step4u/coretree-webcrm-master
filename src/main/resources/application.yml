@@ -31,7 +31,7 @@ uc:
 ---
 
 spring:
-  profiles: dev3
+  profiles: deveit
   name: webcrm
   datasource:
     driverClassName: org.firebirdsql.jdbc.FBDriver
@@ -42,7 +42,7 @@ server:
   port: ${port:8080}
   session-timeout: 1800
 uc:
-  pbxip: 14.63.166.98
+  pbxip: 14.63.168.149
   
 ---
 
