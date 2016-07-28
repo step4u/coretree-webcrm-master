@@ -1,58 +1,64 @@
 package com.coretree.defaultconfig.mapper;
 
 public class Member {
-	private String username;
+	private String emp_no;
 	private String password;
-	private String uname;
-	private String posi;
-	private String tel;
-	private String cellular;
-	private String extension;
-	private String role;
+	private String emp_nm;
+	private String grp_cd;
+	private String enter_date;
+	private String auth_cd;
+	private String mobile_phoneno;
+	private String emailid;
+	private String extension_no;
+	private String note;
 	private int state;
-	private short enabled = 1;
-	private int tempval = 0;
+	private int tempstate = 0;
 	private String tempstr;
 	
-	public String getUsername() { return username; }
-	public void setUsername(String username) { this.username = username; }
+	public String getEmp_no() { return emp_no; }
+	public void setEmp_no(String emp_no) { this.emp_no = emp_no; }
 	
 	public String getPassword() { return password; }
 	public void setPassword(String password) { this.password = password; }
 	
-	public String getUname() { return uname; }
-	public void setUname(String uname) { this.uname = uname; }
+	public String getEmp_nm() { return emp_nm; }
+	public void setEmp_nm(String emp_nm) { this.emp_nm = emp_nm; }
 	
-	public String getPosi() { return posi; }
-	public void setPosi(String posi) { this.posi = posi; }
+	public String getGrp_cd() { return grp_cd; }
+	public void setGrp_cd(String grp_cd) { this.grp_cd = grp_cd; }
 	
-	public String getTel() { return tel; }
-	public void setTel(String tel) { this.tel = tel; }
+	public String getEnter_date() { return enter_date; }
+	public void setEnter_date(String enter_date) { this.enter_date = enter_date; }
 	
-	public String getCellular() { return cellular; }
-	public void setCellular(String cellular) { this.cellular = cellular; }
+	public String getAuth_cd() { return auth_cd; }
+	public void setAuth_cd(String auth_cd) { this.auth_cd = auth_cd; }
 	
-	public String getExtension() { return extension; }
-	public void setExtension(String extension) { this.extension = extension; }
+	public String getMobile_phoneno() { return mobile_phoneno; }
+	public void setMobile_phoneno(String mobile_phoneno) { this.mobile_phoneno = mobile_phoneno; }
 	
-	public String getRole() { return role; }
-	public void setRole(String role) { this.role = role; }
+	public String getEmailid() { return emailid; }
+	public void setEmailid(String emailid) { this.emailid = emailid; }
+	
+	public String getExtension_no() { return extension_no; }
+	public void setExtension_no(String extension_no) { this.extension_no = extension_no; }
+	
+	public String getNote() { return note; }
+	public void setNote(String note) { this.note = note; }
 	
 	public int getState() { return state; }
 	public void setState(int state) { this.state = state; }
 	
-	public short getEnabled() { return enabled; }
-	public void setEnabled(short enabled) { this.enabled = enabled; }
-	
-	public int getTempval() { return tempval; }
-	public void setTempval(int tempval) { this.tempval = tempval; }
+	public int getTempstate() { return tempstate; }
+	public void setTempstate(int tempstate) { this.tempstate = tempstate; }
 	
 	public String getTempstr() { return this.tempstr; }
 	public void setTempstr(String tempstr) { this.tempstr = tempstr; }
 	
 	@Override
 	public String toString() {
-		return "Member [username=" + username + ", uname=" + uname + ", posi=" + posi + ", tel=" + tel + ""
-				+ ", cellular=" + cellular + ", extension=" + extension + ", role=" + role + ", state=" + state + ", enabled=" + enabled + "]";
+		return "Member [emp_no=" + emp_no + ", password=" + password + ", emp_nm=" + emp_nm + ", grp_cd=" + grp_cd
+				+ ", enter_date=" + enter_date + ", auth_cd=" + auth_cd + ", mobile_phoneno=" + mobile_phoneno
+				+ ", emailid=" + emailid + ", extension_no=" + extension_no + ", note=" + note + ", state=" + state
+				+ ", tempstate=" + tempstate + ", tempstr=" + tempstr + "]";
 	}
 }

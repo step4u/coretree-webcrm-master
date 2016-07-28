@@ -1,59 +1,56 @@
 package com.coretree.defaultconfig.mapper;
 
 public class Customer {
-	private long idx;
-	private String depthorder;
-	private String maingroup;
-	private String subgroup;
-	private String username;
-	private String uname;
-	private String firm;
-	private String posi;
-	private String tel;
-	private String cellular;
-	private String extension;
-	private String email;
+	private String cust_no;
+	private String cust_nm;
+	private String cust_cd;
+	private String tel1_no;
+	private String tel2_no;
+	private String tel3_no;
+	private String fax_no;
+	private String addr;
+	private String emailid;
+	private String reg_date;
+	private String cust_note;
 	
-	public long getIdx() { return this.idx; }
-	public void setIdx(long idx) { this.idx = idx; }
+	public String getCust_no() { return this.cust_no; }
+	public void setCust_no(String cust_no) { this.cust_no = cust_no; }
 	
-	public String getDepthorder() { return this.depthorder; }
-	public void setDepthorder(String depthorder) { this.depthorder = depthorder; }
+	public String getCust_nm() { return this.cust_nm; }
+	public void setCust_nm(String cust_nm) { this.cust_nm = cust_nm; }
 	
-	public String getMaingroup() { return this.maingroup; }
-	public void setMaingroup(String maingroup) { this.maingroup = maingroup; }
+	public String getCust_cd() { return this.cust_cd; }
+	public void setCust_cd(String cust_cd) { this.cust_cd = cust_cd; }
 	
-	public String getSubgroup() { return this.subgroup; }
-	public void setSubgroup(String subgroup) { this.subgroup = subgroup; }
+	public String getTel1_no() { return this.tel1_no; }
+	public void setTel1_no(String tel1_no) { this.tel1_no = tel1_no; }
 	
-	public String getUsername() { return this.username; }
-	public void setUsername(String username) { this.username = username; }
+	public String getTel2_no() { return this.tel2_no; }
+	public void setTel2_no(String tel2_no) { this.tel2_no = tel2_no; }
 	
-	public String getUname() { return this.uname; }
-	public void setUname(String uname) { this.uname = uname; }
-
-	public String getFirm() { return this.firm; }
-	public void setFirm(String firm) { this.firm = firm; }
+	public String getTel3_no() { return this.tel3_no; }
+	public void setTel3_no(String tel3_no) { this.tel3_no = tel3_no; }
 	
-	public String getPosi() { return this.posi; }
-	public void setPosi(String posi) { this.posi = posi; }
+	public String getFax_no() { return this.fax_no; }
+	public void setFax_no(String fax_no) { this.fax_no = fax_no; }
 	
-	public String getTel() { return this.tel; }
-	public void setTel(String tel) { this.tel = tel; }
+	public String getAddr() { return this.addr; }
+	public void setAddr(String addr) { this.addr = addr; }
 	
-	public String getCellular() { return this.cellular; }
-	public void setCellular(String cellular) { this.cellular = cellular; }
+	public String getEmailid() { return this.emailid; }
+	public void setEmailid(String emailid) { this.addr = emailid; }
 	
-	public String getExtension() { return this.extension; }
-	public void setExtension(String extension) { this.extension = extension; }
+	public String getReg_date() { return this.reg_date; }
+	public void setReg_date(String reg_date) { this.addr = reg_date; }
 	
-	public String getEmail() { return this.email; }
-	public void setEmail(String email) { this.email = email; }
+	public String getCust_note() { return this.cust_note; }
+	public void setCust_note(String cust_note) { this.addr = cust_note; }
+	
 	
 	@Override
 	public String toString() {
-		return "Customer [idx=" + idx + ", depthorder=" + depthorder + ", username=" + username + ", uname=" + uname
-				+ ", firm=" + firm + ", posi=" + posi + ", tel=" + tel + ", cellular=" + cellular
-				+ ", extension=" + extension + ", email=" + email + "]";
+		return "Customer [cust_no=" + cust_no + ", cust_nm=" + cust_nm + ", cust_cd=" + cust_cd + ", tel1_no=" + tel1_no
+				+ ", tel2_no=" + tel2_no + ", tel3_no=" + tel3_no + ", fax_no=" + fax_no + ", addr=" + addr
+				+ ", emailid=" + emailid + ", reg_date=" + reg_date + ", cust_note=" + cust_note + "]";
 	}
 }

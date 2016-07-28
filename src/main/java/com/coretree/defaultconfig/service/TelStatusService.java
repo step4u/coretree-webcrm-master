@@ -111,13 +111,13 @@ public class TelStatusService implements ApplicationListener<BrokerAvailabilityE
 			case Const4pbx.WS_REQ_EXTENSION_STATE:
 				message.cmd = Const4pbx.WS_RES_EXTENSION_STATE;
 				for (Member m : userstate) {
-					message.extension = m.getExtension();
+					message.extension = m.getExtension_no();
 					message.status = m.getState();
 					this.msgTemplate.convertAndSendToUser(principal.getName(), "/queue/groupware", message);
 				}
 				break;
 			case Const4pbx.WS_REQ_SET_EXTENSION_STATE:
-				Member mem = userstate.stream().filter(x -> x.getExtension().equals(message.extension)).findFirst().get();
+				Member mem = userstate.stream().filter(x -> x.getExtension_no().equals(message.extension)).findFirst().get();
 				
 				//message = GetMessage(mem, message.status);
 				break;
@@ -130,7 +130,7 @@ public class TelStatusService implements ApplicationListener<BrokerAvailabilityE
 				Member member;
 				r.lock();
 				try {
-					member = userstate.stream().filter(x -> x.getExtension().equals(message.extension)).findFirst().get();
+					member = userstate.stream().filter(x -> x.getExtension_no().equals(message.extension)).findFirst().get();
 				} catch (NoSuchElementException | NullPointerException e) {
 					member = null;
 				} finally {
@@ -138,7 +138,7 @@ public class TelStatusService implements ApplicationListener<BrokerAvailabilityE
 				}
 				
 				this.RequestToPbx(message);
-				member.setTempval(message.cmd);
+				member.setTempstate(message.cmd);
 				break;
 			default:
 				this.RequestToPbx(message);
@@ -187,7 +187,7 @@ public class TelStatusService implements ApplicationListener<BrokerAvailabilityE
 				break;
 			case Const4pbx.UC_REPORT_EXT_STATE:
 				for (Member m : userstate) {
-					if (m.getExtension().equals(data.getExtension())) {
+					if (m.getExtension_no().equals(data.getExtension())) {
 						m.setState(data.getStatus());
 					}
 				}
@@ -209,8 +209,8 @@ public class TelStatusService implements ApplicationListener<BrokerAvailabilityE
 				
 				Member mem = memberMapper.selectByExt(data.getExtension());
 				
-				if (mem.getUsername() == null) return;
-				if (mem.getUsername().isEmpty()) return;
+				if (mem.getEmp_no() == null) return;
+				if (mem.getEmp_no().isEmpty()) return;
 				
 				payload = new UcMessage();
 				payload.cmd = data.getCmd();
@@ -218,7 +218,7 @@ public class TelStatusService implements ApplicationListener<BrokerAvailabilityE
 				payload.caller = data.getCaller();
 				payload.callee = data.getCallee();
 				payload.status = data.getStatus();
-				this.msgTemplate.convertAndSendToUser(mem.getUsername(), "/queue/groupware", payload);
+				this.msgTemplate.convertAndSendToUser(mem.getEmp_no(), "/queue/groupware", payload);
 				break;
 		}
 	}
@@ -243,7 +243,7 @@ public class TelStatusService implements ApplicationListener<BrokerAvailabilityE
 		r.lock();
 		try
 		{
-			counsellor = userstate.stream().filter(x -> x.getExtension().equals(data.getExtension())).findFirst().get();
+			counsellor = userstate.stream().filter(x -> x.getExtension_no().equals(data.getExtension())).findFirst().get();
 		} catch (NoSuchElementException | NullPointerException e) {
 			return;
 		} finally {
@@ -264,7 +264,7 @@ public class TelStatusService implements ApplicationListener<BrokerAvailabilityE
 				break;
 			case Const4pbx.UC_SET_SRV_RES:
 				if (data.getStatus() == Const4pbx.UC_STATUS_SUCCESS) {
-					counsellor.setState(counsellor.getTempval());
+					counsellor.setState(counsellor.getTempstate());
 					if (data.getResponseCode() == Const4pbx.UC_SRV_UNCONDITIONAL) {
 						counsellor.setTempstr(data.getUnconditional());
 					} else if (data.getResponseCode() == Const4pbx.UC_SRV_NOANSWER) {
@@ -338,7 +338,7 @@ public class TelStatusService implements ApplicationListener<BrokerAvailabilityE
 									call.setCust_tel(data.getCaller());
 									call.setStatus(data.getStatus());
 									call.setDirect(data.getDirect());
-									call.setUsername(member.getUsername());
+									call.setEmp_no(member.getEmp_no());
 									
 									w.lock();
 									try {
@@ -371,15 +371,15 @@ public class TelStatusService implements ApplicationListener<BrokerAvailabilityE
 								Customer cust = custMapper.findByExt(data.getCaller());
 								
 								if (cust != null) {
-									payload.callername = cust.getUname();
-									payload.cust_idx = cust.getIdx();
+									payload.callername = cust.getCust_nm();
+									payload.cust_no = cust.getCust_no();
 								}
 								if (member != null) {
-									payload.calleename = member.getUname();
+									payload.calleename = member.getEmp_nm();
 								}
 								
 								payload.call_idx = call.getIdx();
-								this.msgTemplate.convertAndSendToUser(member.getUsername(), "/queue/groupware", payload);
+								this.msgTemplate.convertAndSendToUser(member.getEmp_no(), "/queue/groupware", payload);
 							}
 						}
 						// this.messagingTemplate.convertAndSend("/topic/ext.state." + data.getExtension(), payload);
@@ -433,7 +433,7 @@ public class TelStatusService implements ApplicationListener<BrokerAvailabilityE
 									call.setStartdate(new Timestamp(System.currentTimeMillis()));
 									call.setStatus(data.getStatus());
 									call.setDirect(data.getDirect());
-									call.setUsername(member.getUsername());
+									call.setEmp_no(member.getEmp_no());
 									
 									w.lock();
 									try {
@@ -465,15 +465,15 @@ public class TelStatusService implements ApplicationListener<BrokerAvailabilityE
 								Customer cust = custMapper.findByExt(data.getCallee());
 								
 								if (cust != null) {
-									payload.calleename = cust.getUname();
-									payload.cust_idx = cust.getIdx();
+									payload.calleename = cust.getCust_nm();
+									payload.cust_no = cust.getCust_no();
 								}
 								if (member != null) {
-									payload.callername = member.getUname();
+									payload.callername = member.getEmp_nm();
 								}
 								
 								payload.call_idx = call.getIdx();
-								this.msgTemplate.convertAndSendToUser(member.getUsername(), "/queue/groupware", payload);
+								this.msgTemplate.convertAndSendToUser(member.getEmp_no(), "/queue/groupware", payload);
 							}
 						}
 						
@@ -739,10 +739,10 @@ public class TelStatusService implements ApplicationListener<BrokerAvailabilityE
 		}
 		this.SendSms(data);
 		
-		Member mem = userstate.stream().filter(x -> x.getExtension().equals(data.getFrom_ext())).findFirst().get();
+		Member mem = userstate.stream().filter(x -> x.getExtension_no().equals(data.getFrom_ext())).findFirst().get();
 		
-		if (mem.getUsername() == null) return;
-		if (mem.getUsername().isEmpty()) return;
+		if (mem.getEmp_no() == null) return;
+		if (mem.getEmp_no().isEmpty()) return;
 		
 		UcMessage payload = new UcMessage();
 		payload.cmd = data.getCmd();
@@ -774,7 +774,7 @@ public class TelStatusService implements ApplicationListener<BrokerAvailabilityE
 			w.unlock();
 		}
 		
-		this.msgTemplate.convertAndSendToUser(mem.getUsername(), "/queue/groupware", payload);
+		this.msgTemplate.convertAndSendToUser(mem.getEmp_no(), "/queue/groupware", payload);
 	}
 		
 	@Override

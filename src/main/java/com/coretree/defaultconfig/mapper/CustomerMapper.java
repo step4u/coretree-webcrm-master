@@ -1,10 +1,9 @@
 package com.coretree.defaultconfig.mapper;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
-import org.springframework.boot.mybatis.autoconfigure.Mapper;
+import org.apache.ibatis.annotations.Mapper;
 
 import com.coretree.defaultconfig.model.CustSearchConditions;
 import com.coretree.defaultconfig.model.Group;
@@ -17,7 +16,7 @@ public interface CustomerMapper {
 	Customer findByIdx(@Param("idx") long idx);
 	Customer findByExt(@Param("telnum") String telnum);
 	void add(Customer cust);
-	void del(long idx);
+	void del(String idx);
 	void modi(Customer obj);
 	List<Group> getGroup();
 	List<Group> getSubgroup(String maingroup);

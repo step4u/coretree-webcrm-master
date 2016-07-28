@@ -2,27 +2,26 @@
 <mapper namespace="com.coretree.defaultconfig.mapper.MemberMapper">
 
     <resultMap id="resMap" type="com.coretree.defaultconfig.mapper.Member">
-        <id     property="username"		column="username" />
-        <result property="password"		column="password" />
-        <result property="uname"		column="uname" />
-        <result property="posi"			column="posi" />
-        <result property="tel"			column="tel" />
-        <result property="extension"	column="extension" />
-		<result property="role"			column="role" />
-		<result property="state"		column="state" />
-		<result property="enabled"		column="enabled" />
+        <id     property="emp_no"			column="emp_no" />
+        <result property="password"			column="password" />
+        <result property="emp_nm"			column="emp_nm" />
+        <result property="grp_cd"			column="grp_cd" />
+        <result property="enter_date"		column="enter_date" />
+        <result property="auth_cd"			column="auth_cd" />
+		<result property="mobile_phoneno"	column="mobile_phoneno" />
+		<result property="extension_no"		column="extension_no" />
+		<result property="note"				column="note" />
     </resultMap>
     
     <select id="count" resultType="java.lang.Integer">
-    	select count(username) from users
+    	select count(emp_no) from TORGANIZATION
     </select>
     
     <select id="selectAll" resultMap="resMap">
     	select first #{rowsperpage} skip ((#{curpage} - 1) * #{rowsperpage})
-			a.username, a.uname, a.posi, a.tel, a.cellular, a.role, a.state, a.enabled, b.extension
-			from users a join users_exts b
-				on a.username=b.username
-			order by a.uname asc
+			emp_no, emp_nm, grp_cd, mobile_phoneno, extension_no
+			from TORGANIZATION
+			order by emp_nm asc
     </select>
     
     <select id="selectByIdx" resultMap="resMap">
@@ -46,11 +45,9 @@
     </select>
     
     <select id="getUserState" resultMap="resMap">
-		select a.username, a.uname, a.posi, a.tel, a.cellular, a.role, a.state, a.enabled, b.extension
-			from users a join users_exts b
-				on a.username=b.username
-			where a.enabled=1
-			order by a.uname asc
+		select emp_no, emp_nm, grp_cd, enter_date, auth_cd, mobile_phoneno, emailid, extension_no, password, note
+			from TORGANIZATION
+			order by emp_nm
     </select>
     
     <select id="add" resultType="java.lang.Void">

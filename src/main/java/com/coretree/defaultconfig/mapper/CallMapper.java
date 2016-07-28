@@ -3,7 +3,8 @@ package com.coretree.defaultconfig.mapper;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
-import org.springframework.boot.mybatis.autoconfigure.Mapper;
+import org.apache.ibatis.annotations.Mapper;
+//import org.springframework.boot.mybatis.autoconfigure.Mapper;
 
 import com.coretree.defaultconfig.model.SearchConditions;
 

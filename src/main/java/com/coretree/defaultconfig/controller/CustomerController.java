@@ -66,13 +66,13 @@ public class CustomerController {
 	
 	@RequestMapping(path="/customer/del/{idx}", method=RequestMethod.GET)
 	public void del(@PathVariable("idx") int idx, Principal principal) {
-		mapper.del(idx);
+		// mapper.del(idx);
 	}
 	
 	@RequestMapping(path="/customer/del/all", method=RequestMethod.POST)
 	public void delAll(@RequestBody ArrayList<Customer> list, Principal principal) {
 		for (Customer cust : list) {
-			mapper.del(cust.getIdx());
+			// mapper.del(cust.getCust_no());
 		}
 	}
 }

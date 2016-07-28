@@ -75,6 +75,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+		/*
 		String getUser = "select username, password, enabled from users where username=?";
 		String getAuth = "select username, password, role from users where username=?";
 
@@ -85,5 +86,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .authoritiesByUsernameQuery(getAuth);
 		
 		// System.err.println("Progress authenticate");
+		*/
+		
+		auth.inMemoryAuthentication().withUser("1000001").password("1").roles("USER");
+		auth.inMemoryAuthentication().withUser("1000002").password("1").roles("USER");
+		auth.inMemoryAuthentication().withUser("1000003").password("1").roles("USER");
+		auth.inMemoryAuthentication().withUser("1000004").password("1").roles("USER");
 	}
 }

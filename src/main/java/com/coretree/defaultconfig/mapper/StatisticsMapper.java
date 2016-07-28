@@ -2,8 +2,7 @@ package com.coretree.defaultconfig.mapper;
 
 import java.util.List;
 
-import org.springframework.boot.mybatis.autoconfigure.Mapper;
-
+import org.apache.ibatis.annotations.Mapper;
 import com.coretree.defaultconfig.model.StatisticsSearchConditions;
 
 @Mapper
