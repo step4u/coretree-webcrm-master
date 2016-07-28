@@ -25,7 +25,7 @@ public class MemberController {
 	}
 	
 	@RequestMapping(path="/member/get/all/{curpage}/{rowsperpage}", method=RequestMethod.GET)
-	public List<Member> getMembers(@PathVariable("curpage") int curpage, @PathVariable("rowsperpage") int rowsperpage, Principal principa) {
+	public List<Member> getMembers(@PathVariable("curpage") int curpage, @PathVariable("rowsperpage") int rowsperpage, Principal principal) {
 		return mapper.selectAll(curpage, rowsperpage);
 	}
 
