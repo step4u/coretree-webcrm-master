@@ -251,6 +251,8 @@ public class TelStatusService implements ApplicationListener<BrokerAvailabilityE
 		}
 		
 		switch (data.getCmd()) {
+			case Const4pbx.UC_INPUT_DATA_RESULT_REQ:
+				break;
 			case Const4pbx.UC_REPORT_WAITING_COUNT:
 				this.messagingTemplate.convertAndSend("/topic/ext.state." + data.getExtension(), payload);
 				break;
