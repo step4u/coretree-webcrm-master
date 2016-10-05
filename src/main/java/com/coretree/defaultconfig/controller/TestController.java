@@ -1,34 +1,26 @@
 package com.coretree.defaultconfig.controller;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.security.Principal;
-import java.util.List;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.Message;
-import org.springframework.messaging.handler.annotation.MessageExceptionHandler;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.Payload;
-import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.messaging.simp.annotation.SendToUser;
-import org.springframework.messaging.simp.annotation.SubscribeMapping;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.context.Theme;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.coretree.defaultconfig.mapper.Member;
-import com.coretree.defaultconfig.mapper.MemberMapper;
-import com.coretree.defaultconfig.model.ChatMessage;
-import com.coretree.defaultconfig.model.LoginResult;
 import com.coretree.interfaces.ITelStatusService;
 import com.coretree.models.UcMessage;
 
 // @Controller
+@RestController
 public class TestController {
 	
 	private static final Log logger = LogFactory.getLog(TestController.class);
@@ -55,7 +47,7 @@ public class TestController {
 		// logger.debug(String.format("TestController Trade: cmd:%d, extension:%s, peer:%s, status:%d" + message.cmd, message.extension, message.peer, message.status));
 		// System.err.println(String.format("TestController Trade: cmd:%d, extension:%s, peer:%s, status:%d" + message.cmd, message.extension, message.peer, message.status));
 		
-		ucservice.RequestToPbx(message);
+		// ucservice.RequestToPbx(message);
 		
 		
 //		Principal principal = message.getHeaders().get(SimpMessageHeaderAccessor.USER_HEADER, Principal.class);
@@ -77,5 +69,27 @@ public class TestController {
 		count++;
 		System.err.println(String.format("handleException : %d, message : %s", count, exception.getMessage()));
 		return exception.getMessage();
+	}
+	
+	
+	@RequestMapping(path="/getstream/{filename}", method=RequestMethod.GET)
+	public byte[] getStream(@PathVariable("filename") String fn, Principal principal) {
+		String filename = "d:///dev/test/" + fn + ".wav";
+		File file = new File(filename);
+		InputStream in = null;
+		try {
+			in = new FileInputStream(file);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		byte[] out = new byte[(int)file.length()];
+		try {
+			IOUtils.read(in, out, 0, out.length);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return out;
 	}
 }

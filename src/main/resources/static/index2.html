@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>CRM with IPCC - Coretree222</title>
+  	<meta charset="utf-8">
+  	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<script src="/resources/jquery/jquery.min.js"></script>
+    <link href="http://fonts.googleapis.com/css?family=Lato:100italic,100,300italic,300,400italic,400,700italic,700,900italic,900" rel="stylesheet" type="text/css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+	<link rel="stylesheet" href="/resources/jquery-ui-1.11.4.custom/jquery-ui.min.css" />
+	<script src="/resources/jquery-ui-1.11.4.custom/jquery-ui.min.js"></script>
+
+	<script>
+		// var dogBarkingBuffer = null;
+	 	// Fix up prefixing
+	 	// window.AudioContext = window.AudioContext || window.webkitAudioContext;
+	 	// var context = new AudioContext();
+
+	
+		$(document).ready(function(){
+			var filename = "test.wav";
+			var encryptedfn = "test.encrypted";
+			
+			$.get("/getstream/" + filename, function(response){
+				var buff = new Uint8Array(response);
+				// console.log(buff);
+				document.getElementById("audio").src = buff;
+				// $("#audio").play();
+				// console.log(response);
+				// var data = JSON.parse(response);
+				// console.log(data);
+			});
+		});
+	</script>	
+</head>
+<body>
+	<audio id="audio" controls="controls">
+        <source id="mainSrc" type="audio/wave"></source>
+    </audio>
+</body>
+</html>

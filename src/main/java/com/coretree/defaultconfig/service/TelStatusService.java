@@ -79,12 +79,13 @@ public class TelStatusService implements ApplicationListener<BrokerAvailabilityE
 	@Override
 	public void onApplicationEvent(BrokerAvailabilityEvent event) {
 		this.brokerAvailable.set(event.isBrokerAvailable());
-
+/*
 		uc = new UcServer(configs.getPbxip(), 31001, 1, this.byteorder);
 		uc.HaveGotUcMessageEventHandler.addEventHandler(this);
 		uc.regist();
 
 		this.InitializeUserState();
+*/		
 	}
 	
 	private void InitializeUserState() {
@@ -380,7 +381,7 @@ public class TelStatusService implements ApplicationListener<BrokerAvailabilityE
 								
 								if (cust != null) {
 									payload.callername = cust.getUname();
-									payload.cust_idx = cust.getIdx();
+									//payload.cust_idx = cust.getIdx();
 								}
 								if (member != null) {
 									payload.calleename = member.getUname();
@@ -474,7 +475,7 @@ public class TelStatusService implements ApplicationListener<BrokerAvailabilityE
 								
 								if (cust != null) {
 									payload.calleename = cust.getUname();
-									payload.cust_idx = cust.getIdx();
+									// payload.cust_idx = cust.getIdx();
 								}
 								if (member != null) {
 									payload.callername = member.getUname();

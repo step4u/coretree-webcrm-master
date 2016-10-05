@@ -32,13 +32,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     				new XFrameOptionsHeaderWriter(
     						XFrameOptionsHeaderWriter.XFrameOptionsMode.SAMEORIGIN)).and()
             .formLogin()
-				.defaultSuccessUrl("/index.html")
+				.defaultSuccessUrl("/index2.html")
 				.loginPage("/login.html")
-				//.loginProcessingUrl("/login")
+				// .loginProcessingUrl("/login")
 				.failureUrl("/login.html?error")
 				.usernameParameter("username")
 				.passwordParameter("password")
-				.successHandler(loginSuccessHandler)
+				// .successHandler(loginSuccessHandler)
 				.permitAll()
 				.and()
             .logout()
@@ -59,7 +59,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
             .authorizeRequests() //Authorize Request Configuration
 				.antMatchers("/resources/**").permitAll()
-				//.antMatchers("/media/**").permitAll()
+				.antMatchers("/media/**").permitAll()
 				//.antMatchers("/customer/**").hasRole("ADMIN")
 				//.antMatchers("/customer/**").permitAll()
 				//.antMatchers("/member/**").permitAll()
@@ -73,15 +73,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-		String getUser = "select username, password, enabled from users where username=?";
-		String getAuth = "select username, password, role from users where username=?";
-
-		auth
-        .jdbcAuthentication()
-        	.dataSource(dataSrc)
-            .usersByUsernameQuery(getUser)
-            .authoritiesByUsernameQuery(getAuth);
-		
-		// System.err.println("Progress authenticate");
+		auth.inMemoryAuthentication().withUser("1000001").password("1").roles("USER");
+		auth.inMemoryAuthentication().withUser("1000002").password("1").roles("USER");
+		auth.inMemoryAuthentication().withUser("1000003").password("1").roles("USER");
+		auth.inMemoryAuthentication().withUser("1000004").password("1").roles("USER");
 	}
 }
