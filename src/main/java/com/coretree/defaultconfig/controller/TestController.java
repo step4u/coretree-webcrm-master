@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.coretree.crypto.CryptoAES;
+import com.coretree.exceptions.CryptoException;
 import com.coretree.interfaces.ITelStatusService;
 import com.coretree.models.UcMessage;
 
@@ -90,6 +92,16 @@ public class TestController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		return out;
+	}
+	
+	@RequestMapping(path="/getstream2/{filename}", method=RequestMethod.GET)
+	public byte[] getStream2(@PathVariable("filename") String fn) throws CryptoException {
+		String filename = "d:///dev/test/" + fn + ".encrypted";
+		File file = new File(filename);
+		String key = "Mary has one cat";
+		byte[] out = CryptoAES.decrypt(key, file);
+		
 		return out;
 	}
 }
