@@ -363,20 +363,17 @@
 	
 	Secs2mmss = function (totalsecs) {
 		totalsecs = totalsecs.toFixed(0);
-		var result;
-		
-		try {
-			// var hours   = Math.floor(totalSeconds / 3600);
-			var minutes = Math.floor(totalsecs / 60);
-			var seconds = totalsecs - (minutes * 60);
+		var hours   = Math.floor(totalsecs / 3600);
+		var minutes = Math.floor((totalsecs - (hours * 3600)) / 60);
+		var seconds = totalsecs - (hours * 3600) - (minutes * 60);
 
-			// round seconds
-			this.seconds = Math.round(seconds * 100) / 100;
+		// round seconds
+		seconds = Math.round(seconds * 100) / 100
+		console.log('seconds : ' + seconds);
 
-			result = (minutes < 10 ? "0" + minutes : this.minutes) + ":" + (seconds  < 10 ? "0" + seconds : seconds);
-		} catch(err) {
-			console.log(err);
-		}
+		var result = (hours < 10 ? "0" + hours : hours);
+		result += ":" + (minutes < 10 ? "0" + minutes : minutes);
+		result += ":" + (seconds  < 10 ? "0" + seconds : seconds);
 		
 		return result;
 	};
@@ -754,14 +751,14 @@
 
    <div class="sm2-progress">
     <div class="sm2-row">
-    <div class="sm2-inline-time">0:00</div>
+    <div class="sm2-inline-time">00:00:00</div>
      <div class="sm2-progress-bd">
       <div class="sm2-progress-track">
        <div class="sm2-progress-bar"></div>
        <div class="sm2-progress-ball"><div class="icon-overlay"></div></div>
       </div>
      </div>
-     <div class="sm2-inline-duration">0:00</div>
+     <div class="sm2-inline-duration">00:00:00</div>
     </div>
    </div>
 
