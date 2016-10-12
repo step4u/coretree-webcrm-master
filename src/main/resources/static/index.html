@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <head>
 <meta charset="UTF-8" />
-<title>SoundManager 2: Bar UI Player (prototype)</title>
+<title></title>
 <!--meta name="robots" content="noindex" /-->
 <!--meta name="viewport" content="width=500, initial-scale=1"-->
 <!--script type="text/javascript" src="../../script/soundmanager2.js"></script-->
@@ -12,6 +12,9 @@
 .play
 </style>
 <script id="jsbin-javascript">
+
+
+
 	var url;
 	window.player;
 
@@ -265,7 +268,7 @@
 	Player.prototype.updatePlayTime = function(time) {
 		// if (!this.playing) return;
 	  	if (typeof(time) == 'undefined') {
-			this.lineTime.innerHTML = (this.ac.currentTime - this.startTime).toFixed(2);
+			this.lineTime.innerHTML = Secs2mmss((this.ac.currentTime - this.startTime));
 	  	} else {
 	  		var curtime = 0;
 	  		if (time <= this.startTime)
@@ -273,10 +276,10 @@
 	  		else
 	  			curtime = time - this.startTime;
 	  		
-	  		this.lineTime.innerHTML = curtime.toFixed(2);
+	  		this.lineTime.innerHTML = Secs2mmss(curtime);
 	  	}
 
-	  	this.lineDuration.innerHTML = this.buffer.duration.toFixed(2);
+	  	this.lineDuration.innerHTML = Secs2mmss(this.buffer.duration);
 	};
 	
 	Player.prototype.onMouseDown = function( e ) {
@@ -358,6 +361,25 @@
 		requestAnimationFrame(this.draw.bind(this));
 	};
 	
+	Secs2mmss = function (totalsecs) {
+		totalsecs = totalsecs.toFixed(0);
+		var result;
+		
+		try {
+			// var hours   = Math.floor(totalSeconds / 3600);
+			var minutes = Math.floor(totalsecs / 60);
+			var seconds = totalsecs - (minutes * 60);
+
+			// round seconds
+			this.seconds = Math.round(seconds * 100) / 100;
+
+			result = (minutes < 10 ? "0" + minutes : this.minutes) + ":" + (seconds  < 10 ? "0" + seconds : seconds);
+		} catch(err) {
+			console.log(err);
+		}
+		
+		return result;
+	};
 
 	// 유틸리티
 	utils = {
